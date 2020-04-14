@@ -6,6 +6,7 @@ os = $(word 1, $@)
 .PHONY: all
 all: clean release run
 
+.PHONY: build
 build:
 	mkdir -p build
 	go build -o build/$(BINARY) -v
