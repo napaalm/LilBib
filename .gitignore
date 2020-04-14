@@ -74,9 +74,6 @@ _testmain.go
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-
 # Compiled Static libraries
 *.lai
 *.la
@@ -88,3 +85,6 @@ _testmain.go
 *.out
 *.app
 
+# build and release directories
+/build
+/release
