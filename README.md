@@ -53,11 +53,11 @@ Elenco dei libri con ricerca
 Elenco dei generi
 Reidizza alla ricerca `/libri` quando si preme su un genere
 
-### /autori/<iniziale>
+### /autori/\<iniziale\>
 Elenco degli autori con iniziale `iniziale`  
 Reindirizza alla ricerca `/libri` quando si preme su un autore
 
-### /libro/<id>
+### /libro/\<id\>
 Dettagli sul libro `id`
 
 * /login
