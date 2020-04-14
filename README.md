@@ -38,7 +38,7 @@ Sistema di prenotazione libri.
 * Libro
 
 ### Funzioni
-* ```go
+```go
 func GetLibro(id uint32) Libro
 ```
 
