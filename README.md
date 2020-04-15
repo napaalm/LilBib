@@ -34,6 +34,9 @@ Contiene il main.
 ### `/internal`
 Contiene i packages interni da cui è composto il software.
 
+### `/vendor`
+Contiene le dipendenze del progetto.
+
 ### `/web`
 Contiene gli asset statici e i template HTML.
 
