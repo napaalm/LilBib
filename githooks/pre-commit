@@ -18,7 +18,7 @@ unformatted=$(gofmt -l $gofiles)
 
 # Some files are not gofmt'd. Print message and fail.
 
-echo >&2 "Go files must be formatted with gofmt. Please run:"
+echo >&2 "Il codice sorgente Go dev'essere formattato con gofmt. Esegui:"
 for fn in $unformatted; do
 	echo >&2 "  gofmt -w $PWD/$fn"
 done
