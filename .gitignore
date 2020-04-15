@@ -85,6 +85,6 @@ _testmain.go
 *.out
 *.app
 
-# build and release directories
-/build
+# build and release files
+/lilbib
 /release

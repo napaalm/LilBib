@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # Script per inizializzare la directory di sviluppo
-# UTILIZZO: ./misc/setup.sh
+# UTILIZZO: ./scripts/setup.sh
 
 install_hooks() {
   rm -rf .git/hooks
   cd .git
-  ln -s ../misc/git-hooks hooks
+  ln -s ../githooks hooks
   cd ..
 }
 

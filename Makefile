@@ -1,29 +1,35 @@
 BINARY := lilbib
 VERSION ?= $(shell git describe --always --dirty --tags 2> /dev/null)
-PLATFORMS := windows linux
-os = $(word 1, $@)
 
 .PHONY: all
 all: clean release run
 
 .PHONY: build
 build:
-	mkdir -p build
-	go build -o build/$(BINARY) -v
+	go build -o $(BINARY) cmd/lilbib/main.go
 
 .PHONY: run
 run: build
-	./build/lilbib
+	./lilbib
 
 .PHONY: release
-release: windows linux
+release: linux windows
 
 .PHONY: clean
 clean:
-	go clean
-	rm -rf build release
+	rm -f lilbib
+	rm -rf release
 
-.PHONY: $(PLATFORMS)
-$(PLATFORMS):
-	mkdir -p release
-	GOOS=$(os) GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-$(os)-amd64
+.PHONY: linux
+linux:
+	mkdir -p release/$(BINARY)-$(VERSION)-linux-amd64
+	cp -r web release/$(BINARY)-$(VERSION)-linux-amd64
+	GOOS=linux GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-linux-amd64/lilbib cmd/lilbib/main.go
+	tar -czf release/$(BINARY)-$(VERSION)-linux-amd64.tar.gz release/$(BINARY)-$(VERSION)-linux-amd64
+
+.PHONY: windows
+windows:
+	mkdir -p release/$(BINARY)-$(VERSION)-windows-amd64
+	cp -r web release/$(BINARY)-$(VERSION)-windows-amd64
+	GOOS=linux GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-windows-amd64/lilbib.exe cmd/lilbib/main.go
+	zip -qr release/$(BINARY)-$(VERSION)-windows-amd64.zip release/$(BINARY)-$(VERSION)-windows-amd64
