@@ -10,26 +10,25 @@ build:
 
 .PHONY: run
 run: build
-	./lilbib
+	./$(BINARY)
 
 .PHONY: release
 release: linux windows
 
 .PHONY: clean
 clean:
-	rm -f lilbib
-	rm -rf release
+	rm -f $(BINARY) release
 
 .PHONY: linux
 linux:
-	mkdir -p release/$(BINARY)-$(VERSION)-linux-amd64
-	cp -r web release/$(BINARY)-$(VERSION)-linux-amd64
-	GOOS=linux GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-linux-amd64/lilbib ./...
-	tar -czf release/$(BINARY)-$(VERSION)-linux-amd64.tar.gz release/$(BINARY)-$(VERSION)-linux-amd64
+	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
+	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
+	GOOS=$@ GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-$@-amd64/lilbib ./...
+	tar -czf release/$(BINARY)-$(VERSION)-$@-amd64.tar.gz release/$(BINARY)-$(VERSION)-$@-amd64
 
 .PHONY: windows
 windows:
-	mkdir -p release/$(BINARY)-$(VERSION)-windows-amd64
-	cp -r web release/$(BINARY)-$(VERSION)-windows-amd64
-	GOOS=linux GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-windows-amd64/lilbib.exe ./...
-	zip -qr release/$(BINARY)-$(VERSION)-windows-amd64.zip release/$(BINARY)-$(VERSION)-windows-amd64
+	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
+	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
+	GOOS=$@ GOARCH=amd64 go build -o release/$(BINARY)-$(VERSION)-$@-amd64/lilbib.exe ./...
+	zip -qr release/$(BINARY)-$(VERSION)-$@-amd64.zip release/$(BINARY)-$(VERSION)-$@-amd64
