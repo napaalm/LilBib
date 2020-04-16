@@ -115,7 +115,7 @@ Funzionamento identico a `/prestito`.
 * `nome`
 
 ### Autore
-* `id`
+* `codice`
 * `nome`
 * `cognome`
 
@@ -131,14 +131,19 @@ Funzionamento identico a `/prestito`.
 ### Packages
 * sql
 * ldap
-*
 
 ### Tipi
-* Libro
+* sql.Libro
+* sql.Autore
+* sql.Genere
+* sql.Prestito
 
 ### Funzioni
 ```go
-func GetLibro(id uint32) Libro
+func sql.GetLibro(codice uint32) (sql.Libro, error)
+func sql.GetAutore(iniziale uint8) ([]sql.Autore, error)
+func sql.GetGeneri() ([]sql.Genere, error)
+func sql.GetPrestiti(utente uint32) ([]sql.Prestito, error)
+func sql.AddPrestito(codice, libro uint32, utente string data_prenotazione, data_restituzione TipoData?) error
 ```
-
 
