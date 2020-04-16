@@ -1,14 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2012 The Go Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-# git gofmt pre-commit hook
+# git (compilation|gofmt) pre-commit hook
 #
 # To use, store as .git/hooks/pre-commit inside your repository and make sure
 # it has execute permissions.
 #
 # This script does not handle file names that contain spaces.
+
+# Check	if the code compiles
+
+cd $(git rev-parse --show-toplevel)
+! make build && echo "Il tuo codice non compila! Controlla i messaggi del compilatore" && exit 1
+
+# Check if the code is well-formatted
 
 gofiles=$(git diff --cached --name-only --diff-filter=ACM | grep '\.go$')
 [ -z "$gofiles" ] && exit 0
