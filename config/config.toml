@@ -1,0 +1,12 @@
+[Generale]
+admin="test"
+
+[LDAP]
+uri="test uri"
+porta="test porta"
+
+[SQL]
+username="asdf"
+password="asdf"
+indirizzo="asdf"
+database="asdf"

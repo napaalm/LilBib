@@ -3,9 +3,7 @@ Pacchetto per la configurazione del progetto
 
 ## Variabili
 ```go
-var (
-	admin []string
-)
+var Config config
 ```
 
 ## Funzioni
