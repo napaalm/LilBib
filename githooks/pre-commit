@@ -29,5 +29,6 @@ echo >&2 "Il codice sorgente Go dev'essere formattato con gofmt. Esegui:"
 for fn in $unformatted; do
 	echo >&2 "  gofmt -w $PWD/$fn"
 done
+echo "Infine esegui git add <files> e git commit -m \"descrizione\""
 
 exit 1
