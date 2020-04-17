@@ -17,7 +17,7 @@ release: linux windows
 
 .PHONY: clean
 clean:
-	rm -f $(BINARY) release
+	rm -rf $(BINARY) release
 
 .PHONY: linux
 linux:
