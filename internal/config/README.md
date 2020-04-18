@@ -1,5 +1,6 @@
 # config
-Pacchetto per la configurazione del progetto
+Pacchetto per la configurazione del progetto.
+La configurazione viene caricata all'avvio del programma.
 
 ## Variabili
 ```go

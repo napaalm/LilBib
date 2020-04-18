@@ -13,7 +13,8 @@ type config struct {
 }
 
 type generale struct {
-	Admin string `toml:"admin"`
+	AdminUser string `toml:"admin"`
+	JWTSecret string `toml:"chiave_firma"`
 }
 
 type ldap struct {
