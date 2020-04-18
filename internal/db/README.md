@@ -21,11 +21,12 @@ func RicercaLibri(nome string, autore, genere []uint32) ([]Libro, error)
 func RicercaAutori(nome string) ([]Autore, error)
 func RicercaGeneri(nome string) ([]Genere, error)
 
-func AddLibro(titolo string, autore, genere uint32, hash string) error
-func AddGenere(nome string) error
-func AddAutore(nome, cognome string) error
-func AddPrestito(codice, libro uint32, utente string data_prenotazione TipoData?, durata uint32) error
+func AddLibro(titolo string, autore, genere uint32) (uint32, error)
+func AddGenere(nome string) (uint32, error)
+func AddAutore(nome, cognome string) (uint32, error)
+func AddPrestito(libro uint32, utente string data_prenotazione TipoData?, durata uint32) (uint32, error)
 
+func SetHash(codice uint32, string hash) error
 func SetRestituito(prestito uint32, data_restituzione TipoData?) error
 ```
 
