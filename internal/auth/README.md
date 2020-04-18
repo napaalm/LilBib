@@ -13,6 +13,7 @@ Da `internal/config` va letto l'indirizzo del server.
 # Token JWT
 I token JWT conservano il nome utente e il livello di privilegi dell'utente (user o admin).
 Essi sono firmati crittograficamente, e l'algoritmo scelto per questo progetto è HMAC-SHA256.
+Il secret per la firma dev'essere ottenuto da `internal/config`.
 [Libreria](https://github.com/gbrlsnchs/jwt).
 
 ## Tipi
