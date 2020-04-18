@@ -1,5 +1,5 @@
 # hash
-Pacchetto per la generazione e verifica delle password dei libri
+Pacchetto per la generazione e verifica dei codici dei libri.
 
 ## Funzioni
 ```go
