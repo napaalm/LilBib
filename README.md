@@ -132,8 +132,8 @@ In ogni package è presente un file README dove sono indicate le funzionalità d
 Si consiglia di scrivere funzioni interne al package per evitare funzioni troppo lunghe.
 
 ### Packages
-* auth
-* config
-* db
-* handlers
-* hash
+* `auth`
+* `config`
+* `db`
+* `handlers`
+* `hash`
