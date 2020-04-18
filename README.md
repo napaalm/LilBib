@@ -128,12 +128,12 @@ Funzionamento identico a `/prestito`.
 * `data_restituzione`
 
 ## Backend GO
+In ogni package è presente un file README dove sono indicate le funzionalità da implementare, i tipi e le funzioni esportate.
+Si consiglia di scrivere funzioni interne al package per evitare funzioni troppo lunghe.
 
 ### Packages
+* auth
+* config
 * db
-* ldap
-
-### Tipi
-
-### Funzioni
-
+* handlers
+* hash
