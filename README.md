@@ -100,6 +100,9 @@ In caso non sia stato effettuato l'accesso verranno richieste le proprie credenz
 Permette di restituire i libri in proprio possesso.
 Funzionamento identico a `/prestito`.
 
+### `/static`
+Endpoint per servire contenuti statici da `web/static`.
+
 ## Tabelle SQL
 
 ### Libro
