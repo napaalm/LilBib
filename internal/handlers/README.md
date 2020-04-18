@@ -1,5 +1,5 @@
 # handlers
-Pacchetto per comunicare con il database SQL
+Package per gestire le diverse pagine ed i relativi template.
 
 ## Funzioni
 ```go
