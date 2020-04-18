@@ -1,5 +1,5 @@
 # db
-Pacchetto per comunicare con il database SQL
+Pacchetto per la comunicazione con il database SQL.
 
 ## Tipi
 ```go
