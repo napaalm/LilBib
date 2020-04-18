@@ -1,4 +1,4 @@
-module antonionapolitano.eu/zAxny32/LilBib
+module git.antonionapolitano.eu/napaalm/LilBib
 
 go 1.14
 
