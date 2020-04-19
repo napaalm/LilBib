@@ -22,13 +22,13 @@ func Verifica(pass []byte) (db.Libro, error) {
 	libro, err := db.GetLibro(codice)
 
 	if err != nil {
-		return _, err
+		return libro, err
 	}
 
 	hash := sha256.Sum256(pass)
 
 	if !bytes.Equal(hash[:], libro.hash) {
-		return _, ErrHash()
+		return libro, ErrHash{}
 	}
 
 	return libro, nil
