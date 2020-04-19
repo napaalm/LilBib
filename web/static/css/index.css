@@ -1,0 +1,96 @@
+body{
+
+text-decoration: none; /*Zix: se osate fare dei testi sottolineati o cancellati vi taglio le mani */
+margin: 0px;
+
+}
+
+
+/* Opzioni grafiche per il footer*/
+header>nav>ul>li{
+
+display: inline;
+
+}
+
+header>nav{
+
+width: 100%;
+height: 60px;
+position: absolute;
+top: 0px;
+background-color: #232C33;
+opacity: 0.8;
+
+}
+
+a{
+
+text-decoration: none;  
+color: white;
+
+}
+
+span.footerRight{
+
+position: absolute;
+right: 2%;
+top: 20px;
+
+}
+
+nav>ul{
+
+margin-top: 20px;
+
+}
+
+li>a{
+
+margin-right: 1.5%;
+
+}
+
+
+
+nav>ul>li>a:hover , nav>ul>li>span>a:hover{
+
+color: #F0803C;
+
+}
+
+
+/*Opzioni grafiche imagine Home*/
+
+div.homeImg{
+
+width: 100%;
+height: 600px;
+overflow: hidden;
+text-align: center;
+
+}
+
+div>img{
+
+z-index: -1;
+width: 2200px;
+
+}
+
+h1.titleHome{
+
+color: white;   /*Zix: bidogna trovare un colore migliore https://coolors.co/ per trovare altri colori*/
+position: absolute;
+top:  240px;
+font-size: 50px;
+width: 100%;
+font-family: RestoreW00-Heavy;
+}
+
+@font-face{
+
+src: url("/LilBib/web/static/font/Restore W00 Heavy.ttf");
+font-family: 'RestoreW00-Heavy';
+
+}
