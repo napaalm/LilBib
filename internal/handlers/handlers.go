@@ -29,6 +29,8 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 )
 
 const templatesDir = "web/template"
@@ -58,44 +60,100 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 
 func HandleLibro(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/libro/")
-	_, err := strconv.ParseUint(idStr, 10, 32)
+	idParsed, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
 		// id invalido: torna all'elenco
-		http.Redirect(w, r, "/libri/0", 303)
+		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
 		return
 	}
+	idLibro := uint32(idParsed)
 	// TODO manca libro.html!
-	templates.ExecuteTemplate(w, "libri.html", nil)
+	libro, err := db.GetLibro(idLibro)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	templates.ExecuteTemplate(w, "libri.html", libro)
 }
 
 func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	pageStr := strings.TrimPrefix(r.URL.Path, "/libri/")
-	_, err := strconv.ParseUint(pageStr, 10, 32)
+	page, err := strconv.ParseUint(pageStr, 10, 32)
 	if err != nil {
-		// pagina non valida
-		http.Redirect(w, r, "/libri/0", 303)
+		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
 		return
 	}
 
-	// q := r.URL.Query()
-	// titolo := q.Get("titolo")
-	// autore := q.Get("autore")
-	// genere := q.Get("genere")
+	q := r.URL.Query()
+	titolo := q.Get("titolo")
+	nomeAutore := q.Get("autore")
+	nomeGenere := q.Get("genere")
 
-	// idsAutore := db.RicercaAutori(autore)
-	// idsGeneri := db.RicercaGeneri(genere)
-	templates.ExecuteTemplate(w, "libri.html", nil)
+	autori, err := db.RicercaAutori(nomeAutore)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// senz'offesa, questa interfaccia mi fa un po' schifo
+	idsAutori := make([]uint32, 0, len(autori))
+	for _, a := range autori {
+		idsAutori = append(idsAutori, a.Codice)
+	}
+	generi, err := db.RicercaGeneri(nomeGenere)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	idsGeneri := make([]uint32, 0, len(generi))
+	for _, g := range generi {
+		idsGeneri = append(idsGeneri, g.Codice)
+	}
+	libri, err := db.RicercaLibri(titolo, idsAutori, idsGeneri)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	templates.ExecuteTemplate(w, "libri.html", struct {
+		Pagina uint64
+		Libri  []db.Libro
+	}{page, libri})
 }
 func HandleAutori(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/autori/" {
-		// HTTP 303 See Other
-		http.Redirect(w, r, "/autori/a", 303)
+	initStr := strings.TrimPrefix(r.URL.Path, "/autori/")
+	if len(initStr) != 1 {
+		http.Redirect(w, r, "/autori/a", http.StatusSeeOther)
 		return
 	}
-	templates.ExecuteTemplate(w, "autori.html", nil)
+	initial := initStr[0]
+	if 'A' <= initial && initial <= 'Z' {
+		http.Redirect(w, r, "/autori/"+string(initial-'A'+'a'), http.StatusSeeOther)
+		return
+	}
+	if !('a' <= initial && initial <= 'z') {
+		http.Redirect(w, r, "/autori/a", http.StatusSeeOther)
+		return
+	}
+
+	autori, err := db.GetAutori(initial)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	templates.ExecuteTemplate(w, "autori.html", struct {
+		Iniziale byte
+		Autori   []db.Autore
+	}{initial, autori})
 }
 func HandleGeneri(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "generi.html", nil)
+	generi, err := db.GetGeneri()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	templates.ExecuteTemplate(w, "generi.html", struct {
+		Generi []db.Genere
+	}{generi})
 }
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "login.html", nil)
