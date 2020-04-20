@@ -38,7 +38,7 @@ type config struct {
 }
 
 type generale struct {
-	FQDi      string `toml:"fqdn_sito"`
+	FQDN      string `toml:"fqdn_sito"`
 	AdminUser string `toml:"admin"`
 	JWTSecret string `toml:"chiave_firma"`
 }
