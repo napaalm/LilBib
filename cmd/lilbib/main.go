@@ -24,7 +24,51 @@
 
 package main
 
-import ()
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
+
+// TODO config fatto bene
+const srvAddress = ":8081"
+
+func rootOr404(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
+	fmt.Fprintln(w, "It works!")
+}
+func libri(w http.ResponseWriter, r *http.Request)        {}
+func libro(w http.ResponseWriter, r *http.Request)        {}
+func autori(w http.ResponseWriter, r *http.Request)       {}
+func generi(w http.ResponseWriter, r *http.Request)       {}
+func login(w http.ResponseWriter, r *http.Request)        {}
+func prestito(w http.ResponseWriter, r *http.Request)     {}
+func restituzione(w http.ResponseWriter, r *http.Request) {}
 
 func main() {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", rootOr404)
+	mux.HandleFunc("/libri/", libri)
+	mux.HandleFunc("/libro/", libro)
+	mux.HandleFunc("/autori/", autori)
+	mux.HandleFunc("/generi/", generi)
+	mux.HandleFunc("/login/", login)
+	mux.HandleFunc("/prestito/", prestito)
+	mux.HandleFunc("/restituzione/", restituzione)
+
+	fileserver := http.FileServer(http.Dir("web/static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", fileserver))
+
+	srv := &http.Server{
+		Addr:    srvAddress,
+		Handler: mux,
+	}
+
+	log.Fatal(srv.ListenAndServe())
+
 }
