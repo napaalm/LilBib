@@ -62,6 +62,7 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// id invalido: torna all'elenco
 		http.Redirect(w, r, "/libri/0", 303)
+		return
 	}
 	// TODO manca libro.html!
 	templates.ExecuteTemplate(w, "libri.html", nil)
@@ -73,6 +74,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// pagina non valida
 		http.Redirect(w, r, "/libri/0", 303)
+		return
 	}
 
 	// q := r.URL.Query()
