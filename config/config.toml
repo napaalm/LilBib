@@ -1,9 +1,11 @@
 [Generale]
-admin="test"
+admin="admin"
+chiave_firma="secret"
+fqdn_sito="example.org"
 
 [LDAP]
-uri="test uri"
-porta="test porta"
+host="ldap.example.org"
+porta="389"
 
 [SQL]
 username="asdf"
