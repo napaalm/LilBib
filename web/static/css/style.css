@@ -5,12 +5,22 @@ margin: 0px;
 
 }
 
+*:focus {
+    outline: none;
+}
 
 
-
-
-
-/* Opzioni grafiche per il footer*/
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*/
+/* Opzioni grafiche per il Header*/
 header>nav>ul>li{
 
 display: inline;
@@ -62,13 +72,16 @@ nav>ul>li>a:hover , nav>ul>li>span>a:hover{
 color: #F0803C;
 
 }
-
-
-
-
-
-
-
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*/
 /*Opzioni grafiche imagine Home*/
 
 div.homeImg{
@@ -100,16 +113,20 @@ font-family: RestoreW00-Heavy;
 
 @font-face{
 
-src: url("/LilBib/web/static/font/Restore W00 Heavy.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
+src: url("/static/font/Restore W00 Heavy.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
 font-family: 'RestoreW00-Heavy';
 
 }
-
-
-
-
-
-
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*/
 /*Opzioni grafiche /login  */
 
 div.login{
@@ -123,6 +140,7 @@ transform: translateX(-50%) translateY(-50%);
 
 }
 
+/*  opzioni grafiche form*/
 div.form{
 
 width: 400px;
@@ -154,13 +172,11 @@ h2.log{
 color: white;
 position: absolute;
 top: 25px;
-left: 150px;
+left: 140px;
 font-size: 40px;
+font-family: RestoreW00-Heavy; 
 
 }
-
-
-/*  opzioni grafiche form*/
 
 form{
 
@@ -169,7 +185,57 @@ align-items: center;
 
 }
 
+input{
 
+background-color: #E8E8E8;
+border: 1px solid #A8A8A8;
+text-align: center;
+margin-bottom: 20px;
+width: 180px;
+padding-top: 2px;
+border-radius: 4px;
+
+}
+
+
+input:hover , input:focus , input:active {
+
+border:1px solid #F0803C;
+border-radius: 4px;
+
+}
+
+input#submit:hover{
+
+background-color: #F0803C;
+
+}
+
+h3.loginTitle{
+
+margin-top:0px;
+font-family: RestoreW00-Heavy;		/* cambiare font*/
+
+}
+
+h3.loginTitle1{
+
+margin-top: 15px;
+font-family: RestoreW00-Heavy;		/* cambiare font*/
+
+}
+
+
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*/
 /*	opzioni grafiche footer*/
 
 footer{
