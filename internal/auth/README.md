@@ -21,8 +21,19 @@ Il secret per la firma dev'essere ottenuto da `internal/config`.
 type Token
 ```
 
+## Errori
+```go
+type AuthenticationError
+type LDAPError
+type EmptySecretError
+type JWTCreationError
+type JWTVerificationError
+```
+
 ## Funzioni
 ```go
 func AuthenticateUser(username string, password string) (string, error)
+func InitializeSigning() error
+func getToken(username string, isAdmin bool) (string, error)
 func ParseToken(token string) (Token, error)
 ```
