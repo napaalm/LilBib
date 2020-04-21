@@ -41,53 +41,51 @@ import (
 
 //Tabelle del database
 type Libro struct {
-	codice uint32
+	Codice uint32
 
-	titolo string
+	Titolo string
 
-	autore uint32
+	Autore uint32
 
-	genere uint32
+	Genere uint32
 
-	prenotato bool
+	Prenotato bool
 
-	hashz string
+	Hashz string
 }
 
 type Genere struct {
-	codice uint32
+	Codice uint32
 
-	nome string
+	Nome string
 }
 
 type Autore struct {
-	codice uint32
+	Codice uint32
 
-	nome string
+	Nome string
 
-	cognome string
+	Cognome string
 }
 
 type Prestito struct {
-	codice uint32
+	Codice uint32
 
-	libro uint32
+	Libro uint32
 
-	utente string
+	Utente string
 
-	data_prenotazione time.Time
+	Data_prenotazione time.Time
 
-	durata uint32
+	Durata uint32
 
-	data_restituzione time.Time
+	Data_restituzione time.Time
 }
 
 //Funzione per trovare un libro in base al suo codice
 func GetLibro(cod uint32) (Libro, error) {
 
 	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-
-	defer db.Close()
 
 	var vuoto Libro //creo un libro vuoto da ritornare in caso di errore
 
@@ -96,6 +94,8 @@ func GetLibro(cod uint32) (Libro, error) {
 		return vuoto, err
 
 	}
+
+	defer db.Close()
 
 	err = db.Ping() //verifico se il server è ancora disponibile
 
@@ -121,7 +121,7 @@ func GetLibro(cod uint32) (Libro, error) {
 
 	for rows.Next() { //rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 
-		if err := rows.Scan(&lib.codice, &lib.titolo, &lib.autore, &lib.genere, &lib.prenotato, &lib.hashz); err != nil { //tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
+		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.Autore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil { //tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
 
 			return vuoto, err
 
@@ -239,7 +239,7 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 
 		var fabrizio Autore //dichiaro variabili temporanee
 
-		if err := rows.Scan(&fabrizio.codice, &fabrizio.nome, &fabrizio.cognome); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Nome, &fabrizio.Cognome); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 
 			return nil, err
 
@@ -264,13 +264,13 @@ func GetGeneri() ([]Genere, error) {
 
 	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
-	defer db.Close()
-
 	if err != nil { //se c'è un errore, ritorna null e l'errore
 
 		return nil, err
 
 	}
+
+	defer db.Close()
 
 	err = db.Ping() //verifico se il server è ancora disponibile
 
@@ -298,7 +298,7 @@ func GetGeneri() ([]Genere, error) {
 
 		var fabrizio Genere //dichiaro variabili temporanee
 
-		if err := rows.Scan(&fabrizio.codice, &fabrizio.nome); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Nome); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 
 			return nil, err
 
@@ -323,13 +323,13 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 
 	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
-	defer db.Close()
-
 	if err != nil { //se c'è un errore, ritorna null e l'errore
 
 		return nil, err
 
 	}
+
+	defer db.Close()
 
 	err = db.Ping() //verifico se il server è ancora disponibile
 
@@ -361,15 +361,15 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 
 		var fabrizio Prestito
 
-		if err := rows.Scan(&fabrizio.codice, &fabrizio.libro, &fabrizio.utente, &data_pre, &fabrizio.durata, &data_rest); err != nil { //tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Libro, &fabrizio.Utente, &data_pre, &fabrizio.Durata, &data_rest); err != nil { //tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
 
 			return nil, err
 
 		}
 
-		fabrizio.data_prenotazione = time.Unix(data_pre, 0) //salvo data_pre in fabrizio convertendola in timestamp unix
+		fabrizio.Data_prenotazione = time.Unix(data_pre, 0) //salvo data_pre in fabrizio convertendola in timestamp unix
 
-		fabrizio.data_restituzione = time.Unix(data_rest, 0) //salvo data_rest in fabrizio convertendola in timestamp unix
+		fabrizio.Data_restituzione = time.Unix(data_rest, 0) //salvo data_rest in fabrizio convertendola in timestamp unix
 
 		prests = append(prests, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
 
@@ -389,13 +389,13 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 
 	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
-	defer db.Close()
-
 	if err != nil { //se c'è un errore, ritorna null e l'errore
 
 		return nil, err
 
 	}
+
+	defer db.Close()
 
 	err = db.Ping() //verifico se il server è ancora disponibile
 
@@ -513,7 +513,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 
 		var fabrizio Libro //dichiaro variabili temporanee
 
-		if err := rows.Scan(&fabrizio.codice, &fabrizio.titolo, &fabrizio.autore, &fabrizio.genere, &fabrizio.prenotato, &fabrizio.hashz); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.Autore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 
 			return nil, err
 
