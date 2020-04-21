@@ -33,10 +33,13 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
+
+	"strings"
+
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 )
 
 //Tabelle del database
-
 type Libro struct {
 	codice uint32
 
@@ -80,10 +83,9 @@ type Prestito struct {
 }
 
 //Funzione per trovare un libro in base al suo codice
-
 func GetLibro(cod uint32) (Libro, error) {
 
-	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
 	defer db.Close()
 
@@ -138,7 +140,7 @@ func GetLibro(cod uint32) (Libro, error) {
 }
 
 //Funzione per trovare più libri
-func GetLibri(page uint16, num uint16) ([]Libro, error) {
+/*func GetLibri(page uint16, num uint16) ([]Libro, error) {
 
 	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
 
@@ -182,7 +184,7 @@ func GetLibri(page uint16, num uint16) ([]Libro, error) {
 
 		}
 
-		libs = append(libs, fabrizio) //copio la variabile temporantea nell'ultima posizione dell'array
+		libs = append(libs, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
 
 	}
 
@@ -194,14 +196,14 @@ func GetLibri(page uint16, num uint16) ([]Libro, error) {
 
 	return libs, nil //returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
 
-}
+}*/
 
 //Funzione per trovare Autori in base all'iniziale del cognome
 func GetAutori(iniziale uint8) ([]Autore, error) {
 
 	s := string(iniziale) + "%"
 
-	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
 	defer db.Close()
 
@@ -243,7 +245,7 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 
 		}
 
-		auths = append(auths, fabrizio) //copio la variabile temporantea nell'ultima posizione dell'array
+		auths = append(auths, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
 
 	}
 
@@ -260,7 +262,7 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 //Funzione per trovare tutti i generi esistenti nel database
 func GetGeneri() ([]Genere, error) {
 
-	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
 	defer db.Close()
 
@@ -302,7 +304,7 @@ func GetGeneri() ([]Genere, error) {
 
 		}
 
-		gens = append(gens, fabrizio) //copio la variabile temporantea nell'ultima posizione dell'array
+		gens = append(gens, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
 
 	}
 
@@ -319,7 +321,7 @@ func GetGeneri() ([]Genere, error) {
 //Funzione per trovare tutti i prestiti di un utente
 func GetPrestiti(utente string) ([]Prestito, error) {
 
-	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
 	defer db.Close()
 
@@ -369,7 +371,7 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 
 		fabrizio.data_restituzione = time.Unix(data_rest, 0) //salvo data_rest in fabrizio convertendola in timestamp unix
 
-		prests = append(prests, fabrizio) //copio la variabile temporantea nell'ultima posizione dell'array
+		prests = append(prests, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
 
 	}
 
@@ -383,21 +385,21 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 
 }
 
-/*func RicercaLibri (nome string, autore, genere []uint32) ([]Libro, error) {
+func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Libro, error) {
 
-	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 
 	defer db.Close()
 
-	if err != nil {				//se c'è un errore, ritorna null e l'errore
+	if err != nil { //se c'è un errore, ritorna null e l'errore
 
 		return nil, err
 
 	}
 
-	err = db.Ping()				//verifico se il server è ancora disponibile
+	err = db.Ping() //verifico se il server è ancora disponibile
 
-	if err != nil {				//se c'è un errore, ritorna null e l'errore
+	if err != nil { //se c'è un errore, ritorna null e l'errore
 
 		return nil, err
 
@@ -405,6 +407,128 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 
 	tags := strings.Split(nome, " ")
 
+	var args []interface{}
 
+	for i := 0; i < len(tags); i++ {
 
-}*/
+		if len(tags[i]) > 0 {
+
+			tags[i] = "%" + tags[i] + "%"
+
+		}
+
+		args = append(args, tags[i])
+
+	}
+
+	for i := 0; i < len(autore); i++ {
+
+		args = append(args, autore[i])
+
+	}
+
+	for i := 0; i < len(genere); i++ {
+
+		args = append(args, genere[i])
+
+	}
+
+	var q string
+
+	if len(tags) > 0 {
+
+		if len(autore) > 0 {
+
+			if len(genere) > 0 {
+
+				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) AND (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) AND (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
+
+			} else {
+
+				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) AND (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) LIMIT ?,?`
+
+			}
+
+		} else {
+
+			if len(genere) > 0 {
+
+				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) AND (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
+
+			} else {
+
+				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) LIMIT ?,?`
+
+			}
+
+		}
+
+	} else {
+
+		if len(autore) > 0 {
+
+			if len(genere) > 0 {
+
+				q = `SELECT * FROM Libro WHERE (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) AND (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
+
+			} else {
+
+				q = `SELECT * FROM Libro WHERE (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) LIMIT ?,?`
+
+			}
+
+		} else {
+
+			if len(genere) > 0 {
+
+				q = `SELECT * FROM Libro WHERE (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
+
+			} else {
+
+				q = `SELECT * FROM Libro LIMIT ?,?`
+
+			}
+
+		}
+
+	}
+
+	args = append(args, (page-1)*num)
+
+	args = append(args, page*num)
+
+	rows, err := db.Query(q, args...)
+
+	if err != nil { //se c'è un errore, ritorna null e l'errore
+
+		return nil, err
+
+	}
+
+	defer rows.Close() //rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+
+	var libs []Libro
+
+	for rows.Next() { //rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+
+		var fabrizio Libro //dichiaro variabili temporanee
+
+		if err := rows.Scan(&fabrizio.codice, &fabrizio.titolo, &fabrizio.autore, &fabrizio.genere, &fabrizio.prenotato, &fabrizio.hashz); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+
+			return nil, err
+
+		}
+
+		libs = append(libs, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
+
+	}
+
+	if err := rows.Err(); err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
+
+		return nil, err
+
+	}
+
+	return libs, nil //returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+
+}
