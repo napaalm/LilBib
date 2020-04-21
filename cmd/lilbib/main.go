@@ -37,15 +37,19 @@ const srvAddress = ":8081"
 func main() {
 	mux := http.NewServeMux()
 
+	// I pattern che finiscono per '/' comprendono anche i sottopercorsi.
+	// Sono valutati 'a partire dal più specifico', quindi '/' sarà
+	// sempre l'ultimo.
 	mux.HandleFunc("/", handlers.HandleRootOr404)
 	mux.HandleFunc("/libri/", handlers.HandleLibri)
 	mux.HandleFunc("/libro/", handlers.HandleLibri)
 	mux.HandleFunc("/autori/", handlers.HandleAutori)
-	mux.HandleFunc("/generi/", handlers.HandleGeneri)
-	mux.HandleFunc("/login/", handlers.HandleLogin)
-	mux.HandleFunc("/prestito/", handlers.HandlePrestito)
-	mux.HandleFunc("/restituzione/", handlers.HandleRestituzione)
+	mux.HandleFunc("/generi", handlers.HandleGeneri)
+	mux.HandleFunc("/login", handlers.HandleLogin)
+	mux.HandleFunc("/prestito", handlers.HandlePrestito)
+	mux.HandleFunc("/restituzione", handlers.HandleRestituzione)
 
+	// File server per servire direttamente i contenuti statici.
 	fileserver := http.FileServer(http.Dir("web/static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileserver))
 
