@@ -10,5 +10,5 @@ install_hooks() {
   cd ..
 }
 
-! [[ -d .git ]] && echo 'Execute this script from the project folder' && exit 1
+[ -d .git ] || { echo 'Execute this script from the project folder'; exit 1; }
 install_hooks

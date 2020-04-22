@@ -50,7 +50,7 @@ type ldap struct {
 
 type sql struct {
 	Username  string `toml:"username"`
-	Password  string `toml:"passowrd"`
+	Password  string `toml:"password"`
 	Indirizzo string `toml:"indirizzo"`
 	Database  string `toml:"database"`
 }
