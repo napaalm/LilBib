@@ -29,6 +29,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
@@ -65,19 +66,31 @@ type Prestito struct {
 	Data_restituzione time.Time
 }
 
+var db_Connection *sql.DB
+
+//Funzione per inizializzare il database
+func InizializzaDB() error {
+	var err error
+	db_Connection, err = sql.Open("mysql", config.Config.SQL.Username+":"+config.Config.SQL.Password+"@"+config.Config.SQL.Indirizzo+"/"+config.Config.SQL.Database)
+	fmt.Println(config.Config)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Funzione per chiudere il database
+func ChiudiDB() {
+	db_Connection.Close()
+}
+
 //Funzione per trovare un libro in base al suo codice
 func GetLibro(cod uint32) (Libro, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
 	//creo un libro vuoto da ritornare in caso di errore
 	var vuoto Libro
-	//se c'è un errore, ritorna un libro vuoto e l'errore
-	if err != nil {
-		return vuoto, err
-	}
-	defer db.Close()
 
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna un libro vuoto e l'errore
 	if err != nil {
 		return vuoto, err
@@ -86,7 +99,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	//salvo la query che eseguirà l'sql in una variabile stringa
 	q := `SELECT * FROM Libro WHERE codice = ?`
 	//applico la query al database. Salvo i risultati in rows
-	rows, err := db.Query(q, cod)
+	rows, err := db_Connection.Query(q, cod)
 	if err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
 		return vuoto, err
 	}
@@ -113,19 +126,13 @@ func GetLibro(cod uint32) (Libro, error) {
 
 //Funzione per trovare più libri
 /*func GetLibri(page uint16, num uint16) ([]Libro, error) {
-	db, err := sql.Open("mysql", "buff:rodolfo@/suqi")
-	if err != nil { //se c'è un errore, ritorna null e l'errore
-		return nil, err
-	}
-	defer db.Close()
-
-	err = db.Ping() //verifico se il server è ancora disponibile
+	err := db_Connection.Ping() //verifico se il server è ancora disponibile
 	if err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
 		return nil, err
 	}
 
 	q := `SELECT * FROM Libro LIMIT ?,?` //salvo la query che eseguirà l'sql in una variabile stringa
-	rows, err := db.Query(q, (page-1)*num, page*num) //applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(q, (page-1)*num, page*num) //applico la query al database. Salvo i risultati in rows
 	if err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
 		return nil, err
 	}
@@ -148,15 +155,8 @@ func GetLibro(cod uint32) (Libro, error) {
 
 //Funzione per trovare Autori in base all'iniziale del cognome
 func GetAutori(iniziale uint8) ([]Autore, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	defer db.Close()
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return nil, err
-	}
-
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -167,7 +167,7 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 	//salvo la query che eseguirà l'sql in una variabile stringa
 	q := `SELECT * FROM Autore WHERE cognome LIKE ?`
 	//applico la query al database. Salvo i risultati in rows
-	rows, err := db.Query(q, s)
+	rows, err := db_Connection.Query(q, s)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -197,15 +197,8 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 
 //Funzione per trovare tutti i generi esistenti nel database
 func GetGeneri() ([]Genere, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -214,7 +207,7 @@ func GetGeneri() ([]Genere, error) {
 	//salvo la query che eseguirà l'sql in una variabile stringa
 	q := `SELECT * FROM Genere`
 	//applico la query al database. Salvo i risultati in rows
-	rows, err := db.Query(q)
+	rows, err := db_Connection.Query(q)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -244,15 +237,8 @@ func GetGeneri() ([]Genere, error) {
 
 //Funzione per trovare tutti i prestiti di un utente
 func GetPrestiti(utente string) ([]Prestito, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -261,7 +247,7 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 	//salvo la query che eseguirà l'sql in una variabile stringa
 	q := `SELECT * FROM Prestito WHERE utente = ?`
 	//applico la query al database. Salvo i risultati in rows
-	rows, err := db.Query(q, utente)
+	rows, err := db_Connection.Query(q, utente)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -295,15 +281,10 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 	return prests, nil
 }
 
+//Funzione per la ricerca dei libri
 func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Libro, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -359,7 +340,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 	args = append(args, (page-1)*num)
 	args = append(args, page*num)
 
-	rows, err := db.Query(q, args...)
+	rows, err := db_Connection.Query(q, args...)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -387,16 +368,10 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 	return libs, nil
 }
 
+//Funzione per la ricerca degli autori
 func RicercaAutori(nome string) ([]Autore, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -415,7 +390,7 @@ func RicercaAutori(nome string) ([]Autore, error) {
 	}
 
 	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1) + strings.Repeat(` OR cognome LIKE ?`, len(tags))
-	rows, err := db.Query(q, args...)
+	rows, err := db_Connection.Query(q, args...)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -443,16 +418,10 @@ func RicercaAutori(nome string) ([]Autore, error) {
 	return auths, nil
 }
 
+//Funzione per la ricerca dei generi
 func RicercaGeneri(nome string) ([]Genere, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -469,7 +438,7 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 	}
 
 	q := `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
-	rows, err := db.Query(q, args...)
+	rows, err := db_Connection.Query(q, args...)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -497,42 +466,105 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 	return gens, nil
 }
 
+//Funzione per aggiungere un libro
+
 func AddLibro(titolo string, autore, genere uint32) (uint32, error) {
-	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
-	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return 0, err
-	}
-	defer db.Close()
-
 	//verifico se il server è ancora disponibile
-	err = db.Ping()
+	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return 0, err
 	}
 
-	q := `INSERT INTO Libro VALUES (null, ?, ?, ?, false, null);
-		  SELECT LAST_INSERT_ID();`
-	rows, err := db.Query(q, titolo, autore, genere)
+	//preparo il database per la query
+	stmt, err := db_Connection.Prepare(`INSERT INTO Libro VALUES (null, ?, ?, ?, false, null)`)
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	//eseguo la query e ne salvo i risultati
+	res, err := stmt.Exec(titolo, autore, genere)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return 0, err
 	}
-	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
-	defer rows.Close()
 
-	var id uint32
-	rows.Next()
-	//tramite rows.Scan() salvo il risultato nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
-	if err := rows.Scan(&id); err != nil {
-		return 0, err
-	}
+	//trovo l'id del libro appena inserito
+	id, err := res.LastInsertId()
 	//se c'è un errore, ritorna null e l'errore
-	if err := rows.Err(); err != nil {
+	if err != nil {
 		return 0, err
 	}
 
 	//returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
-	return id, nil
+	return uint32(id), nil
+}
+
+//Funzione per aggiungere un genere
+func AddGenere(nome string) (uint32, error) {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//preparo il database per la query
+	stmt, err := db_Connection.Prepare(`INSERT INTO Genere VALUES (null, ?)`)
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	//eseguo la query e ne salvo i risultati
+	res, err := stmt.Exec(nome)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//trovo l'id del genere appena inserito
+	id, err := res.LastInsertId()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
+	return uint32(id), nil
+}
+
+//Funzione per aggiungere un autore
+func AddAutore(nome, cognome string) (uint32, error) {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//preparo il database per la query
+	stmt, err := db_Connection.Prepare(`INSERT INTO Autore VALUES (null, ?, ?)`)
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	//eseguo la query e ne salvo i risultati
+	res, err := stmt.Exec(nome, cognome)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//trovo l'id del genere appena inserito
+	id, err := res.LastInsertId()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
+	return uint32(id), nil
 }
