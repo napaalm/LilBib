@@ -38,8 +38,8 @@ type config struct {
 }
 
 type generale struct {
-	AdminUser string `toml:"admin"`
-	JWTSecret string `toml:"chiave_firma"`
+	AdminUser       string `toml:"admin"`
+	JWTSecret       string `toml:"chiave_firma"`
 	LunghezzaPagina uint16 `toml:"lunghezzaPagina"`
 }
 

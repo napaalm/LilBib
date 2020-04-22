@@ -294,7 +294,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	var args []interface{}
 	for _, tag := range tags {
 		if len(tag) > 0 {
-			args = append(args, "%" + tag + "%")
+			args = append(args, "%"+tag+"%")
 		}
 	}
 	for _, a := range autore {
