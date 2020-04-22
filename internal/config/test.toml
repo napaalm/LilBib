@@ -1,0 +1,12 @@
+[Generale]
+admin="loaded"
+
+[LDAP]
+uri="loaded"
+porta="loaded"
+
+[SQL]
+username="loaded"
+password="loaded"
+indirizzo="loaded"
+database="loaded"
