@@ -29,6 +29,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
@@ -68,10 +69,9 @@ type Prestito struct {
 var db_Connection *sql.DB
 
 //Funzione per inizializzare il database
-func InizializzaDB() error {
-	var err error
+func InizializzaDB() (err error) {
 	db_Connection, err = sql.Open("mysql", fmt.Sprintf("%s:%s@(%s)/%s", config.Config.SQL.Username, config.Config.SQL.Password, config.Config.SQL.Indirizzo, config.Config.SQL.Database))
-	return err
+	return
 }
 
 //Funzione per chiudere il database
@@ -426,7 +426,7 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 	//Divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
 	tags := strings.Split(nome, " ")
 	var args []interface{}
-	for _, tag := range rags {
+	for _, tag := range tags {
 		if len(tag) > 0 {
 			//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
 			args = append(args, "%"+tag+"%")
