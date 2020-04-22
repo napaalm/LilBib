@@ -477,7 +477,7 @@ func AddLibro(titolo string, autore, genere uint32) (uint32, error) {
 	}
 
 	//preparo il database per la query
-	stmt, err := db_Connection.Prepare(`INSERT INTO Libro VALUES (null, ?, ?, ?, false, null)`)
+	stmt, err := db_Connection.Prepare(`INSERT INTO Libro VALUES (null, ?, ?, ?, false, "")`)
 	if err != nil {
 		return 0, err
 	}
@@ -567,4 +567,27 @@ func AddAutore(nome, cognome string) (uint32, error) {
 
 	//returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
 	return uint32(id), nil
+}
+
+//Funzione per impostare l'hash di un libro
+func SetHash(codice uint32, hash string) error {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+
+	q := `UPDATE Libro
+		  SET hashz = ?
+		  WHERE codice = ?`
+	rows, err := db_Connection.Query(q, hash, codice)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	return nil
 }
