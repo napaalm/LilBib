@@ -29,7 +29,6 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
@@ -72,7 +71,6 @@ var db_Connection *sql.DB
 func InizializzaDB() error {
 	var err error
 	db_Connection, err = sql.Open("mysql", config.Config.SQL.Username+":"+config.Config.SQL.Password+"@"+config.Config.SQL.Indirizzo+"/"+config.Config.SQL.Database)
-	fmt.Println(config.Config)
 	if err != nil {
 		return err
 	}
@@ -126,31 +124,42 @@ func GetLibro(cod uint32) (Libro, error) {
 
 //Funzione per trovare più libri
 /*func GetLibri(page uint16, num uint16) ([]Libro, error) {
-	err := db_Connection.Ping() //verifico se il server è ancora disponibile
-	if err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna un libro vuoto e l'errore
+	if err != nil {
 		return nil, err
 	}
 
-	q := `SELECT * FROM Libro LIMIT ?,?` //salvo la query che eseguirà l'sql in una variabile stringa
-	rows, err := db_Connection.Query(q, (page-1)*num, page*num) //applico la query al database. Salvo i risultati in rows
-	if err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
+	//salvo la query che eseguirà l'sql in una variabile stringa
+	q := `SELECT * FROM Libro LIMIT ?,?`
+	//applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(q, (page-1)*num, page*num)
+	//se c'è un errore, ritorna un libro vuoto e l'errore
+	if err != nil {
 		return nil, err
 	}
-	defer rows.Close() //rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
 
 	var libs []Libro
-	for rows.Next() { //rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
-		var fabrizio Libro //dichiaro variabili temporanee
-		if err := rows.Scan(&fabrizio.codice, &fabrizio.titolo, &fabrizio.autore, &fabrizio.genere, &fabrizio.prenotato, &fabrizio.hashz); err != nil { //tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+	//rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		//dichiaro variabili temporanee
+		var fabrizio Libro
+		//tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.codice, &fabrizio.titolo, &fabrizio.autore, &fabrizio.genere, &fabrizio.prenotato, &fabrizio.hashz); err != nil {
 			return nil, err
 		}
-		libs = append(libs, fabrizio) //copio la variabile temporanea nell'ultima posizione dell'array
+		//copio la variabile temporanea nell'ultima posizione dell'array
+		libs = append(libs, fabrizio)
 	}
-	if err := rows.Err(); err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
+	//se c'è un errore, ritorna un libro vuoto e l'errore
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-
-	return libs, nil //returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	//returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	return libs, nil
 }*/
 
 //Funzione per trovare Autori in base all'iniziale del cognome
@@ -569,6 +578,39 @@ func AddAutore(nome, cognome string) (uint32, error) {
 	return uint32(id), nil
 }
 
+func AddPrestito(libro uint32, utente string, data_prenotazione time.Time, durata uint32) (uint32, error) {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//preparo il database per la query
+	stmt, err := db_Connection.Prepare(`INSERT INTO Prestito VALUES (null, ?, ?, ?, ?, null)`)
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	//eseguo la query e ne salvo i risultati
+	res, err := stmt.Exec(libro, utente, data_prenotazione.Unix(), durata)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//trovo l'id del genere appena inserito
+	id, err := res.LastInsertId()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	//returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
+	return uint32(id), nil
+}
+
 //Funzione per impostare l'hash di un libro
 func SetHash(codice uint32, hash string) error {
 	//verifico se il server è ancora disponibile
@@ -582,6 +624,117 @@ func SetHash(codice uint32, hash string) error {
 		  SET hashz = ?
 		  WHERE codice = ?`
 	rows, err := db_Connection.Query(q, hash, codice)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	return nil
+}
+
+//Funzione per impostare la restituzione
+func SetRestituzione(prestito uint32, data_restituzione time.Time) error {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+
+	q := `UPDATE Prestito
+		  SET data_restituzione = ?
+		  WHERE codice = ?`
+	rows, err := db_Connection.Query(q, data_restituzione.Unix(), prestito)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	return nil
+}
+
+//Funzione per rimuovere un libro
+func RemoveLibro(codice uint32) error {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+
+	q := `DELETE FROM Libro
+		  WHERE codice = ?`
+	rows, err := db_Connection.Query(q, codice)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	return nil
+}
+
+//Funzione per rimuovere un genere
+func RemoveGenere(codice uint32) error {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+
+	q := `DELETE FROM Genere
+		  WHERE codice = ?`
+	rows, err := db_Connection.Query(q, codice)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	return nil
+}
+
+//Funzione per rimuovere un autore
+func RemoveAutore(codice uint32) error {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+
+	q := `DELETE FROM Autore
+		  WHERE codice = ?`
+	rows, err := db_Connection.Query(q, codice)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	return nil
+}
+
+//Funzione per rimuovere un prestito
+func RemovePrestito(codice uint32) error {
+	//verifico se il server è ancora disponibile
+	err := db_Connection.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+
+	q := `DELETE FROM Prestito
+		  WHERE codice = ?`
+	rows, err := db_Connection.Query(q, codice)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return err
