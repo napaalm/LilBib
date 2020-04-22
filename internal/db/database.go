@@ -71,12 +71,8 @@ var db_Connection *sql.DB
 //Funzione per inizializzare il database
 func InizializzaDB() error {
 	var err error
-	db_Connection, err = sql.Open("mysql", config.Config.SQL.Username+":"+config.Config.SQL.Password+"@"+config.Config.SQL.Indirizzo+"/"+config.Config.SQL.Database)
-	fmt.Println(config.Config)
-	if err != nil {
-		return err
-	}
-	return nil
+	db_Connection, err = sql.Open("mysql", fmt.Sprintf("%s:%s@(%s)/%s", config.Config.SQL.Username, config.Config.SQL.Password, config.Config.SQL.Indirizzo, config.Config.SQL.Database))
+	return err
 }
 
 //Funzione per chiudere il database
@@ -86,14 +82,10 @@ func ChiudiDB() {
 
 //Funzione per trovare un libro in base al suo codice
 func GetLibro(cod uint32) (Libro, error) {
-	//creo un libro vuoto da ritornare in caso di errore
-	var vuoto Libro
-
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna un libro vuoto e l'errore
-	if err != nil {
-		return vuoto, err
+	if err := db_Connection.Ping(); err != nil {
+		return Libro{}, err
 	}
 
 	//salvo la query che eseguirà l'sql in una variabile stringa
@@ -101,7 +93,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	//applico la query al database. Salvo i risultati in rows
 	rows, err := db_Connection.Query(q, cod)
 	if err != nil { //se c'è un errore, ritorna un libro vuoto e l'errore
-		return vuoto, err
+		return Libro{}, err
 	}
 	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
@@ -112,12 +104,12 @@ func GetLibro(cod uint32) (Libro, error) {
 	for rows.Next() {
 		//tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
 		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.Autore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil {
-			return vuoto, err
+			return Libro{}, err
 		}
 	}
 	//se c'è un errore, ritorna un libro vuoto e l'errore
 	if err := rows.Err(); err != nil {
-		return vuoto, err
+		return Libro{}, err
 	}
 
 	//returno il libro trovato e null (null sarebbe l'errore che non è avvenuto)
@@ -156,9 +148,8 @@ func GetLibro(cod uint32) (Libro, error) {
 //Funzione per trovare Autori in base all'iniziale del cognome
 func GetAutori(iniziale uint8) ([]Autore, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return nil, err
 	}
 
@@ -198,9 +189,8 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 //Funzione per trovare tutti i generi esistenti nel database
 func GetGeneri() ([]Genere, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return nil, err
 	}
 
@@ -238,9 +228,8 @@ func GetGeneri() ([]Genere, error) {
 //Funzione per trovare tutti i prestiti di un utente
 func GetPrestiti(utente string) ([]Prestito, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return nil, err
 	}
 
@@ -284,9 +273,8 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 //Funzione per la ricerca dei libri
 func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Libro, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return nil, err
 	}
 
@@ -337,8 +325,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 			}
 		}
 	}
-	args = append(args, (page-1)*num)
-	args = append(args, page*num)
+	args = append(args, page*num, (page+1)*num)
 
 	rows, err := db_Connection.Query(q, args...)
 	//se c'è un errore, ritorna null e l'errore
@@ -371,20 +358,19 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 //Funzione per la ricerca degli autori
 func RicercaAutori(nome string) ([]Autore, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return nil, err
 	}
 
 	//divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
 	tags := strings.Split(nome, " ")
 	var args []interface{}
-	for j := 0; j < 2; j++ {
-		for i := 0; i < len(tags); i++ {
-			if len(tags[i]) > 0 {
+	for j := uint8(0); j < 2; j++ {
+		for _, tag := range tags {
+			if len(tag) > 0 {
 				//i % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
-				args = append(args, "%"+tags[i]+"%")
+				args = append(args, "%" + tag + "%")
 			}
 		}
 	}
@@ -421,19 +407,18 @@ func RicercaAutori(nome string) ([]Autore, error) {
 //Funzione per la ricerca dei generi
 func RicercaGeneri(nome string) ([]Genere, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return nil, err
 	}
 
 	//divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
 	tags := strings.Split(nome, " ")
 	var args []interface{}
-	for i := 0; i < len(tags); i++ {
-		if len(tags[i]) > 0 {
+	for _, tag := range rags {
+		if len(tag) > 0 {
 			//i % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
-			args = append(args, "%"+tags[i]+"%")
+			args = append(args, "%" + tag + "%")
 		}
 	}
 
@@ -470,9 +455,8 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 
 func AddLibro(titolo string, autore, genere uint32) (uint32, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return 0, err
 	}
 
@@ -504,9 +488,8 @@ func AddLibro(titolo string, autore, genere uint32) (uint32, error) {
 //Funzione per aggiungere un genere
 func AddGenere(nome string) (uint32, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return 0, err
 	}
 
@@ -538,9 +521,8 @@ func AddGenere(nome string) (uint32, error) {
 //Funzione per aggiungere un autore
 func AddAutore(nome, cognome string) (uint32, error) {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return 0, err
 	}
 
@@ -572,9 +554,8 @@ func AddAutore(nome, cognome string) (uint32, error) {
 //Funzione per impostare l'hash di un libro
 func SetHash(codice uint32, hash string) error {
 	//verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
 
