@@ -286,11 +286,13 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 		//copio la variabile temporanea nell'ultima posizione dell'array
 		prests = append(prests, fabrizio)
 	}
-	if err := rows.Err(); err != nil { //se c'è un errore, ritorna null e l'errore
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return prests, nil //returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
+	//returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
+	return prests, nil
 }
 
 func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Libro, error) {
@@ -376,7 +378,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 		//copio la variabile temporanea nell'ultima posizione dell'array
 		libs = append(libs, fabrizio)
 	}
-	//se c'è un errore, ritorna un libro vuoto e l'errore
+	//se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -432,12 +434,12 @@ func RicercaAutori(nome string) ([]Autore, error) {
 		auths = append(auths, fabrizio)
 	}
 
-	//se c'è un errore, ritorna un libro vuoto e l'errore
+	//se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	//returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	//returno gli autori trovati e null (null sarebbe l'errore che non è avvenuto)
 	return auths, nil
 }
 
@@ -466,7 +468,7 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 		}
 	}
 
-	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
+	q := `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
 	rows, err := db.Query(q, args...)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
@@ -486,11 +488,51 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 		gens = append(gens, fabrizio)
 	}
 
-	//se c'è un errore, ritorna un libro vuoto e l'errore
+	//se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	//returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	//returno i generi trovati e null (null sarebbe l'errore che non è avvenuto)
 	return gens, nil
+}
+
+func AddLibro(titolo string, autore, genere uint32) (uint32, error) {
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	defer db.Close()
+
+	//verifico se il server è ancora disponibile
+	err = db.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+
+	q := `INSERT INTO Libro VALUES (null, ?, ?, ?, false, null);
+		  SELECT LAST_INSERT_ID();`
+	rows, err := db.Query(q, titolo, autore, genere)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var id uint32
+	rows.Next()
+	//tramite rows.Scan() salvo il risultato nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+	if err := rows.Scan(&id); err != nil {
+		return 0, err
+	}
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	//returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
+	return id, nil
 }
