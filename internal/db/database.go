@@ -282,7 +282,7 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 }
 
 //Funzione per la ricerca dei libri
-func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Libro, error) {
+func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
@@ -292,51 +292,28 @@ func RicercaLibri(nome string, autore, genere []uint32, page, num uint16) ([]Lib
 	//Divido la stringa nome in vari tag e poi aggiungo i vari argomenti alla slice "args"
 	tags := strings.Split(nome, " ")
 	var args []interface{}
-	for i := 0; i < len(tags); i++ {
-		if len(tags[i]) > 0 {
-			tags[i] = "%" + tags[i] + "%"
+	for _, tag := range tags {
+		if len(tag) > 0 {
+			args = append(args, "%" + tag + "%")
 		}
-		args = append(args, tags[i])
 	}
-	for i := 0; i < len(autore); i++ {
-		args = append(args, autore[i])
+	for _, a := range autore {
+		args = append(args, a)
 	}
-	for i := 0; i < len(genere); i++ {
-		args = append(args, genere[i])
+	for _, g := range genere {
+		args = append(args, g)
 	}
+	args = append(args, page*config.Config.Generale.LunghezzaPagina, (page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	var q string
-	if len(tags) > 0 {
-		if len(autore) > 0 {
-			if len(genere) > 0 {
-				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) AND (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) AND (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
-			} else {
-				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) AND (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) LIMIT ?,?`
-			}
-		} else {
-			if len(genere) > 0 {
-				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) AND (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
-			} else {
-				q = `SELECT * FROM Libro WHERE (titolo LIKE ?` + strings.Repeat(` OR titolo LIKE ?`, len(tags)-1) + `) LIMIT ?,?`
-			}
-		}
-	} else {
-		if len(autore) > 0 {
-			if len(genere) > 0 {
-				q = `SELECT * FROM Libro WHERE (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) AND (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
-			} else {
-				q = `SELECT * FROM Libro WHERE (autore = ?` + strings.Repeat(` OR autore = ?`, len(autore)-1) + `) LIMIT ?,?`
-			}
-		} else {
-			if len(genere) > 0 {
-				q = `SELECT * FROM Libro WHERE (genere = ?` + strings.Repeat(` OR genere = ?`, len(genere)-1) + `) LIMIT ?,?`
-			} else {
-				q = `SELECT * FROM Libro LIMIT ?,?`
-			}
-		}
+	q := `SELECT * FROM Libro WHERE 1 = 1` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
+	if len(autore) > 0 {
+		q += ` AND autore IN (?` + strings.Repeat(`,?`, len(autore)-1) + `)`
 	}
-	args = append(args, page*num, (page+1)*num)
+	if len(genere) > 0 {
+		q += ` AND genere IN (?` + strings.Repeat(`,?`, len(genere)-1) + `)`
+	}
+	q += ` LIMIT ?,?`
 
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
@@ -620,9 +597,8 @@ func SetHash(codice uint32, hash string) error {
 //Funzione per impostare la restituzione
 func SetRestituzione(prestito uint32, data_restituzione time.Time) error {
 	//Verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
 
@@ -643,9 +619,8 @@ func SetRestituzione(prestito uint32, data_restituzione time.Time) error {
 //Funzione per rimuovere un libro
 func RemoveLibro(codice uint32) error {
 	//Verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
 
@@ -665,9 +640,8 @@ func RemoveLibro(codice uint32) error {
 //Funzione per rimuovere un genere
 func RemoveGenere(codice uint32) error {
 	//Verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
 
@@ -687,9 +661,8 @@ func RemoveGenere(codice uint32) error {
 //Funzione per rimuovere un autore
 func RemoveAutore(codice uint32) error {
 	//Verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
 
@@ -709,9 +682,8 @@ func RemoveAutore(codice uint32) error {
 //Funzione per rimuovere un prestito
 func RemovePrestito(codice uint32) error {
 	//Verifico se il server è ancora disponibile
-	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
-	if err != nil {
+	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
 
