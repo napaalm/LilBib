@@ -413,13 +413,11 @@ func RicercaAutori(nome string) ([]Autore, error) {
 	}
 
 	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1) + strings.Repeat(` OR cognome LIKE ?`, len(tags))
-
 	rows, err := db.Query(q, args...)
 	//se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
 	}
-
 	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
 
@@ -441,4 +439,58 @@ func RicercaAutori(nome string) ([]Autore, error) {
 
 	//returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
 	return auths, nil
+}
+
+func RicercaGeneri(nome string) ([]Genere, error) {
+	db, err := sql.Open("mysql", config.Config.SQL.Indirizzo)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	//verifico se il server è ancora disponibile
+	err = db.Ping()
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+
+	//divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
+	tags := strings.Split(nome, " ")
+	var args []interface{}
+	for i := 0; i < len(tags); i++ {
+		if len(tags[i]) > 0 {
+			//i % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
+			args = append(args, "%"+tags[i]+"%")
+		}
+	}
+
+	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
+	rows, err := db.Query(q, args...)
+	//se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	//rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var gens []Genere
+	for rows.Next() {
+		var fabrizio Genere
+		//tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Nome); err != nil {
+			return nil, err
+		}
+		//copio la variabile temporanea nell'ultima posizione dell'array
+		gens = append(gens, fabrizio)
+	}
+
+	//se c'è un errore, ritorna un libro vuoto e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	//returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	return gens, nil
 }
