@@ -6,8 +6,9 @@
 <meta name="description" content="Lightweight Integrated Logistics for Book Indexing and Borrowing"/>
 <meta name="keywords" content="libri, prenotazione, liceo, vinci, dav"> <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
 <meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa --> 
+<link rel="stylesheet" type="text/css" href="/LilBib/LilBib/web/static/css/960_12_col.css"> <!-- questo e' un tentativo che per ora e fallito--> 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
-<link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
+<link rel="stylesheet" type="text/css" href="/LilBib/LilBib/web/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 
 </head>
@@ -18,24 +19,52 @@
 <header>
 	<nav>
 		<ul>
-			<li><a href="index.html">Home</a></li>
-			<li><a href="libri.html">Libri</a></li>   <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
-			<li><a href="autori.html">Autori</a></li>
-			<li><a href="generi.html">Generi</a></li>
-			<li><a href="prestito.html">Prestito</a></li>
-			<li><a href="restituzione.html">Restituzione</a></li>
-			<li><span class="footerRight"><a href="login.html"> <!--<i class="material-icons">person</i>--><span class="login">Login</span></a></span></li>
-		</ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/libri">Libri</a></li>   <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
+			<li><a href="/autori">Autori</a></li>
+			<li><a href="/generi">Generi</a></li>
+			<li><a href="/prestito">Prestito</a></li>
+			<li><a href="/restituzione">Restituzione</a></li>
+			<li><span class="footerRight"><a href="/LilBib/LilBib/web/template/login.html"> <!--<i class="material-icons">person</i>--><span class="login">Login</span></a></span></li>
+		</ul>	
 	</nav>
 </header>
 
 <div class="homeImg">
-	<img class="home" src="/static/img/libriHome.jpeg"/>
+	<img class="home" src="/LilBib/LilBib/web/static/img/libriHome.jpeg"/>
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 	<h1 class="titleHome">Lightweight Integrated Logistics for <br /> Book Indexing and Borrowing</h1> <!-- bisogna cambiare font -->
 </div>
 
+<div class="middleHome"> 
+	<div class="coll1Home">
+		<h2 class="home">Libri Disponibili</h2>
+		<p class="Home">attualmente i libri diponibili sono:<br/> <span class="numHome">m</span></p>
+	</div>
+	<div class="coll2Home">
+		<h2 class="home">Libri Prenotati</h2>
+		<p class="Home"> attualmente i libri prenotati sono:<br/><span class="numHome">n</span></p>
+	</div>  
+	<div class="coll3Home">
+		<h2 class="home">Server Status</h2>
+		<p class="Home"> attualmente il server e':<br/><span class="numHome">online</span></p>
+	</div>
+</div>
 
+<div>
+<footer id="Other" >
+	<p class="Other FooterLeft">© 2020 LilBib | Versione: vXX.XX</p>
+	<p class="Other FooterRight">Codice sorgente | Licenza AGPLv3</p>
+</footer>
+</div>
 </body>
 
+
 </html>
+
+
+<!--
+		1- scegliere verione da adottare( full screen o come e' attualmente)
+		2-
+
+-->
