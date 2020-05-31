@@ -28,6 +28,8 @@ import (
 	"log"
 	"net/http"
 
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/handlers"
 )
 
@@ -35,6 +37,9 @@ import (
 const srvAddress = ":8081"
 
 func main() {
+	config.LoadConfig("config/config.toml")
+	auth.InitializeSigning()
+
 	mux := http.NewServeMux()
 
 	// I pattern che finiscono per '/' comprendono anche i sottopercorsi.
