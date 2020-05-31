@@ -2,7 +2,7 @@
 admin="admin"
 chiave_firma="secret"
 fqdn_sito="example.org"
-dummy_auth=false
+dummy_auth=true
 
 [LDAP]
 host="ldap.example.org"

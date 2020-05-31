@@ -18,11 +18,20 @@ Il secret per la firma dev'essere ottenuto da `internal/config`.
 
 ## Tipi
 ```go
-type Token
+type UserInfo
+```
+
+## Errori
+```go
+type AuthenticationError
+type LDAPError
+type JWTCreationError
+type InvalidTokenError
 ```
 
 ## Funzioni
 ```go
-func AuthenticateUser(username string, password string) (string, error)
-func ParseToken(token string) (Token, error)
+func InitializeSigning() error
+func AuthenticateUser(username, password string) ([]byte, error)
+func ParseToken(token string) (UserInfo, error)
 ```
