@@ -661,7 +661,7 @@ func RemovePrestito(codice uint32) error {
 }
 
 //Funzione che ritorna il numero di libri prenotati
-func LibriPrenotati() int {
+func LibriPrenotati() (int, err) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
@@ -691,11 +691,11 @@ func LibriPrenotati() int {
 		return nil, err
 	}
 
-	return pren
+	return pren, nil
 }
 
 //Funzione che ritorna il numero di libri disponibili
-func LibriDisponibili() int {
+func LibriDisponibili() (int, err) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
@@ -725,5 +725,5 @@ func LibriDisponibili() int {
 		return nil, err
 	}
 
-	return disp
+	return disp, nil
 }

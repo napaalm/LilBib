@@ -35,6 +35,11 @@ import (
 
 const templatesDir = "web/template"
 
+type homeVars struct {
+	Disponibili int
+	Prenotati int
+}
+
 // viene inizializzato nel momento in cui viene importato il package
 var templates = template.Must(template.ParseFiles(
 	templatesDir+"/autori.html",
@@ -60,7 +65,22 @@ func HandleRootOr404(w http.ResponseWriter, r *http.Request) {
 // Percorso: /
 // Homepage.
 func HandleHome(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "index.html", nil)
+	pren, err := db.LibriPrenotati()
+	if err != nil {
+		//errore, imposto dei valori di default
+		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1}
+		return
+	}
+
+	disp, err := db.LibriDisponibili()
+	if err != nil {
+		//errore, imposto dei valori di default
+		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1}
+		return
+	}
+
+	vars = homeVars{Disponibili: disp, Prenotati: pren}
+	templates.ExecuteTemplate(w, "index.html", vars)
 }
 
 // Percorso: /libro/<idLibro uint32>
