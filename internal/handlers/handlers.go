@@ -37,7 +37,7 @@ const templatesDir = "web/template"
 
 type homeVars struct {
 	Disponibili int
-	Prenotati int
+	Prenotati   int
 }
 
 // viene inizializzato nel momento in cui viene importato il package
@@ -68,18 +68,18 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 	pren, err := db.LibriPrenotati()
 	if err != nil {
 		//errore, imposto dei valori di default
-		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1}
+		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1})
 		return
 	}
 
 	disp, err := db.LibriDisponibili()
 	if err != nil {
 		//errore, imposto dei valori di default
-		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1}
+		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1})
 		return
 	}
 
-	vars = homeVars{Disponibili: disp, Prenotati: pren}
+	vars := homeVars{Disponibili: disp, Prenotati: pren}
 	templates.ExecuteTemplate(w, "index.html", vars)
 }
 

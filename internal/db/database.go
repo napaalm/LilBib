@@ -661,19 +661,19 @@ func RemovePrestito(codice uint32) error {
 }
 
 //Funzione che ritorna il numero di libri prenotati
-func LibriPrenotati() (int, err) {
+func LibriPrenotati() (int, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
-		return err
+		return 0, err
 	}
 
 	q := `SELECT COUNT(*) FROM Libro
 		WHERE prenotato = 1`
-	rows, err := db_Connection.Query(q, codice)
+	rows, err := db_Connection.Query(q)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
-		return err
+		return 0, err
 	}
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
@@ -682,32 +682,32 @@ func LibriPrenotati() (int, err) {
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&pren); err != nil {
-			return nil, err
+			return 0, err
 		}
 	}
 
 	//se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return pren, nil
 }
 
 //Funzione che ritorna il numero di libri disponibili
-func LibriDisponibili() (int, err) {
+func LibriDisponibili() (int, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
-		return err
+		return 0, err
 	}
 
 	q := `SELECT COUNT(*) FROM Libro
 		WHERE prenotato = 0`
-	rows, err := db_Connection.Query(q, codice)
+	rows, err := db_Connection.Query(q)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
-		return err
+		return 0, err
 	}
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
@@ -716,13 +716,13 @@ func LibriDisponibili() (int, err) {
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&disp); err != nil {
-			return nil, err
+			return 0, err
 		}
 	}
 
 	//se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	return disp, nil
