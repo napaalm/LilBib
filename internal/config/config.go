@@ -38,10 +38,11 @@ type config struct {
 }
 
 type generale struct {
-	FQDN      string `toml:"fqdn_sito"`
-	AdminUser string `toml:"admin"`
-	JWTSecret string `toml:"chiave_firma"`
-	DummyAuth bool   `toml:"dummy_auth"`
+	FQDN            string `toml:"fqdn_sito"`
+	AdminUser       string `toml:"admin"`
+	LunghezzaPagina uint16 `toml:"lunghezzaPagina"`
+	JWTSecret       string `toml:"chiave_firma"`
+	DummyAuth       bool   `toml:"dummy_auth"`
 }
 
 type ldap struct {
