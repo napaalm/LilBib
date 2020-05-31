@@ -30,13 +30,14 @@ import "git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 func AuthenticateUser(username, password string) ([]byte, error) {
 
 	// Controlla le credenziali
+	var err error
 	if !config.Config.Generale.DummyAuth {
-		err := checkCredentials(username, password);
+		err = checkCredentials(username, password)
 	} else {
-		err := nil
+		err = nil
 	}
 
-	if err != nil {
+	if err == nil {
 		// Controlla se l'utente è admin
 		isAdmin := (username == config.Config.Generale.AdminUser)
 

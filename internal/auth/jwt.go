@@ -117,7 +117,7 @@ func ParseToken(token []byte) (UserInfo, error) {
 
 		// Carico l'FQDN dalla configurazione e definisco l'audience
 		fqdn = config.Config.Generale.FQDN
-		aud = jwt.Audience{"http://" + fqdn, "https://" + fqdn}
+		aud  = jwt.Audience{"http://" + fqdn, "https://" + fqdn}
 
 		// Inizializzo i "validatori"
 		iatValidator = jwt.IssuedAtValidator(now)
