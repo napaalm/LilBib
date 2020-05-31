@@ -41,6 +41,7 @@ type generale struct {
 	FQDN      string `toml:"fqdn_sito"`
 	AdminUser string `toml:"admin"`
 	JWTSecret string `toml:"chiave_firma"`
+	DummyAuth bool   `toml:"dummy_auth"`
 }
 
 type ldap struct {
