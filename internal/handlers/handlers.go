@@ -95,50 +95,40 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
 		return
 	}
-	page := uint32(pageParsed)
+	page := uint16(pageParsed)
 
 	q := r.URL.Query()
 	titolo := q.Get("titolo")
 	nomeAutore := q.Get("autore")
 	nomeGenere := q.Get("genere")
 
-	var libri []db.Libro
-	if titolo == "" && nomeAutore == "" && nomeGenere == "" {
-		var err error
-		libri, err = db.GetLibri(page)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		autori, err := db.RicercaAutori(nomeAutore)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		// senz'offesa, questa interfaccia mi fa un po' schifo
-		idsAutori := make([]uint32, 0, len(autori))
-		for _, a := range autori {
-			idsAutori = append(idsAutori, a.Codice)
-		}
-		generi, err := db.RicercaGeneri(nomeGenere)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		idsGeneri := make([]uint32, 0, len(generi))
-		for _, g := range generi {
-			idsGeneri = append(idsGeneri, g.Codice)
-		}
-		libri, err = db.RicercaLibri(titolo, idsAutori, idsGeneri)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	autori, err := db.RicercaAutori(nomeAutore)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// senz'offesa, questa interfaccia mi fa un po' schifo
+	idsAutori := make([]uint32, 0, len(autori))
+	for _, a := range autori {
+		idsAutori = append(idsAutori, a.Codice)
+	}
+	generi, err := db.RicercaGeneri(nomeGenere)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	idsGeneri := make([]uint32, 0, len(generi))
+	for _, g := range generi {
+		idsGeneri = append(idsGeneri, g.Codice)
+	}
+	libri, err := db.RicercaLibri(titolo, idsAutori, idsGeneri, page)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	templates.ExecuteTemplate(w, "libri.html", struct {
-		Pagina uint32
+		Pagina uint16
 		Libri  []db.Libro
 	}{page, libri})
 }
