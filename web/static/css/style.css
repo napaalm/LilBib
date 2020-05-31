@@ -33,6 +33,7 @@ display: inline;
 header>nav{
 
 width: 100%;
+
 height: 60px;
 position: fixed;
 top: 0px;
@@ -412,6 +413,7 @@ h1.TitoloLib{
 margin-top: 90px;
 font-size: 55px;
 margin-left: 3%;
+font-family: RestoreW00-Heavy;
 
 }
 
@@ -427,9 +429,12 @@ div.Box1{
 
 height: 300px;
 width: 27%;
-margin-top: 70px;
-background-color: red;
-margin-left: 6%;
+margin-top: 50px;
+margin-bottom: 50px;
+background-color: #536878;
+margin-left: 3%;
+padding-left: 3%;
+padding-top: 50px;
 
 }
 
@@ -437,10 +442,13 @@ div.Box2{
 
 height: 300px;
 width: 27%;
-margin-top: 70px;
-background-color: red;
+margin-top: 50px;
+background-color: #536878;
 margin-left: auto;
+margin-bottom: 50px;
 margin-right: auto;
+padding-left: 3%;
+padding-top: 50px;
 
 }
 
@@ -448,9 +456,49 @@ div.Box3{
 
 height: 300px;
 width: 27%;
-background-color: red;
-margin-top: 70px;
-margin-right: 6%;
+background-color: #536878;
+margin-top: 50px;
+margin-bottom: 50px;
+margin-right: 3%;
+padding-left: 3%;
+padding-top: 50px;
+
+}
+
+div.Box4{
+
+height: 300px;
+width: 27%;
+margin-bottom: 50px;
+background-color: #536878;
+margin-left: 3%;
+padding-left: 3%;
+padding-top: 50px;
+
+}
+
+div.Box5{
+
+height: 300px;
+width: 27%;
+margin-bottom: 50px;
+background-color: #536878;
+margin-left: auto;
+margin-right: auto;
+padding-left: 3%;
+padding-top: 50px;
+
+}
+
+div.Box6{
+
+height: 300px;
+width: 27%;
+margin-bottom: 50px;
+background-color: #536878;
+margin-right: 3%;
+padding-left: 3%;
+padding-top: 50px;
 
 }
 
@@ -459,27 +507,30 @@ margin-right: 6%;
 div.menuLib{
 	
 width: 94%;
-background-color: red;
+background-color: #536878;
 margin-bottom: 50px;
 height: 50px;
 background-color: #232C33;
 opacity: 0.8;
 margin-left: 3%;
+color: white;
+padding-top: 25px;
 
 }
 
 div>a.menuLib0{
 
 color: white;
-padding-left: ;
-padding-right: ;
+padding-left: 6%;
+padding-right: 1%;
 
 }
 
 div>a.menuLib1{
 
 color: white;
-padding-right: ;
+padding-right: 6%;
+padding-left: 1%;
 
 
 }
@@ -487,7 +538,8 @@ padding-right: ;
 div>a.menuLib{
 
 color: white;
-padding-right: ;
+padding-right: 1%;
+padding-left: 1%;
 
 }
 
@@ -497,10 +549,12 @@ margin-left: 3%;
 width: 94%;
 background-color: #232C33;
 opacity: 0.8;
-height: 1000px;
+height: auto;
 margin-bottom: 100px;
 display: flex;
 flex-direction: row;
+flex-wrap: wrap;
+color: white;
 
 }
 
