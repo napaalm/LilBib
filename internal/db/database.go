@@ -659,3 +659,71 @@ func RemovePrestito(codice uint32) error {
 
 	return nil
 }
+
+//Funzione che ritorna il numero di libri prenotati
+func LibriPrenotati() int {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return err
+	}
+
+	q := `SELECT COUNT(*) FROM Libro
+		WHERE prenotato = 1`
+	rows, err := db_Connection.Query(q, codice)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var pren int
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&pren); err != nil {
+			return nil, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return pren
+}
+
+//Funzione che ritorna il numero di libri disponibili
+func LibriDisponibili() int {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return err
+	}
+
+	q := `SELECT COUNT(*) FROM Libro
+		WHERE prenotato = 0`
+	rows, err := db_Connection.Query(q, codice)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var disp int
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&disp); err != nil {
+			return nil, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return disp
+}
