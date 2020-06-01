@@ -253,9 +253,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	tags := strings.Split(nome, " ")
 	var args []interface{}
 	for _, tag := range tags {
-		if len(tag) > 0 {
-			args = append(args, "%"+tag+"%")
-		}
+		args = append(args, "%"+tag+"%")
 	}
 	for _, a := range autore {
 		args = append(args, a)
@@ -266,7 +264,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	args = append(args, page*config.Config.Generale.LunghezzaPagina, (page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	q := `SELECT * FROM Libro WHERE 1 = 1` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
+	q := `SELECT * FROM Libro WHERE 0 = 0` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
 	if len(autore) > 0 {
 		q += ` AND autore IN (?` + strings.Repeat(`,?`, len(autore)-1) + `)`
 	}
@@ -313,17 +311,17 @@ func RicercaAutori(nome string) ([]Autore, error) {
 
 	//Divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
 	tags := strings.Split(nome, " ")
+
 	var args []interface{}
-	for j := uint8(0); j < 2; j++ {
-		for _, tag := range tags {
-			if len(tag) > 0 {
-				//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
-				args = append(args, "%"+tag+"%")
-			}
+	for _, tag := range tags {
+		if len(tag) > 0 {
+			//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
+			args = append(args, "%"+tag+"%")
+			args = append(args, "%"+tag+"%")
 		}
 	}
 
-	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1) + strings.Repeat(` OR cognome LIKE ?`, len(tags))
+	q := `SELECT * FROM Autore WHERE 0 = 0` + strings.Repeat(` AND (nome LIKE ? OR cognome LIKE ?)`, len(args))
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
@@ -370,7 +368,7 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 		}
 	}
 
-	q := `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
+	q := `SELECT * FROM Genere WHERE 0 = 0` + strings.Repeat(` OR nome LIKE ?`, len(args))
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
