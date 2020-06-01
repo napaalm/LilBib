@@ -515,17 +515,23 @@ color: white;
 
 .Box1G{
 
-height: 100px;
+height: 90px;
 width: 84%;
-margin-bottom: 50px;
+margin-bottom: 30px;
 background-color: #536878;
 margin-right: 8%;
 margin-left: 8%;
-margin-top: 50px;
-padding-top: 50px;
+margin-top: 40px;
+padding-top: 5px;
 text-align: center;
 
 }
+
+div.spazio{
+width: 50px;
+
+}
+
 
 .Box2G{
 
