@@ -39,8 +39,9 @@ type config struct {
 
 type generale struct {
 	FQDN            string `toml:"fqdn_sito"`
-	AdminUser       string `toml:"admin"`
-	LunghezzaPagina uint16 `toml:"lunghezzaPagina"`
+	Porta           string `toml:"porta_http"`
+	AdminUser       string `toml:"utente_admin"`
+	LunghezzaPagina uint16 `toml:"lunghezza_pagina"`
 	JWTSecret       string `toml:"chiave_firma"`
 	DummyAuth       bool   `toml:"dummy_auth"`
 }

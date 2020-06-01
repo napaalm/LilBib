@@ -36,28 +36,19 @@
 
 <div class="elencoLib">
 	<div class="Box1G">
-	<h1 class="generi"><a href="">Prova 6</a></h1>
-	</div>
-	<div class="Box2G">
-	<h1 class="generi"><a href="">Prova 5</a></h1>
-	</div>
-	<div class="Box3G">
-	<h1 class="generi"><a href="">Prova 4</a></h1>
-	</div>
-	<div class="Box4G">
-	<h1 class="generi"><a href="">Prova 3</a></h1>
-	</div>
-	<div class="Box5G">
-	<h1 class="generi"><a href="">Prova 2</a></h1>
-	</div>
-	<div class="Box6G">
 	<h1 class="generi"><a href="">Prova 1</a></h1>
+	</div>
+	{{ range .Generi }}
+	<div class="Box2G">
+	<h1 class="generi"><a href="">{{ .Generi }}</a></h1>
+	</div>
+	{{ end }}
 	</div>
 	
 </div>
 
 <footer id="Other" >
-	<p class="Other FooterLeft">© 2020 LilBib | Versione: vXX.XX</p>
+	<p class="Other FooterLeft">© 2020 LilBib | Versione: v{{ .CommonValues.Version }}</p>
 	<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>

@@ -35,9 +35,6 @@ import (
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/handlers"
 )
 
-// TODO config fatto bene
-const srvAddress = ":8081"
-
 var Version string
 
 func main() {
@@ -76,6 +73,7 @@ func main() {
 	fileserver := http.FileServer(http.Dir("web/static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileserver))
 
+	srvAddress := config.Config.Generale.Porta
 	srv := &http.Server{
 		Addr:    srvAddress,
 		Handler: mux,
