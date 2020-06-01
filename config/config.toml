@@ -1,7 +1,7 @@
 [Generale]
 admin="admin"
 chiave_firma="secret"
-fqdn_sito="example.org"
+fqdn_sito="lilbib.example.org"
 dummy_auth=false
 
 [LDAP]
@@ -9,7 +9,7 @@ host="ldap.example.org"
 porta="389"
 
 [SQL]
-username="asdf"
-password="asdf"
-indirizzo="asdf"
-database="asdf"
+username="lilbib"
+password="secret"
+indirizzo="localhost"
+database="lilbib"
