@@ -313,17 +313,15 @@ func RicercaAutori(nome string) ([]Autore, error) {
 
 	//Divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
 	tags := strings.Split(nome, " ")
+
 	var args []interface{}
-	for j := uint8(0); j < 2; j++ {
-		for _, tag := range tags {
-			if len(tag) > 0 {
-				//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
-				args = append(args, "%"+tag+"%")
-			}
-		}
+	for _, tag := range tags {
+		//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
+		args = append(args, "%"+tag+"%")
+		args = append(args, "%"+tag+"%")
 	}
 
-	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1) + strings.Repeat(` OR cognome LIKE ?`, len(tags))
+	q := `SELECT * FROM Autore WHERE 0 = 0` + strings.Repeat(` AND (nome LIKE ? OR cognome LIKE ?)`, len(tags))
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
