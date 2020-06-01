@@ -8,14 +8,20 @@ all: clean release run
 build:
 	go build -ldflags "-X main.Version=$(VERSION)" -o $(BINARY) cmd/lilbib/main.go
 
-sandbox:
-	mkdir -p sandbox
-	cp -r config sandbox
-	ln -s web sandbox/web
+sandbox/config: config | sandbox/
+	cp -r $^ $@
+
+sandbox/web: | sandbox/
+	ln -s ../web $@
+
+sandbox/$(BINARY): $(BINARY) | sandbox/
+	cp $^ $@
+
+.PHONY: sandbox
+sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
 
 .PHONY: run
 run: build sandbox
-	cp $(BINARY) sandbox
 	./sandbox/$(BINARY)
 
 .PHONY: release
@@ -40,3 +46,6 @@ windows:
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
 	zip -qr release/$(BINARY)-$(VERSION)-$@-amd64.zip release/$(BINARY)-$(VERSION)-$@-amd64
+
+%/:
+	mkdir -p $*
