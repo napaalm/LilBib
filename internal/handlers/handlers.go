@@ -35,11 +35,6 @@ import (
 
 const templatesDir = "web/template"
 
-type homeVars struct {
-	Disponibili int
-	Prenotati   int
-}
-
 // viene inizializzato nel momento in cui viene importato il package
 var templates = template.Must(template.ParseFiles(
 	templatesDir+"/autori.html",
@@ -68,19 +63,27 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 	pren, err := db.LibriPrenotati()
 	if err != nil {
 		//errore, imposto dei valori di default
-		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1})
+		templates.ExecuteTemplate(w, "index.html", struct {
+			Disponibili int
+			Prenotati   int
+		}{0, 0})
 		return
 	}
 
 	disp, err := db.LibriDisponibili()
 	if err != nil {
 		//errore, imposto dei valori di default
-		templates.ExecuteTemplate(w, "index.html", homeVars{Disponibili: -1, Prenotati: -1})
+		templates.ExecuteTemplate(w, "index.html", struct {
+			Disponibili int
+			Prenotati   int
+		}{0, 0})
 		return
 	}
 
-	vars := homeVars{Disponibili: disp, Prenotati: pren}
-	templates.ExecuteTemplate(w, "index.html", vars)
+	templates.ExecuteTemplate(w, "index.html", struct {
+		Disponibili int
+		Prenotati   int
+	}{disp, pren})
 }
 
 // Percorso: /libro/<idLibro uint32>
@@ -106,7 +109,7 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 }
 
 // Formato: /libri/<page uint32>
-// Mostra la pagina `page` dei risultati della ricera determinata dalla query GET
+// Mostra la pagina `page` dei risultati della ricerca determinata dalla query GET
 // Reindirizza a /libri/0  nel caso di `page` assente o invalida
 func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	pageStr := strings.TrimPrefix(r.URL.Path, "/libri/")
