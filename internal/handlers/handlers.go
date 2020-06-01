@@ -202,7 +202,8 @@ func HandleGeneri(w http.ResponseWriter, r *http.Request) {
 	}
 	templates.ExecuteTemplate(w, "generi.html", struct {
 		Generi []db.Genere
-	}{generi})
+		Values CommonValues
+	}{generi, CommonValues{Version}})
 }
 
 // Percorso: /login
