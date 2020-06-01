@@ -25,6 +25,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -33,9 +34,13 @@ import (
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 )
 
+const templatesDir = "web/template"
+
 var Version string
 
-const templatesDir = "web/template"
+type CommonValues struct {
+	Version string
+}
 
 // viene inizializzato nel momento in cui viene importato il package
 var templates = template.Must(template.ParseFiles(
@@ -68,7 +73,8 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		templates.ExecuteTemplate(w, "index.html", struct {
 			Disponibili int
 			Prenotati   int
-		}{0, 0})
+			Values      CommonValues
+		}{0, 0, CommonValues{Version}})
 		return
 	}
 
@@ -78,14 +84,16 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		templates.ExecuteTemplate(w, "index.html", struct {
 			Disponibili int
 			Prenotati   int
-		}{0, 0})
+			Values      CommonValues
+		}{0, 0, CommonValues{Version}})
 		return
 	}
 
 	templates.ExecuteTemplate(w, "index.html", struct {
 		Disponibili int
 		Prenotati   int
-	}{disp, pren})
+		Values      CommonValues
+	}{disp, pren, CommonValues{Version}})
 }
 
 // Percorso: /libro/<idLibro uint32>
@@ -94,14 +102,13 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 func HandleLibro(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/libro/")
 	idParsed, err := strconv.ParseUint(idStr, 10, 32)
+	fmt.Println(err)
 	if err != nil {
 		// id invalido: torna all'elenco
 		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
 		return
 	}
 	idLibro := uint32(idParsed)
-	// TODO manca libro.html!
-
 	libro, err := db.GetLibro(idLibro)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
