@@ -1,4 +1,4 @@
-body{
+﻿body{
 
 text-decoration: none; /*Zix: se osate fare dei testi sottolineati o cancellati vi taglio le mani */
 margin: 0px;
@@ -33,7 +33,7 @@ display: inline;
 header>nav{
 
 width: 100%;
-
+z-index: 100;
 height: 60px;
 position: fixed;
 top: 0px;
@@ -136,6 +136,9 @@ src: url("/static/font/Restore W00 Heavy.ttf");  /* per tutti i link bisogna par
 font-family: 'RestoreW00-Heavy';
 
 }
+
+
+
 /*
 *
 *
@@ -204,6 +207,7 @@ text-align: center;
 align-items: center;
 
 }
+
 
 input{
 
@@ -338,10 +342,18 @@ left: 0.5%;
 /*Opzioni grafiche colonne Home */
 .coll1Home{
 
-width: auto;
+width: 19%;
 height: 200px;
 margin-left:13%;
-margin-right: auto;
+margin-right: 8%;
+float:left;
+
+}
+
+.spazioD{
+
+width: 100%;
+height: 400px;
 
 }
 
@@ -350,8 +362,6 @@ margin-right: auto;
 width: 100%;
 margin-top: 11%;
 margin-bottom: 5%;
-display: flex;
-flex-direction: row;
 
  
 }
@@ -359,19 +369,21 @@ flex-direction: row;
 .coll2Home{
 
 
-width: auto;
+width: 20%;
 height: 200px;
 margin-right: auto;
 margin-left: auto;
+float:left;
 
 }
 
 .coll3Home{
 
-width: auto;
+width: 19%;
 height: 200px;
-margin-right: 10%;
-margin-left: auto;
+margin-right: 13%;
+margin-left: 8%;
+float: right;
 
 }
 
@@ -388,6 +400,14 @@ span.numHome{
 
 font-size: 40px;
 text-transform: uppercase;
+
+}
+
+span.numHome1{
+
+font-size: 40px;
+text-transform: uppercase;
+color: green;
 
 }
 
@@ -695,4 +715,62 @@ h2.libL{
 padding-left: 45px;
 
 
+}
+
+
+
+@media screen and (max-width: 900px) {
+  
+  h1.titleHome{
+  
+  top: 170px;
+  font-size: 40px;
+  
+  }
+   
+  body{
+  
+  min-width: 0px;
+  
+  }
+  
+  .middleHome{
+  
+  display: block;
+  
+  }
+  
+  .coll1Home{
+  
+  width: 20%;
+  margin-left: 40%;
+  margin-right: 40%;
+  
+  }
+  
+  .coll2Home{
+  
+  width: 20%;
+  margin-left: 40%;
+  margin-right: 40%;
+  padding-top: 13%;
+  
+  }
+  
+  .coll3Home{
+  
+  width: 20%;
+  margin-left: 40%;
+  margin-right: 40%;
+   padding-top: 13%;
+  
+  }
+  
+  .spazioD{
+  
+	width: 100%;
+	height: 1000px;
+  
+  }
+  
 }
