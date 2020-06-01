@@ -316,12 +316,14 @@ func RicercaAutori(nome string) ([]Autore, error) {
 
 	var args []interface{}
 	for _, tag := range tags {
-		//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
-		args = append(args, "%"+tag+"%")
-		args = append(args, "%"+tag+"%")
+		if len(tag) > 0 {
+			//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
+			args = append(args, "%"+tag+"%")
+			args = append(args, "%"+tag+"%")
+		}
 	}
 
-	q := `SELECT * FROM Autore WHERE 0 = 0` + strings.Repeat(` AND (nome LIKE ? OR cognome LIKE ?)`, len(tags))
+	q := `SELECT * FROM Autore WHERE 0 = 0` + strings.Repeat(` AND (nome LIKE ? OR cognome LIKE ?)`, len(args))
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
@@ -368,7 +370,7 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 		}
 	}
 
-	q := `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
+	q := `SELECT * FROM Genere WHERE 0 = 0` + strings.Repeat(` OR nome LIKE ?`, len(args))
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
