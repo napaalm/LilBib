@@ -253,9 +253,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	tags := strings.Split(nome, " ")
 	var args []interface{}
 	for _, tag := range tags {
-		if len(tag) > 0 {
-			args = append(args, "%"+tag+"%")
-		}
+		args = append(args, "%"+tag+"%")
 	}
 	for _, a := range autore {
 		args = append(args, a)
@@ -266,7 +264,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	args = append(args, page*config.Config.Generale.LunghezzaPagina, (page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	q := `SELECT * FROM Libro WHERE 1 = 1` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
+	q := `SELECT * FROM Libro WHERE 0 = 0` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
 	if len(autore) > 0 {
 		q += ` AND autore IN (?` + strings.Repeat(`,?`, len(autore)-1) + `)`
 	}
