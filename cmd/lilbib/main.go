@@ -41,9 +41,17 @@ const srvAddress = ":8081"
 var Version string
 
 func main() {
-	config.LoadConfig("config/config.toml")
+	if err := config.LoadConfig("config/config.toml"); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if err := db.InizializzaDB(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	auth.InitializeSigning()
-	db.InizializzaDB()
 
 	fmt.Println("LilBib versione: " + Version)
 
@@ -71,5 +79,4 @@ func main() {
 	}
 
 	log.Fatal(srv.ListenAndServe())
-
 }
