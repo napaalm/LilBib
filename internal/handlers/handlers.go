@@ -33,6 +33,8 @@ import (
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 )
 
+var Version string
+
 const templatesDir = "web/template"
 
 // viene inizializzato nel momento in cui viene importato il package

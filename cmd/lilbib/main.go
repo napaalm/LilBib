@@ -55,6 +55,9 @@ func main() {
 
 	fmt.Println("LilBib versione: " + Version)
 
+	// Imposta la versione nei package che lo richiedono
+	handlers.Version = Version
+
 	mux := http.NewServeMux()
 
 	// I pattern che finiscono per '/' comprendono anche i sottopercorsi.
