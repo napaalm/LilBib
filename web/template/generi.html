@@ -38,11 +38,11 @@
 	<div class="Box1G">
 	<h1 class="generi"><a href="">Prova 1</a></h1>
 	</div>
-	
+	{{ range .Generi }}
 	<div class="Box2G">
-	<h1 class="generi"><a href="">Prova 1</a></h1>
+	<h1 class="generi"><a href="">{{ .Generi }}</a></h1>
 	</div>
-	
+	{{ end }}
 	</div>
 	
 </div>
