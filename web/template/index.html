@@ -25,7 +25,7 @@
 			<li><a href="/generi">Generi</a></li>
 			<li><a href="/prestito">Prestito</a></li>
 			<li><a href="/restituzione">Restituzione</a></li>
-			<li><span class="footerRight"><a href="/template/login.html"> <!--<i class="material-icons">person</i>--><span class="login">Login</span></a></span></li>
+			<li><span class="footerRight"><a href="/login"> <!--<i class="material-icons">person</i>--><span class="login">Login</span></a></span></li>
 		</ul>	
 	</nav>
 </header>
@@ -39,11 +39,11 @@
 <div class="middleHome"> 
 	<div class="coll1Home">
 		<h2 class="home">Libri Disponibili</h2>
-		<p class="Home">attualmente i libri diponibili sono:<br/> <span class="numHome">m</span></p>
+		<p class="Home">attualmente i libri diponibili sono:<br/> <span class="numHome">{{.Disponibili}}</span></p>
 	</div>
 	<div class="coll2Home">
 		<h2 class="home">Libri Prenotati</h2>
-		<p class="Home"> attualmente i libri prenotati sono:<br/><span class="numHome">n</span></p>
+		<p class="Home"> attualmente i libri prenotati sono:<br/><span class="numHome">{{.Prenotati}}</span></p>
 	</div>  
 	<div class="coll3Home">
 		<h2 class="home">Server Status</h2>
