@@ -450,78 +450,13 @@ div.Box1{
 height: 300px;
 width: 27%;
 margin-top: 50px;
-margin-bottom: 50px;
+margin-bottom: 30px;
 background-color: #536878;
-margin-left: 3%;
+margin-left: 2.5%;
 padding-left: 3%;
 padding-top: 50px;
 
 }
-
-div.Box2{
-
-height: 300px;
-width: 27%;
-margin-top: 50px;
-background-color: #536878;
-margin-left: auto;
-margin-bottom: 50px;
-margin-right: auto;
-padding-left: 3%;
-padding-top: 50px;
-
-}
-
-div.Box3{
-
-height: 300px;
-width: 27%;
-background-color: #536878;
-margin-top: 50px;
-margin-bottom: 50px;
-margin-right: 3%;
-padding-left: 3%;
-padding-top: 50px;
-
-}
-
-div.Box4{
-
-height: 300px;
-width: 27%;
-margin-bottom: 50px;
-background-color: #536878;
-margin-left: 3%;
-padding-left: 3%;
-padding-top: 50px;
-
-}
-
-div.Box5{
-
-height: 300px;
-width: 27%;
-margin-bottom: 50px;
-background-color: #536878;
-margin-left: auto;
-margin-right: auto;
-padding-left: 3%;
-padding-top: 50px;
-
-}
-
-div.Box6{
-
-height: 300px;
-width: 27%;
-margin-bottom: 50px;
-background-color: #536878;
-margin-right: 3%;
-padding-left: 3%;
-padding-top: 50px;
-
-}
-
 
 
 div.menuLib{
