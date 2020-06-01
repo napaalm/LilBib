@@ -6,7 +6,7 @@ all: clean release run
 
 .PHONY: build
 build:
-	go build -o $(BINARY) cmd/lilbib/main.go
+	go build -ldflags "-X main.Version=$(VERSION)" -o $(BINARY) cmd/lilbib/main.go
 
 .PHONY: run
 run: build
