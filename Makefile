@@ -8,7 +8,6 @@ all: clean release run
 build:
 	go build -ldflags "-X main.Version=$(VERSION)" -o $(BINARY) cmd/lilbib/main.go
 
-.PHONY: sandbox
 sandbox:
 	mkdir -p sandbox
 	cp -r config sandbox
