@@ -1,4 +1,4 @@
-﻿body{
+body{
 
 text-decoration: none; /*Zix: se osate fare dei testi sottolineati o cancellati vi taglio le mani */
 margin: 0px;
@@ -578,46 +578,32 @@ color: white;
 
 }
 
-
-div.Box1G{
-
-height: 100px;
-width: 30%;
-margin-top: 50px;
-background-color: #536878;
-margin-left: 3%;
-padding-top: 35px;
-text-align: center;
-
-}
-
-div.Box2G{
+.Box1G{
 
 height: 100px;
-width: 30%;
-margin-top: 50px;
-background-color: #536878;
-margin-left: auto;
+width: 84%;
 margin-bottom: 50px;
-margin-right: auto;
-padding-top: 35px;
+background-color: #536878;
+margin-right: 8%;
+margin-left: 8%;
+margin-top: 50px;
+padding-top: 50px;
 text-align: center;
 
 }
 
-div.Box3G{
+.Box2G{
 
 height: 100px;
-width: 30%;
-background-color: #536878;
-margin-top: 50px;
+width: 84%;
 margin-bottom: 50px;
-margin-right: 3%;
-padding-top: 35px;
+background-color: #536878;
+margin-right: 8%;
+margin-left: 8%;
+padding-top: 40px;
 text-align: center;
 
 }
-
 
 h1.generi{
 
@@ -627,42 +613,6 @@ text-transform: uppercase;
 }
 
 
-div.Box4G{
-
-height: 100px;
-width: 30%;
-margin-bottom: 50px;
-background-color: #536878;
-margin-left: 3%;
-padding-top: 35px;
-text-align: center;
-
-}
-
-div.Box5G{
-
-height: 100px;
-width: 30%;
-margin-bottom: 50px;
-background-color: #536878;
-margin-left: auto;
-margin-right: auto;
-padding-top: 35px;
-text-align: center;
-
-}
-
-div.Box6G{
-
-height: 100px;
-width: 30%;
-margin-bottom: 50px;
-background-color: #536878;
-margin-right: 3%;
-padding-top: 35px;
-text-align: center;
-
-}
 
 
 h1.generi>a:hover , h1.autori>a:hover{
