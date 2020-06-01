@@ -558,3 +558,109 @@ color: white;
 
 }
 
+
+div.Box1G{
+
+height: 100px;
+width: 30%;
+margin-top: 50px;
+background-color: #536878;
+margin-left: 3%;
+padding-top: 35px;
+text-align: center;
+
+}
+
+div.Box2G{
+
+height: 100px;
+width: 30%;
+margin-top: 50px;
+background-color: #536878;
+margin-left: auto;
+margin-bottom: 50px;
+margin-right: auto;
+padding-top: 35px;
+text-align: center;
+
+}
+
+div.Box3G{
+
+height: 100px;
+width: 30%;
+background-color: #536878;
+margin-top: 50px;
+margin-bottom: 50px;
+margin-right: 3%;
+padding-top: 35px;
+text-align: center;
+
+}
+
+
+h1.generi{
+
+text-transform: uppercase;
+
+
+}
+
+
+div.Box4G{
+
+height: 100px;
+width: 30%;
+margin-bottom: 50px;
+background-color: #536878;
+margin-left: 3%;
+padding-top: 35px;
+text-align: center;
+text-align: center;
+
+}
+
+div.Box5G{
+
+height: 100px;
+width: 30%;
+margin-bottom: 50px;
+background-color: #536878;
+margin-left: auto;
+margin-right: auto;
+padding-top: 35px;
+text-align: center;
+
+}
+
+div.Box6G{
+
+height: 100px;
+width: 30%;
+margin-bottom: 50px;
+background-color: #536878;
+margin-right: 3%;
+padding-top: 35px;
+text-align: center;
+
+}
+
+
+h1.generi>a:hover , h1.autori>a:hover{
+
+color: #F0803C;
+
+}
+
+p.Other>a:hover{
+
+color: #F0803C;
+
+}
+
+h1.autori{
+
+text-transform: uppercase;
+font-size: 1.5em;
+
+}
