@@ -162,7 +162,8 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "libri.html", struct {
 		Pagina uint16
 		Libri  []db.Libro
-	}{page, libri})
+		Values CommonValues
+	}{page, libri, CommonValues{Version}})
 }
 
 // Percorso: /autori/<iniziale byte>
