@@ -22,7 +22,7 @@ sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
 
 .PHONY: run
 run: build sandbox
-	./sandbox/$(BINARY)
+	cd sandbox; ./$(BINARY)
 
 .PHONY: release
 release: linux windows
