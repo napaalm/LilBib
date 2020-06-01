@@ -1,7 +1,9 @@
 [Generale]
-admin="admin"
-chiave_firma="secret"
 fqdn_sito="lilbib.example.org"
+porta_http=":8080"
+lunghezza_pagina=25
+utente_admin="admin"
+chiave_firma="secret"
 dummy_auth=false
 
 [LDAP]
