@@ -73,7 +73,7 @@ func main() {
 	fileserver := http.FileServer(http.Dir("web/static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fileserver))
 
-	srvAddress := config.Generale.Porta
+	srvAddress := config.Config.Generale.Porta
 	srv := &http.Server{
 		Addr:    srvAddress,
 		Handler: mux,
