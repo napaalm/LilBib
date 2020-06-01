@@ -25,11 +25,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/handlers"
 )
@@ -37,10 +38,14 @@ import (
 // TODO config fatto bene
 const srvAddress = ":8081"
 
+var Version string
+
 func main() {
 	config.LoadConfig("config/config.toml")
 	auth.InitializeSigning()
 	db.InizializzaDB()
+
+	fmt.Println("LilBib versione: " + Version)
 
 	mux := http.NewServeMux()
 
