@@ -120,8 +120,8 @@ h1.titleHome{
 
 color: white;   /*Zix: bidogna trovare un colore migliore https://coolors.co/ per trovare altri colori*/
 position: absolute;
-top:  240px;
-font-size: 50px;
+top:  190px;
+font-size: 60px;
 width: 100%;
 font-family: RestoreW00-Heavy;
 /*background-color: #232C33;
@@ -132,7 +132,7 @@ text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 
 @font-face{
 
-src: url("/static/font/Restore W00 Heavy.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
+src: url("/LilBib/web/static/font/Oxygen-Bold.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
 font-family: 'RestoreW00-Heavy';
 
 }
@@ -556,7 +556,7 @@ text-transform: uppercase;
 
 
 
-h1.generi>a:hover , h1.autori>a:hover{
+h1.generi>a:hover , a>h1.autori:hover{
 
 color: #F0803C;
 
@@ -572,6 +572,7 @@ h1.autori{
 
 text-transform: uppercase;
 font-size: 1.5em;
+padding-top: 10px;
 
 }
 
@@ -636,6 +637,7 @@ padding-left: 45px;
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
+  text-align: center;
   
   }
   
@@ -644,7 +646,8 @@ padding-left: 45px;
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
-  padding-top: 13%;
+  padding-top: 18%;
+  text-align: center;
   
   }
   
@@ -653,7 +656,8 @@ padding-left: 45px;
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
-   padding-top: 13%;
+  padding-top: 18%;
+  text-align: center;
   
   }
   
