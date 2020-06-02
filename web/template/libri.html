@@ -69,6 +69,11 @@
 			<h2>Autore: {{$value.Autore}}</h2>
 			<h2>Genere: {{$value.Genere}}</h2>
 			<h2>Codice: {{$value.Codice}}</h2>
+			{{ if $value.Prenotato }}
+			<h2>Disponibile: No</h2>
+			{{ else }}
+			<h2>Disponibile: Si</h2>
+			{{ end }}
 		</div>
 	{{ end }} 
 	
