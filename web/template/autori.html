@@ -35,13 +35,11 @@
 
 
 <div class="elencoLib">
-	<div class="Box1G">
-	<h1 class="autori"><a href="">Prova 6</a></h1>
-	</div>
-	<div class="Box2G">
-	<h1 class="autori"><a href="">Prova 5</a></h1>
-	</div>
-	
+	{{ range $index, $value := .Autori}}
+		<div class="Box1G">
+			<h1 class="autori"><a href="">{{ $value.Nome }} {{ $value.Cognome }}</a></h1>
+		</div>
+	{{ end }}
 </div>
 
 
