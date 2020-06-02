@@ -40,8 +40,8 @@ import (
 type Libro struct {
 	Codice    uint32
 	Titolo    string
-	Autore    uint32
-	Genere    uint32
+	Autore    string
+	Genere    string
 	Prenotato bool
 	Hashz     string
 }
@@ -264,7 +264,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	args = append(args, page*config.Config.Generale.LunghezzaPagina, (page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	q := `SELECT * FROM Libro WHERE 0 = 0` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
+	q := `SELECT Libro.Codice,Titolo,Autore.nome,Genere.nome,Prenotato, Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
 	if len(autore) > 0 {
 		q += ` AND autore IN (?` + strings.Repeat(`,?`, len(autore)-1) + `)`
 	}
