@@ -132,7 +132,7 @@ text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 
 @font-face{
 
-src: url("/LilBib/web/static/font/Oxygen-Bold.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
+src: url("/static/font/Oxygen-Bold.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
 font-family: 'RestoreW00-Heavy';
 
 }
