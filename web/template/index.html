@@ -8,7 +8,7 @@
 <meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa --> 
 <link rel="stylesheet" type="text/css" href="/static/css/960_12_col.css"> <!-- questo e' un tentativo che per ora e fallito--> 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
-<link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
+<link rel="stylesheet" type="text/css" href="/LilBib/web/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 
 </head>
@@ -39,15 +39,15 @@
 <div class="middleHome"> 
 	<div class="coll1Home">
 		<h2 class="home">Libri Disponibili</h2>
-		<p class="Home"><br/> <span class="numHome">{{ .Disponibili }}</span></p>
+		<p class="Home"><span class="numHome">{{ .Disponibili }}</span></p>
 	</div>
 	<div class="coll2Home">
 		<h2 class="home">Libri Prenotati</h2>
-		<p class="Home"><br/><span class="numHome">{{ .Prenotati }}</span></p>
+		<p class="Home"><span class="numHome">{{ .Prenotati }}</span></p>
 	</div>  
 	<div class="coll3Home">
 		<h2 class="home">Server Status</h2>
-		<p class="Home"><br/><span class="numHome1">online</span></p>
+		<p class="Home"><span class="numHome1">online</span></p>
 	</div>
 </div>
 <div class="spazioD"></div>
