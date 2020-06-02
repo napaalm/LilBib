@@ -20,8 +20,13 @@ sandbox/$(BINARY): $(BINARY) | sandbox/
 .PHONY: sandbox
 sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
 
+.PHONY: database
+database:
+	echo 'Starting database... (if it does not work add yourself to the group "docker")'
+	./database/example-database.sh
+
 .PHONY: run
-run: build sandbox
+run: build sandbox database
 	cd sandbox; ./$(BINARY)
 
 .PHONY: release
