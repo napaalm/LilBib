@@ -36,6 +36,7 @@ linux:
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
 	cp -r config release/$(BINARY)-$(VERSION)-$@-amd64
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
+	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
 	tar -czf release/$(BINARY)-$(VERSION)-$@-amd64.tar.gz release/$(BINARY)-$(VERSION)-$@-amd64
 
@@ -44,6 +45,7 @@ windows:
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
 	cp -r config release/$(BINARY)-$(VERSION)-$@-amd64
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
+	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
 	zip -qr release/$(BINARY)-$(VERSION)-$@-amd64.zip release/$(BINARY)-$(VERSION)-$@-amd64
 
