@@ -11,8 +11,9 @@ build:
 sandbox/config: config | sandbox/
 	cp -r $^ $@
 
+.PHONY: sandbox/web
 sandbox/web: | sandbox/
-	ln -s ../web $@
+	cp -r web $@
 
 sandbox/$(BINARY): $(BINARY) | sandbox/
 	cp $^ $@
