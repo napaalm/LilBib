@@ -3,7 +3,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # restart the database
-docker-compose -f $DIR/docker-compose.yml down
+! [ -z `docker-compose -f $DIR/docker-compose.yml ps -q db` ] || [ -z `docker ps -q --no-trunc | grep $(docker-compose -f $DIR/docker-compose.yml ps -q db)` ] && docker-compose -f $DIR/docker-compose.yml down
 docker-compose -f $DIR/docker-compose.yml up -d
 
 # import data (hacky hack)
