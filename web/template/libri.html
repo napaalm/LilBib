@@ -36,6 +36,7 @@
 
 <div class="elencoLib">
 	{{ range $index, $value := .Libri}}
+		<a href="/libro/{{ $value.Codice }}" >
 		<div class="Box1">
 			<h2>Titolo: {{$value.Titolo}}</h2>
 			<h2>Autore: {{$value.NomeAutore}} {{$value.CognomeAutore}}</h2>
@@ -43,8 +44,10 @@
 			<h2>Codice: {{$value.Codice}}</h2>
 			{{ if $value.Prenotato }}
 			<h2>Disponibile: No</h2>
+			<a/>
 			{{ else }}
 			<h2>Disponibile: Si</h2>
+			<a/>
 			{{ end }}
 		</div>
 	{{ end }} 
