@@ -85,3 +85,6 @@ INSERT INTO `Prestito` (`Codice`, `Libro`, `Utente`, `Data_prenotazione`, `Durat
 (2,	2,	'Bartolomeo.Bianchi',	1013126400,	1209600,	1014336000);
 
 -- 2020-06-02 17:28:16
+
+CREATE USER 'lilbib'@'%' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON lilbib.* TO 'lilbib'@'%';
