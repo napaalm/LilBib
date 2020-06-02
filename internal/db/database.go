@@ -38,12 +38,13 @@ import (
 
 //Tabelle del database
 type Libro struct {
-	Codice    uint32
-	Titolo    string
-	Autore    string
-	Genere    string
-	Prenotato bool
-	Hashz     string
+	Codice        uint32
+	Titolo        string
+	NomeAutore    string
+	CognomeAutore string
+	Genere        string
+	Prenotato     bool
+	Hashz         string
 }
 
 type Genere struct {
@@ -88,7 +89,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	}
 
 	//Salvo la query che eseguirà l'sql in una variabile stringa
-	q := `SELECT * FROM Libro WHERE codice = ?`
+	q := `SELECT Libro.Codice,Libro.Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice AND Libro.Codice = ?`
 	//Applico la query al database. Salvo i risultati in rows
 	rows, err := db_Connection.Query(q, cod)
 	//Se c'è un errore, ritorna un libro vuoto e l'errore
@@ -103,7 +104,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
-		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.Autore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil {
+		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.NomeAutore, &lib.CognomeAutore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil {
 			return Libro{}, err
 		}
 	}
@@ -264,7 +265,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	args = append(args, page*config.Config.Generale.LunghezzaPagina, (page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	q := `SELECT Libro.Codice,Titolo,Autore.nome,Genere.nome,Prenotato, Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
+	q := `SELECT Libro.Codice,Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
 	if len(autore) > 0 {
 		q += ` AND autore IN (?` + strings.Repeat(`,?`, len(autore)-1) + `)`
 	}
@@ -286,7 +287,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	for rows.Next() {
 		var fabrizio Libro
 		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
-		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.Autore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.NomeAutore, &fabrizio.CognomeAutore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
 			return nil, err
 		}
 		//Copio la variabile temporanea nell'ultima posizione dell'array

@@ -66,7 +66,7 @@
 	{{ range $index, $value := .Libri}}
 		<div class="Box1">
 			<h2>Titolo: {{$value.Titolo}}</h2>
-			<h2>Autore: {{$value.Autore}}</h2>
+			<h2>Autore: {{$value.NomeAutore}} {{$value.CognomeAutore}}</h2>
 			<h2>Genere: {{$value.Genere}}</h2>
 			<h2>Codice: {{$value.Codice}}</h2>
 			{{ if $value.Prenotato }}
