@@ -123,7 +123,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	pageStr := strings.TrimPrefix(r.URL.Path, "/libri/")
 	pageParsed, err := strconv.ParseUint(pageStr, 10, 32)
 	if err != nil {
-		http.Redirect(w, r, "/libri/0?" + q.Encode(), http.StatusSeeOther)
+		http.Redirect(w, r, "/libri/0?"+q.Encode(), http.StatusSeeOther)
 		return
 	}
 	page := uint16(pageParsed)
