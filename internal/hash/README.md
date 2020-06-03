@@ -9,6 +9,6 @@ hash: sha256(password effettiva)
 ## Funzioni
 ```go
 func Verifica(password []byte) (db.Libro, error)
-func Genera(codice uint32) ([]byte, []byte, error) // hash password
+func Genera(codice uint32) ([]byte, error)
 ```
 

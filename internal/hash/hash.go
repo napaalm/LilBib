@@ -32,7 +32,7 @@ func Verifica(pass []byte) (db.Libro, error) {
 	return libro, nil
 }
 
-func Genera(codice uint32) (string, []byte, error) { // hash password
+func Genera(codice uint32) ([]byte, error) {
 	pass := make([]byte, 20)
 
 	for i := uint8(0); codice != 0; i++ {
@@ -41,10 +41,11 @@ func Genera(codice uint32) (string, []byte, error) { // hash password
 	}
 
 	if _, err := rand.Read(pass[4:]); err != nil {
-		return "", nil, err
+		return nil, err
 	}
 
 	hash := sha256.Sum256(pass[:])
+	db.SetHash(codice, base64.StdEncoding.EncodeToString(hash[:]))
 
-	return base64.StdEncoding.EncodeToString(hash[:]), pass, nil
+	return pass, nil
 }
