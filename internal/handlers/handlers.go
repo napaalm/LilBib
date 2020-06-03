@@ -47,6 +47,7 @@ var templates = template.Must(template.ParseFiles(
 	templatesDir+"/generi.html",
 	templatesDir+"/index.html",
 	templatesDir+"/libri.html",
+	templatesDir+"/libro.html",
 	templatesDir+"/login.html",
 	templatesDir+"/prestito.html",
 	templatesDir+"/restituzione.html",
@@ -112,7 +113,10 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	templates.ExecuteTemplate(w, "libro.html", libro)
+	templates.ExecuteTemplate(w, "libro.html", struct {
+		Libro  db.Libro
+		Values CommonValues
+	}{libro, CommonValues{Version}})
 }
 
 // Formato: /libri/<page uint32>
