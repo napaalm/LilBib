@@ -25,6 +25,7 @@
 package handlers
 
 import (
+	_ "fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -123,15 +124,15 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 // Mostra la pagina `page` dei risultati della ricerca determinata dalla query GET
 // Reindirizza a /libri/0  nel caso di `page` assente o invalida
 func HandleLibri(w http.ResponseWriter, r *http.Request) {
-	q := r.URL.Query()
 	pageStr := strings.TrimPrefix(r.URL.Path, "/libri/")
 	pageParsed, err := strconv.ParseUint(pageStr, 10, 32)
 	if err != nil {
-		http.Redirect(w, r, "/libri/0?"+q.Encode(), http.StatusSeeOther)
+		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
 		return
 	}
 	page := uint16(pageParsed)
 
+	q := r.URL.Query()
 	titolo := q.Get("titolo")
 	nomeAutore := q.Get("autori")
 	nomeGenere := q.Get("generi")
