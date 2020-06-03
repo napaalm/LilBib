@@ -26,12 +26,12 @@ package handlers
 
 import (
 	_ "fmt"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"net/http"
 	"strconv"
 	"strings"
 	"text/template"
-
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 )
 
 const templatesDir = "web/template"
@@ -164,13 +164,44 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.ExecuteTemplate(w, "libri.html", struct {
-		PaginaPrec uint16
-		Pagina     uint16
-		PaginaSucc uint16
-		Libri      []db.Libro
-		Values     CommonValues
-	}{page - 1, page, page + 1, libri, CommonValues{Version}})
+	if page == 0 {
+		if float64(page) < (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+			templates.ExecuteTemplate(w, "libri.html", struct {
+				PaginaPrec uint16
+				Pagina     uint16
+				PaginaSucc uint16
+				Libri      []db.Libro
+				Values     CommonValues
+			}{page, page, page + 1, libri, CommonValues{Version}})
+		} else {
+			templates.ExecuteTemplate(w, "libri.html", struct {
+				PaginaPrec uint16
+				Pagina     uint16
+				PaginaSucc uint16
+				Libri      []db.Libro
+				Values     CommonValues
+			}{page, page, page, libri, CommonValues{Version}})
+		}
+	} else {
+		if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+			templates.ExecuteTemplate(w, "libri.html", struct {
+				PaginaPrec uint16
+				Pagina     uint16
+				PaginaSucc uint16
+				Libri      []db.Libro
+				Values     CommonValues
+			}{page - 1, page, page, libri, CommonValues{Version}})
+		} else {
+			templates.ExecuteTemplate(w, "libri.html", struct {
+				PaginaPrec uint16
+				Pagina     uint16
+				PaginaSucc uint16
+				Libri      []db.Libro
+				Values     CommonValues
+			}{page - 1, page, page + 1, libri, CommonValues{Version}})
+		}
+	}
+
 }
 
 // Percorso: /autori/<iniziale byte>
