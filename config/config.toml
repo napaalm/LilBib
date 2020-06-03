@@ -1,10 +1,12 @@
 [Generale]
-fqdn_sito="lilbib.example.org"
+#fqdn_sito="lilbib.example.org"
+fqdn_sito="localhost"
 porta_http=":8080"
 lunghezza_pagina=25
 utente_admin="admin"
 chiave_firma="secret"
-dummy_auth=false
+#dummy_auth=false
+dummy_auth=true
 
 [LDAP]
 host="ldap.example.org"
