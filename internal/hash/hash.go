@@ -13,10 +13,15 @@ func (e ErrHash) Error() string {
 	return "Book hash didn't match"
 }
 
-func Verifica(pass []byte) (db.Libro, error) {
+func Verifica(pass string) (db.Libro, error) {
+	pass_decoded, err := base64.StdEncoding.DecodeString(pass)
+	if err != nil {
+		return db.Libro{}, err
+	}
+
 	codice := uint32(0)
 	for i := uint8(0); i < 4; i++ {
-		codice += uint32(pass[i]) << (i * 8)
+		codice += uint32(pass_decoded[i]) << (i * 8)
 	}
 
 	libro, err := db.GetLibro(codice)
@@ -24,7 +29,7 @@ func Verifica(pass []byte) (db.Libro, error) {
 		return libro, err
 	}
 
-	hash := sha256.Sum256(pass)
+	hash := sha256.Sum256(pass_decoded)
 	if base64.StdEncoding.EncodeToString(hash[:]) != libro.Hashz {
 		return libro, ErrHash{}
 	}
@@ -32,7 +37,7 @@ func Verifica(pass []byte) (db.Libro, error) {
 	return libro, nil
 }
 
-func Genera(codice uint32) (string, []byte, error) { // hash password
+func Genera(codice uint32) (string, error) {
 	pass := make([]byte, 20)
 
 	for i := uint8(0); codice != 0; i++ {
@@ -41,10 +46,13 @@ func Genera(codice uint32) (string, []byte, error) { // hash password
 	}
 
 	if _, err := rand.Read(pass[4:]); err != nil {
-		return "", nil, err
+		return "", err
 	}
 
-	hash := sha256.Sum256(pass[:])
+	pass_encoded := base64.StdEncoding.EncodeToString(pass)
 
-	return base64.StdEncoding.EncodeToString(hash[:]), pass, nil
+	hash := sha256.Sum256(pass[:])
+	db.SetHash(codice, base64.StdEncoding.EncodeToString(hash[:]))
+
+	return pass_encoded, nil
 }
