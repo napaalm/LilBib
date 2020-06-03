@@ -236,11 +236,15 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 // Percorso: /prestito
 // Permette di scansionare o inserire il codice di uno o più libri per prenderli in prestito scegliendone la durata.
 func HandlePrestito(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "prestito.html", nil)
+	templates.ExecuteTemplate(w, "prestito.html", struct {
+		Values CommonValues
+	}{CommonValues{Version}})
 }
 
 // Percorso: /restituzione
 // Permette di restituire i libri in proprio possesso.
 func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "restituzione.html", nil)
+	templates.ExecuteTemplate(w, "restituzione.html", struct {
+		Values CommonValues
+	}{CommonValues{Version}})
 }
