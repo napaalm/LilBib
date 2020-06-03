@@ -1,12 +1,24 @@
 body{
 
+position: absolute;
+min-width: 100%;
+min-height: 100%;
+
 text-decoration: none; /*Zix: se osate fare dei testi sottolineati o cancellati vi taglio le mani */
 margin: 0px;
 padding: 0px;
 border: 0px;
-min-width: 1350px;
+/* min-width: 1350px; */
 font-family: OpenSans;
 
+}
+
+body::after{ content:''; display:block; height:140px; }
+footer{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:140px;
 }
 
 *:focus {
@@ -45,7 +57,7 @@ opacity: 0.8;
 
 a{
 
-text-decoration: none;  
+text-decoration: none;
 color: white;
 
 }
@@ -133,14 +145,14 @@ text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 
 @font-face{
 
-src: url("/static/font/Oxygen-Bold.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
+src: url("/static/font/Oxygen-Bold.ttf");  /* per tutti i link bisogna partire dalla root directory*/
 font-family: 'RestoreW00-Heavy';
 
 }
 
 @font-face{
 
-src: url("/static/font/OpenSans-Regular.ttf");  /* per tutti i link bisogna partire dalla root directory*/ 
+src: url("/static/font/OpenSans-Regular.ttf");  /* per tutti i link bisogna partire dalla root directory*/
 font-family: 'OpenSans';
 
 }
@@ -174,7 +186,7 @@ div.form{
 
 width: 400px;
 height: 400px;
-background-color: #E8E8E8; 
+background-color: #E8E8E8;
 border-radius: 10px;
 
 }
@@ -203,7 +215,7 @@ position: absolute;
 top: 25px;
 left: 140px;
 font-size: 40px;
-font-family: RestoreW00-Heavy; 
+font-family: RestoreW00-Heavy;
 text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 
 }
@@ -371,7 +383,7 @@ width: 100%;
 margin-top: 11%;
 margin-bottom: 5%;
 
- 
+
 }
 
 .coll2Home{
@@ -470,7 +482,7 @@ padding-top: 25px;
 
 
 div.menuLib{
-	
+
 width: 94%;
 margin-bottom: 50px;
 height: 50px;
@@ -621,7 +633,7 @@ padding-left: 45px;
 
 video.cam{
 
-transform: scaleX(1); 
+transform: scaleX(1);
 object-fit: contain;
 width: 80%;
 height: auto;
@@ -695,60 +707,60 @@ padding-bottom: 25px;
 }
 
 @media screen and (max-width: 900px) {
-  
+
   h1.titleHome{
-  
+
   top: 170px;
   font-size: 40px;
-  
+
   }
-   
+
   body{
-  
+
   min-width: 0px;
-  
+
   }
-  
+
   .middleHome{
-  
+
   display: block;
-  
+
   }
-  
+
   .coll1Home{
-  
+
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
   text-align: center;
-  
+
   }
-  
+
   .coll2Home{
-  
+
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
   padding-top: 15%;
   text-align: center;
-  
+
   }
-  
+
   .coll3Home{
-  
+
   width: 20%;
   margin-left: 40%;
   margin-right: 40%;
   padding-top: 15%;
   text-align: center;
-  
+
   }
-  
+
   .spazioD{
-  
+
 	width: 100%;
 	height: 1000px;
-  
+
   }
   
   div.Box1{

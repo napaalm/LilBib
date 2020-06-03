@@ -68,12 +68,28 @@
     const camHasCamera = document.getElementById('cam-has-camera');
     const camQrResult = document.getElementById('cam-qr-result');
 
+    function validate(input) {
+        // 128-bit hash as a base64url string with no padding
+	return /^[-_A-Za-z0-9]{27}$/.test(input);
+    }
+
     function setResult(label, result) {
-        label.textContent = result;
-        camQrResultTimestamp.textContent = new Date().toString();
-        label.style.color = 'teal';
-        clearTimeout(label.highlightTimeout);
-        label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+        if (!validate(result)) return;
+        // result is url-safe
+    	const request = new Request('/api/getLibro?qrcode='+result);
+        fetch(request)
+            .then(response => {
+                if (response.status == 200) {
+                    return response.json();
+                } else {
+                    throw new Error('Scheiße!');
+                }
+            }).then(libro => {
+                label.textContent = libro.Titolo;
+                label.style.color = 'teal';
+                clearTimeout(label.highlightTimeout);
+                label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+            }).catch(error => { throw error; });
     }
 
     //  Web Cam Scanning 
