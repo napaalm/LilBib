@@ -14,7 +14,7 @@ func (e ErrHash) Error() string {
 }
 
 func Verifica(pass string) (db.Libro, error) {
-	pass_decoded, err := base64.URLEncoding.DecodeString(pass)
+	pass_decoded, err := base64.RawURLEncoding.DecodeString(pass)
 	if err != nil {
 		return db.Libro{}, err
 	}
@@ -50,7 +50,7 @@ func Genera(codice uint32) (string, error) {
 		return "", err
 	}
 
-	pass_encoded := base64.URLEncoding.EncodeToString(pass)
+	pass_encoded := base64.RawURLEncoding.EncodeToString(pass)
 
 	hash := sha256.Sum256(pass[:])
 	db.SetHash(codice, base64.StdEncoding.EncodeToString(hash[:]))
