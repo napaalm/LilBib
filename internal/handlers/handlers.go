@@ -166,14 +166,24 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if page == 0 {
-		if float64(page) < (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
-			templates.ExecuteTemplate(w, "libri.html", struct {
-				PaginaPrec uint16
-				Pagina     uint16
-				PaginaSucc uint16
-				Libri      []db.Libro
-				Values     CommonValues
-			}{page, page, page + 1, libri, CommonValues{Version}})
+		if float64(len(libri))/float64(config.Config.Generale.LunghezzaPagina) <= 1 {
+			if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec uint16
+					Pagina     uint16
+					PaginaSucc uint16
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page, page, page + 1, libri, CommonValues{Version}})
+			} else {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec uint16
+					Pagina     uint16
+					PaginaSucc uint16
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page, page, page, libri, CommonValues{Version}})
+			}
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
@@ -183,6 +193,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				Values     CommonValues
 			}{page, page, page, libri, CommonValues{Version}})
 		}
+
 	} else {
 		if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
 			templates.ExecuteTemplate(w, "libri.html", struct {
