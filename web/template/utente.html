@@ -9,6 +9,10 @@
 <link rel="stylesheet" type="text/css" href="/static/css/960_12_col.css"> <!-- questo e' un tentativo che per ora e fallito--> 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
 <link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 
 </head>
@@ -38,7 +42,26 @@
 
 <div class="containerUtente">
 
-<h2 class=Utente> Albero</h2>
+<h2 class="Utente"> Albero</h2>
+<h2 class="Utente">Storico</h2>
+<table id="fancytable" class="ggTable">
+
+<col width="35%">
+    <col width="65%">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Keywords</th>
+        </tr>
+    </thead>
+    <tbody>
+         <tr>
+            <td><a href="" target='_blank'></td>
+            <td></td>
+        </tr>
+    </tbody>
+
+</table>
 
 </div>
  
@@ -53,6 +76,11 @@
 </footer>
 </div> 
 
+
+<script>$(document).ready(function() {
+    $('#fancytable').DataTable();
+} );
+</script>  
 
 </body>
 
