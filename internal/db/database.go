@@ -716,7 +716,7 @@ func RemovePrestito(codice uint32) error {
 }
 
 //Funzione che ritorna il numero di libri prenotati
-func LibriPrenotati() (int, error) {
+func LibriPrenotati() (uint32, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
@@ -733,7 +733,7 @@ func LibriPrenotati() (int, error) {
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
 
-	var pren int
+	var pren uint32
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&pren); err != nil {
@@ -750,7 +750,7 @@ func LibriPrenotati() (int, error) {
 }
 
 //Funzione che ritorna il numero di libri disponibili
-func LibriDisponibili() (int, error) {
+func LibriDisponibili() (uint32, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
@@ -767,7 +767,7 @@ func LibriDisponibili() (int, error) {
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
 
-	var disp int
+	var disp uint32
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&disp); err != nil {

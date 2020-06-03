@@ -72,8 +72,8 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		//errore, imposto dei valori di default
 		templates.ExecuteTemplate(w, "index.html", struct {
-			Disponibili int
-			Prenotati   int
+			Disponibili uint32
+			Prenotati   uint32
 			Values      CommonValues
 		}{0, 0, CommonValues{Version}})
 		return
@@ -83,16 +83,16 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		//errore, imposto dei valori di default
 		templates.ExecuteTemplate(w, "index.html", struct {
-			Disponibili int
-			Prenotati   int
+			Disponibili uint32
+			Prenotati   uint32
 			Values      CommonValues
 		}{0, 0, CommonValues{Version}})
 		return
 	}
 
 	templates.ExecuteTemplate(w, "index.html", struct {
-		Disponibili int
-		Prenotati   int
+		Disponibili uint32
+		Prenotati   uint32
 		Values      CommonValues
 	}{disp, pren, CommonValues{Version}})
 }
