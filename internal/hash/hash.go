@@ -14,17 +14,17 @@ func (e ErrHash) Error() string {
 }
 
 func Verifica(pass string) (db.Libro, error) {
+	pass_decoded, err := base64.StdEncoding.DecodeString(pass)
+	if err != nil {
+		return db.Libro{}, err
+	}
+
 	codice := uint32(0)
 	for i := uint8(0); i < 4; i++ {
-		codice += uint32(pass[i]) << (i * 8)
+		codice += uint32(pass_decoded[i]) << (i * 8)
 	}
 
 	libro, err := db.GetLibro(codice)
-	if err != nil {
-		return libro, err
-	}
-
-	pass_decoded, err := base64.StdEncoding.DecodeString(pass)
 	if err != nil {
 		return libro, err
 	}
