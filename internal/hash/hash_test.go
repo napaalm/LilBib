@@ -1,6 +1,7 @@
 package hash
 
 import (
+	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"testing"
@@ -14,27 +15,29 @@ func TestAll(t *testing.T) {
 		return
 	}
 
-	codice, err := db.AddLibro("libro1", 13, 14)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	if codice == 0 {
-		t.Error("codice: 0")
-		return
-	}
-
-	pass, err := Genera(codice)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	//if len(pass) != 20 {
-	//	t.Errorf("len(pass): %d\n", len(pass))
+	//codice, err := db.AddLibro("libro1", 13, 14)
+	//if err != nil {
+	//	t.Error(err)
 	//	return
 	//}
+
+	//if codice == 0 {
+	//	t.Error("codice: 0")
+	//	return
+	//}
+
+	pass, err := Genera(1)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(pass)
+
+	if len(pass) != 28 {
+		t.Errorf("len(pass): %d\n", len(pass))
+		return
+	}
 
 	libro, err := Verifica(pass)
 	if err != nil {
@@ -42,8 +45,8 @@ func TestAll(t *testing.T) {
 		return
 	}
 
-	if libro.Codice != codice {
-		t.Errorf("Il codice non corrisponde: %d != %d", libro.Codice, codice)
+	if libro.Codice != 1 {
+		t.Errorf("Il codice non corrisponde: %d != %d", libro.Codice, 1)
 		return
 	}
 }
