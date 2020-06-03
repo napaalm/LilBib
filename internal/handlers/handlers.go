@@ -131,7 +131,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 
 	q := r.URL.Query()
 	titolo := q.Get("titolo")
-	nomeAutore := q.Get("autore")
+	nomeAutore := q.Get("autori")
 	nomeGenere := q.Get("generi")
 	autori, err := db.RicercaAutori(nomeAutore)
 	if err != nil {
