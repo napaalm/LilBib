@@ -21,10 +21,12 @@ sandbox/$(BINARY): $(BINARY) | sandbox/
 .PHONY: sandbox
 sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
 
-.PHONY: database
-database:
+/tmp/lilbib-database.lock: database/lilbib_example.sql
 	echo 'Starting database... (if it does not work add yourself to the group "docker")'
 	./database/example-database.sh
+
+.PHONY: database
+database: /tmp/lilbib-database.lock
 
 .PHONY: run
 run: build sandbox database
