@@ -8,6 +8,10 @@ all: clean release run
 build:
 	go build -ldflags "-X main.Version=$(VERSION)" -o $(BINARY) cmd/lilbib/main.go
 
+.PHONY: test
+test:
+	go test -ldflags "-X main.Version=$(VERSION)" ./...
+
 sandbox/config: config | sandbox/
 	cp -r $^ $@
 
@@ -16,8 +20,8 @@ sandbox/web: | sandbox/
 	rm -rf $@
 	cp -r web $@
 
-sandbox/$(BINARY): $(BINARY) | sandbox/
-	cp $^ $@
+sandbox/$(BINARY): build | sandbox/
+	cp $(BINARY) $@
 
 .PHONY: sandbox
 sandbox: sandbox/web sandbox/config sandbox/$(BINARY)

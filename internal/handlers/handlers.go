@@ -114,10 +114,12 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	assegnatario, err := db.GetAssegnatario(idLibro)
 	templates.ExecuteTemplate(w, "libro.html", struct {
 		Libro  db.Libro
+		Utente string
 		Values CommonValues
-	}{libro, CommonValues{Version}})
+	}{libro, assegnatario, CommonValues{Version}})
 }
 
 // Formato: /libri/<page uint32>
@@ -234,15 +236,11 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 // Percorso: /prestito
 // Permette di scansionare o inserire il codice di uno o più libri per prenderli in prestito scegliendone la durata.
 func HandlePrestito(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "prestito.html", struct {
-		Values CommonValues
-	}{CommonValues{Version}})
+	templates.ExecuteTemplate(w, "prestito.html", nil)
 }
 
 // Percorso: /restituzione
 // Permette di restituire i libri in proprio possesso.
 func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "restituzione.html", struct {
-		Values CommonValues
-	}{CommonValues{Version}})
+	templates.ExecuteTemplate(w, "restituzione.html", nil)
 }

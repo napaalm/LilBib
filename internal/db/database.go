@@ -43,7 +43,6 @@ type Libro struct {
 	NomeAutore    string
 	CognomeAutore string
 	Genere        string
-	Utente        string
 	Prenotato     bool
 	Hashz         string
 }
@@ -90,7 +89,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	}
 
 	//Salvo la query che eseguirà l'sql in una variabile stringa
-	q := `SELECT Libro.Codice,Libro.Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prestito.Utente,Prenotato,Hashz FROM Libro,Autore,Genere,Prestito WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice AND Libro.Codice = Prestito.Libro AND Libro.Codice = ?`
+	q := `SELECT Libro.Codice,Libro.Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice AND Libro.Codice = ?`
 	//Applico la query al database. Salvo i risultati in rows
 	rows, err := db_Connection.Query(q, cod)
 	//Se c'è un errore, ritorna un libro vuoto e l'errore
@@ -105,7 +104,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
-		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.NomeAutore, &lib.CognomeAutore, &lib.Genere, &lib.Utente, &lib.Prenotato, &lib.Hashz); err != nil {
+		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.NomeAutore, &lib.CognomeAutore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil {
 			return Libro{}, err
 		}
 	}
@@ -116,6 +115,59 @@ func GetLibro(cod uint32) (Libro, error) {
 
 	//Returno il libro trovato e null (null sarebbe l'errore che non è avvenuto)
 	return lib, nil
+}
+
+//Funzione per trovare l'assegnatario di un libro
+func GetAssegnatario(cod uint32) (string, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna un libro vuoto e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return "", err
+	}
+
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	qpre := `SELECT COUNT(*) FROM Prestito WHERE Prestito.Libro = ?`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(qpre, cod)
+	//Se c'è un errore, ritorna un libro vuoto e l'errore
+	if err != nil {
+		return "", err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var count uint32
+	for rows.Next() {
+		if err := rows.Scan(&count); err != nil {
+			return "", err
+		}
+	}
+	if count == 0 {
+		return "", nil
+	}
+
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	q := `SELECT Prestito.Utente FROM Prestito WHERE Prestito.Libro = ?`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err = db_Connection.Query(q, cod)
+	//Se c'è un errore, ritorna un libro vuoto e l'errore
+	if err != nil {
+		return "", err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	//Creo una stringa in cui salvare il risultato della query
+	var assegnatario string
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
+		if err := rows.Scan(&assegnatario); err != nil {
+			return "", err
+		}
+	}
+	return assegnatario, err
+
 }
 
 //Funzione per trovare Autori in base all'iniziale del cognome
