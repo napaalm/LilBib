@@ -25,12 +25,13 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 	"text/template"
 
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 )
 
@@ -232,7 +233,26 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 		username := username_list[0]
 		password := password_list[0]
-		fmt.Println(username, password)
+
+		// Controlla le credenziali e ottiene il token
+		token, err := auth.AuthenticateUser(username, password)
+
+		// Se l'autenticazione fallisce ritorna 401
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		// Ottiene il dominio del sito web
+		fqdn := config.Config.Generale.FQDN
+
+		// Crea e imposta il cookie
+		cookie := http.Cookie{Name: "access_token", Value: string(token), Domain: fqdn, MaxAge: 86400}
+		http.SetCookie(w, &cookie)
+
+		// Reindirizza a /utente
+		http.Redirect(w, r, "/utente", http.StatusSeeOther)
+		return
 	}
 
 	templates.ExecuteTemplate(w, "login.html", struct {
