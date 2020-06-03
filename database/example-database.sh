@@ -13,3 +13,6 @@ do
   sleep 1
 done
 echo " done!"
+
+# touch lock file
+touch /tmp/lilbib-database.lock
