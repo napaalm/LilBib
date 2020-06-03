@@ -95,12 +95,12 @@
 					throw new Error('Scheiße!');
 				}
 			}).then(libro => {
-				label.textContent = !libro.prenotato ? libro.Titolo : 'Il libro è in prestito';
-				label.style.color = !libro.prenotato ? 'teal' : 'red';
+				label.textContent = !libro.Prenotato ? libro.Titolo : 'Il libro è in prestito';
+				label.style.color = !libro.Prenotato ? 'teal' : 'red';
 				clearTimeout(label.highlightTimeout);
 				label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
 
-				buttonResult.hidden = libro.prenotato;
+				buttonResult.hidden = libro.Prenotato;
 				buttonResult.onclick = function() {
 					const req = new Request(`/api/prestito?qrcode=${result}&durata=${selectDurata.value}`);
 					fetch(req)
