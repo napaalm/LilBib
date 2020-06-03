@@ -694,7 +694,6 @@ padding-bottom: 25px;
 
 }
 
-
 @media screen and (max-width: 900px) {
   
   h1.titleHome{
@@ -751,5 +750,14 @@ padding-bottom: 25px;
 	height: 1000px;
   
   }
+  
+  div.Box1{
+
+	width: 76%;
+	margin-left: 12%;
+	overflow: hidden;
+
+
+}
   
 }

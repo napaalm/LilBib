@@ -48,22 +48,30 @@
 <table id="fancytable" class="ggTable">
 
 <col width="35%">
-    <col width="65%">
+    <col width="32%">
+    <col width="32%">
     <thead>
         <tr>
             <th>Libro</th>
-            <th>Data</th>
+            <th>Data Prenotazione</th>
+            <th>Data Restituzione</th>
         </tr>
     </thead>
     <tbody>
          <tr>
             <td>albero birillo</td>
             <td>bella merda gg</td>
+            <td>ggmerda bella</td>
         </tr>
       
     </tbody>
 
 </table>
+<div class="spazio"></div>
+<div style="width: 100%; text-align: center;">
+<button onclick="alert('sei un coglione!!!!')" type="button" style="color: white; background: 
+linear-gradient(to bottom, #232C33 0%, #536878 100%); border: 0px; cursor: pointer; width: 70px; height: 25px;">Esci</button>
+</div>
 <div class="spazio"></div>
 </div>
 </div>
@@ -72,12 +80,12 @@
 
 
 <div>
-<footer class="Other" >
-	<p class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-	<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
+<footer id="footerId" class="Other" >
+	<p id="text2Id" class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
+	<p id="text1Id" class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>
-</div> 
+</div>
 
 
 <script>$(document).ready(function() {
