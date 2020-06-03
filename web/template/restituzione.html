@@ -5,7 +5,7 @@
 <title>LilBib</title>
 <meta name="description" content="Lightweight Integrated Logistics for Book Indexing and Borrowing"/>
 <meta name="keywords" content="libri, prenotazione, liceo, vinci, dav"> <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
-<meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa --> 
+<meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
 <link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
@@ -14,7 +14,7 @@
 
 
 <body>
- 
+
 <header>
 	<nav>
 		<ul>
@@ -32,19 +32,19 @@
 <div>
 	<h1 class="TitoloLib">Restituzione</h1>
 </div>
- 
+
 <video muted playsinline id="qr-video" class="cam"></video>
 
 
 <h2 class="cam">Il libro selezionato e':</h2>
-<p class="cam1"><span id="cam-qr-result">None</span></p>
+<p class="cam1"><span id="cam-qr-result">None</span><br><button id="button-result" hidden>Restituisci</button></p>
 
 
- 
+
 <div>
 <footer class="Other" >
 	<p class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-	<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
+	<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a>
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>
 </div>
@@ -53,18 +53,19 @@
 <script type="module">
 	import QrScanner from '/static/js/qr-scanner.min.js';
 	QrScanner.WORKER_PATH = '/static/js/qr-scanner-worker.min.js';
-		
+
 
 	const video = document.getElementById('qr-video');
 	const camHasCamera = document.getElementById('cam-has-camera');
 	const camQrResult = document.getElementById('cam-qr-result');
+	const buttonResult = document.getElementById('button-result');
 
 	function validate(input) {
 		// 128-bit hash as a base64url string with no padding
 		return /^[-_A-Za-z0-9]{27}$/.test(input);
 	}
 
-	function setResult(label, result) {
+	function setResult(label, result, buttonResult) {
 		if (!validate(result)) return;
 		// result is url-safe
 		const request = new Request('/api/getLibro?qrcode='+result);
@@ -80,21 +81,32 @@
 				label.style.color = 'teal';
 				clearTimeout(label.highlightTimeout);
 				label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+
+				buttonResult.hidden = false;
+				buttonResult.onclick = function() {
+					const req = new Request(`/api/restituzione?qrcode=${result}`);
+					fetch(req)
+						.then(response => {
+							if (response.status == 200)
+								window.location.reload();
+							else throw new Error('network error');
+						}).catch(err => { throw err; });
+				};
 			}).catch(error => { throw error; });
 	}
 
-	//	Web Cam Scanning 
-	
+	//	Web Cam Scanning
+
 	QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
 
-	const scanner = new QrScanner(video, result => setResult(camQrResult, result));
+	const scanner = new QrScanner(video, result => setResult(camQrResult, result, buttonResult));
 	scanner.start();
 
 	document.getElementById('inversion-mode-select').addEventListener('change', event => {
 		scanner.setInversionMode(event.target.value);
 	});
 
-		
+
 </script>
 
 </body>

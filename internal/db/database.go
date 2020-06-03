@@ -652,6 +652,13 @@ func AddPrestito(libro uint32, utente string, durata uint32) (uint32, error) {
 		return 0, err
 	}
 
+	q := `UPDATE Libro SET prenotato = 1 WHERE codice = ?`
+	rows, err := db_Connection.Query(q, libro)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
 	//Returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
 	return uint32(id), nil
 }
@@ -679,7 +686,13 @@ func SetHash(codice uint32, hash string) error {
 }
 
 //Funzione per impostare la restituzione
-func SetRestituzione(prestito uint32) error {
+func SetRestituzione(libro uint32) error {
+	prestito_struct, err := GetCurrentPrestito(libro)
+	if err != nil {
+		return err
+	}
+	prestito := prestito_struct.Codice
+
 	data_restituzione := time.Now()
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
@@ -696,6 +709,13 @@ func SetRestituzione(prestito uint32) error {
 	}
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
+
+	q2 := `UPDATE Libro SET prenotato = 0 WHERE codice = ?`
+	rows2, err := db_Connection.Query(q2, prestito)
+	if err != nil {
+		return err
+	}
+	defer rows2.Close()
 
 	return nil
 }
