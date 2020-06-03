@@ -13,6 +13,7 @@ sandbox/config: config | sandbox/
 
 .PHONY: sandbox/web
 sandbox/web: | sandbox/
+	rm -rf $@
 	cp -r web $@
 
 sandbox/$(BINARY): $(BINARY) | sandbox/
