@@ -368,9 +368,12 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 			args = append(args, "%"+tag+"%")
 		}
 	}
-	fmt.Println(args)
-	q := `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(args)-1)
-	fmt.Println(q)
+	q := ``
+	if len(args) > 0 {
+		q = `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(args)-1)
+	} else {
+		q = `SELECT * FROM Genere`
+	}
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
@@ -389,7 +392,6 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 		//Copio la variabile temporanea nell'ultima posizione dell'array
 		gens = append(gens, fabrizio)
 	}
-	fmt.Println(gens)
 	//Se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
 		return nil, err
