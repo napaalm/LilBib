@@ -67,6 +67,14 @@ type Prestito struct {
 	Data_restituzione time.Time
 }
 
+type NoCurrentPrestitoError struct {
+	codice uint32
+}
+
+func (e *NoCurrentPrestitoError) Error() string {
+	return fmt.Sprintf("No current Prestito for libro with codice %d.", e.codice)
+}
+
 var db_Connection *sql.DB
 
 //Funzione per inizializzare il database
@@ -293,6 +301,66 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 
 	//Returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
 	return prests, nil
+}
+
+//Funzione per trovare tutti i prestiti di un utente
+func GetCurrentPrestito(codice uint32) (Prestito, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return Prestito{}, err
+	}
+
+	q := `SELECT COUNT(*) FROM Prestito WHERE Libro = ? AND Data_restituzione IS NULL`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(q, codice)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return Prestito{}, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var count uint32
+	for rows.Next() {
+		if err := rows.Scan(&count); err != nil {
+			return Prestito{}, err
+		}
+	}
+
+	if count == 0 {
+		return Prestito{}, &NoCurrentPrestitoError{codice}
+	}
+
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	q = `SELECT Codice,Libro,Utente,Data_prenotazione,Durata FROM Prestito WHERE Libro = ? AND Data_restituzione IS NULL`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err = db_Connection.Query(q, codice)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return Prestito{}, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var pres Prestito
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var data_pre int64
+		//Tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&pres.Codice, &pres.Libro, &pres.Utente, &data_pre, &pres.Durata); err != nil {
+			return Prestito{}, err
+		}
+		//Salvo data_pre in pres convertendola in timestamp unix
+		pres.Data_prenotazione = time.Unix(data_pre, 0)
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return Prestito{}, err
+	}
+
+	//Returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
+	return pres, nil
 }
 
 //Funzione per la ricerca dei libri
@@ -554,7 +622,8 @@ func AddAutore(nome, cognome string) (uint32, error) {
 	return uint32(id), nil
 }
 
-func AddPrestito(libro uint32, utente string, data_prenotazione time.Time, durata uint32) (uint32, error) {
+func AddPrestito(libro uint32, utente string, durata uint32) (uint32, error) {
+	data_prenotazione := time.Now()
 	//Verifico se il server è ancora disponibile
 	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
@@ -610,15 +679,15 @@ func SetHash(codice uint32, hash string) error {
 }
 
 //Funzione per impostare la restituzione
-func SetRestituzione(prestito uint32, data_restituzione time.Time) error {
+func SetRestituzione(prestito uint32) error {
+	data_restituzione := time.Now()
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
-
 	q := `UPDATE Prestito
-		  SET data_restituzione = ?
+		  SET Data_restituzione = ?
 		  WHERE codice = ?`
 	rows, err := db_Connection.Query(q, data_restituzione.Unix(), prestito)
 	//Se c'è un errore, ritorna null e l'errore
