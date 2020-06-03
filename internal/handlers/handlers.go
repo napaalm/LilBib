@@ -25,7 +25,7 @@
 package handlers
 
 import (
-	"fmt"
+	_ "fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -165,10 +165,12 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templates.ExecuteTemplate(w, "libri.html", struct {
-		Pagina uint16
-		Libri  []db.Libro
-		Values CommonValues
-	}{page, libri, CommonValues{Version}})
+		PaginaPrec uint16
+		Pagina     uint16
+		PaginaSucc uint16
+		Libri      []db.Libro
+		Values     CommonValues
+	}{page - 1, page, page + 1, libri, CommonValues{Version}})
 }
 
 // Percorso: /autori/<iniziale byte>
@@ -221,20 +223,6 @@ func HandleAutore(w http.ResponseWriter, r *http.Request) {
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		r.ParseForm()
-		username_list, ok0 := r.Form["username"]
-		password_list, ok1 := r.Form["password"]
-		if !ok0 || !ok1 || len(username_list) != 1 || len(password_list) != 1 {
-			http.Error(w, "Bad Request", http.StatusBadRequest)
-			return
-		}
-
-		username := username_list[0]
-		password := password_list[0]
-		fmt.Println(username, password)
-	}
-
 	templates.ExecuteTemplate(w, "login.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
