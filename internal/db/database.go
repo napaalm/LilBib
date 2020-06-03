@@ -687,10 +687,11 @@ func SetHash(codice uint32, hash string) error {
 
 //Funzione per impostare la restituzione
 func SetRestituzione(libro uint32) error {
-	prestito, err := GetCurrentPrestito(libro)
+	prestito_struct, err := GetCurrentPrestito(libro)
 	if err != nil {
 		return err
 	}
+	prestito := prestito_struct.Codice
 
 	data_restituzione := time.Now()
 	//Verifico se il server è ancora disponibile
