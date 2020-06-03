@@ -304,6 +304,25 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 // Mostra informazioni sull'utente.
 func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	_, err = auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "utente.html", nil)
 }
 
@@ -336,7 +355,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 
 	// Se non riesce ad ottenerlo ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -346,7 +365,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 
 	// Se l'autenticazione fallisce ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -423,7 +442,7 @@ func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
 
 	// Se non riesce ad ottenerlo ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -433,7 +452,7 @@ func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
 
 	// Se l'autenticazione fallisce ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
