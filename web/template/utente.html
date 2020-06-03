@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
 <link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
 <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="/static/css/dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
@@ -44,34 +44,37 @@
 
 <h2 class="Utente"> Albero</h2>
 <h2 class="Utente">Storico</h2>
+<div style="padding-left: 40px; padding-right: 40px; margin-bottom: 40px;">
 <table id="fancytable" class="ggTable">
 
 <col width="35%">
     <col width="65%">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Keywords</th>
+            <th>Libro</th>
+            <th>Data</th>
         </tr>
     </thead>
     <tbody>
          <tr>
-            <td><a href="" target='_blank'></td>
-            <td></td>
+            <td>albero birillo</td>
+            <td>bella merda gg</td>
         </tr>
+      
     </tbody>
 
 </table>
-
+<div class="spazio"></div>
+</div>
 </div>
  
 
 
 
 <div>
-<footer class="LogIn" >
-	<p class=" FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-	<p class=" FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
+<footer class="Other" >
+	<p class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
+	<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>
 </div> 
