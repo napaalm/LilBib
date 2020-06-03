@@ -255,6 +255,39 @@ func HandleAutore(w http.ResponseWriter, r *http.Request) {
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		r.ParseForm()
+		username_list, ok0 := r.Form["username"]
+		password_list, ok1 := r.Form["password"]
+		if !ok0 || !ok1 || len(username_list) != 1 || len(password_list) != 1 {
+			http.Error(w, "Bad Request", http.StatusBadRequest)
+			return
+		}
+
+		username := username_list[0]
+		password := password_list[0]
+
+		// Controlla le credenziali e ottiene il token
+		token, err := auth.AuthenticateUser(username, password)
+
+		// Se l'autenticazione fallisce ritorna 401
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+
+		// Ottiene il dominio del sito web
+		fqdn := config.Config.Generale.FQDN
+
+		// Crea e imposta il cookie
+		cookie := http.Cookie{Name: "access_token", Value: string(token), Domain: fqdn, MaxAge: 86400}
+		http.SetCookie(w, &cookie)
+
+		// Reindirizza a /utente
+		http.Redirect(w, r, "/utente", http.StatusSeeOther)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "login.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
@@ -265,6 +298,21 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
 	templates.ExecuteTemplate(w, "utente.html", nil)
+}
+
+// Formato: /api/getLibro?qrcode=<base64-encoded code+password>
+// Ritorna le informazioni del libro in formato JSON.
+func HandleGetLibro(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene la password del libro
+	//q := r.URL.Query()
+	//password := q.Get("qrcode")
+
+	//autori, err := db.RicercaAutori(nomeAutore)
+	//if err != nil {
+	//	http.Error(w, err.Error(), http.StatusInternalServerError)
+	//	return
+	//}
 }
 
 // Percorso: /prestito
