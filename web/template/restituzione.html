@@ -77,12 +77,12 @@
 					throw new Error('Scheiße!');
 				}
 			}).then(libro => {
-				label.textContent = libro.Titolo;
-				label.style.color = 'teal';
+				label.textContent = libro.prenotato ? libro.Titolo : 'Il libro non è in prestito';
+				label.style.color = libro.prenotato ? 'teal' : 'red';
 				clearTimeout(label.highlightTimeout);
 				label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
 
-				buttonResult.hidden = false;
+				buttonResult.hidden = !liceo.prenotato;
 				buttonResult.onclick = function() {
 					const req = new Request(`/api/restituzione?qrcode=${result}`);
 					fetch(req)
