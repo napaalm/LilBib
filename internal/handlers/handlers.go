@@ -259,12 +259,6 @@ func HandleGeneri(w http.ResponseWriter, r *http.Request) {
 	}{generi, CommonValues{Version}})
 }
 
-//Percorso:
-//Mostra un autore
-func HandleAutore(w http.ResponseWriter, r *http.Request) {
-
-}
-
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
