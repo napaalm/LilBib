@@ -25,9 +25,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/hash"
 	"net/http"
 	"strconv"
 	"strings"
@@ -316,14 +318,19 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 func HandleGetLibro(w http.ResponseWriter, r *http.Request) {
 
 	// Ottiene la password del libro
-	//q := r.URL.Query()
-	//password := q.Get("qrcode")
+	q := r.URL.Query()
+	password := q.Get("qrcode")
 
-	//autori, err := db.RicercaAutori(nomeAutore)
-	//if err != nil {
-	//	http.Error(w, err.Error(), http.StatusInternalServerError)
-	//	return
-	//}
+	// Ottiene il libro a partire dalla password
+	libro, err := hash.Verifica(password)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Ritorna in JSON il libro
+	json.NewEncoder(w).Encode(libro)
 }
 
 // Percorso: /prestito
