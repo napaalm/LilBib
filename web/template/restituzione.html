@@ -51,32 +51,48 @@
 
 
 <script type="module">
-    import QrScanner from '/static/js/qr-scanner.min.js';
-    QrScanner.WORKER_PATH = '/static/js/qr-scanner-worker.min.js';
+	import QrScanner from '/static/js/qr-scanner.min.js';
+	QrScanner.WORKER_PATH = '/static/js/qr-scanner-worker.min.js';
 		
 
-    const video = document.getElementById('qr-video');
-    const camHasCamera = document.getElementById('cam-has-camera');
-    const camQrResult = document.getElementById('cam-qr-result');
+	const video = document.getElementById('qr-video');
+	const camHasCamera = document.getElementById('cam-has-camera');
+	const camQrResult = document.getElementById('cam-qr-result');
 
-    function setResult(label, result) {
-        label.textContent = result;
-        camQrResultTimestamp.textContent = new Date().toString();
-        label.style.color = 'teal';
-        clearTimeout(label.highlightTimeout);
-        label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
-    }
+	function validate(input) {
+		// 128-bit hash as a base64url string with no padding
+		return /^[-_A-Za-z0-9]{27}$/.test(input);
+	}
 
-    //  Web Cam Scanning 
-    
-    QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+	function setResult(label, result) {
+		if (!validate(result)) return;
+		// result is url-safe
+		const request = new Request('/api/getLibro?qrcode='+result);
+		fetch(request)
+			.then(response => {
+				if (response.status == 200) {
+					return response.json();
+				} else {
+					throw new Error('Scheiße!');
+				}
+			}).then(libro => {
+				label.textContent = libro.Titolo;
+				label.style.color = 'teal';
+				clearTimeout(label.highlightTimeout);
+				label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+			}).catch(error => { throw error; });
+	}
 
-    const scanner = new QrScanner(video, result => setResult(camQrResult, result));
-    scanner.start();
+	//	Web Cam Scanning 
+	
+	QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
 
-    document.getElementById('inversion-mode-select').addEventListener('change', event => {
-        scanner.setInversionMode(event.target.value);
-    });
+	const scanner = new QrScanner(video, result => setResult(camQrResult, result));
+	scanner.start();
+
+	document.getElementById('inversion-mode-select').addEventListener('change', event => {
+		scanner.setInversionMode(event.target.value);
+	});
 
 		
 </script>

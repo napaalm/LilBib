@@ -125,7 +125,7 @@ text-align: center;
 div>img{
 
 z-index: -1;
-width: 2200px;
+width: 100%;
 
 }
 
@@ -706,7 +706,6 @@ padding-bottom: 25px;
 
 }
 
-
 @media screen and (max-width: 900px) {
 
   h1.titleHome{
@@ -718,7 +717,7 @@ padding-bottom: 25px;
 
   body{
 
-  min-width: 0px;
+  /* min-width: 0px; */
 
   }
 
@@ -763,5 +762,14 @@ padding-bottom: 25px;
 	height: 1000px;
 
   }
+  
+  div.Box1{
 
+	width: 76%;
+	margin-left: 12%;
+	overflow: hidden;
+
+
+}
+  
 }
