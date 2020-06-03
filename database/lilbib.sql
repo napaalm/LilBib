@@ -34,7 +34,7 @@ CREATE TABLE `Libro` (
   `Autore` int(11) NOT NULL,
   `Genere` int(11) NOT NULL,
   `Prenotato` tinyint(4) NOT NULL,
-  `Hashz` char(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Hashz` char(44) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`Codice`),
   KEY `Autore` (`Autore`),
   KEY `Genere` (`Genere`),
