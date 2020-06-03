@@ -37,7 +37,7 @@
 	<div class="spazio"> 
 	</div>
 	{{ range $index, $value := .Generi }}
-	<a class="Box1G" href="">
+	<a class="Box1G" href="/libri/0?generi={{ $value.Nome }}">
 	<h1 class="generi">{{ $value.Nome}}</h1>
 	</a>
 	{{ end }}
