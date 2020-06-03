@@ -55,7 +55,7 @@ func CreateQRCode(id uint32) (QRCodeLibro, error) {
 	}
 
 	// Genera il QR code
-	png, err := qrcode.Encode(password, qrcode.Medium, 256)
+	png, err := qrcode.Encode(password, qrcode.Medium, 400)
 
 	if err != nil {
 		return QRCodeLibro{}, nil
