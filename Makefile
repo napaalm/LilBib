@@ -20,8 +20,8 @@ sandbox/web: | sandbox/
 	rm -rf $@
 	cp -r web $@
 
-sandbox/$(BINARY): $(BINARY) | sandbox/
-	cp $^ $@
+sandbox/$(BINARY): build | sandbox/
+	cp $(BINARY) $@
 
 .PHONY: sandbox
 sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
