@@ -40,9 +40,10 @@ func Verifica(pass string) (db.Libro, error) {
 func Genera(codice uint32) (string, error) {
 	pass := make([]byte, 20)
 
-	for i := uint8(0); codice != 0; i++ {
-		pass[i] = byte(codice & 0xFF)
-		codice /= 256
+	temp := codice
+	for i := uint8(0); temp != 0; i++ {
+		pass[i] = byte(temp & 0xFF)
+		temp /= 256
 	}
 
 	if _, err := rand.Read(pass[4:]); err != nil {
