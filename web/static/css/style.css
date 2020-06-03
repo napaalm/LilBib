@@ -125,7 +125,7 @@ text-align: center;
 div>img{
 
 z-index: -1;
-width: 2200px;
+width: 100%;
 
 }
 
@@ -717,7 +717,7 @@ padding-bottom: 25px;
 
   body{
 
-  min-width: 0px;
+  /* min-width: 0px; */
 
   }
 
