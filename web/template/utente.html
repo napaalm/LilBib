@@ -42,7 +42,7 @@
 
 <div class="containerUtente">
 
-<h2 class="Utente"> Albero</h2>
+<h2 class="Utente">{{ .Utente }}</h2>
 <h2 class="Utente">Storico</h2>
 <div style="padding-left: 40px; padding-right: 40px; margin-bottom: 40px;">
 <table id="fancytable" class="ggTable">
@@ -58,11 +58,14 @@
         </tr>
     </thead>
     <tbody>
+	 {{ range $index, $value := .PrestitiTitoli }}
          <tr>
-            <td>albero birillo</td>
-            <td>bella merda gg</td>
-            <td>ggmerda bella</td>
-        </tr>
+	    <td>{{ $value.Titolo }}</td>
+	    <td>{{ $value.Prestito.Data_prenotazione }}</td>
+	    <td>{{ $value.Prestito.Data_restituzione }}</td>
+         </tr>
+	 {{ end }}
+
       
     </tbody>
 

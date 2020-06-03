@@ -44,6 +44,11 @@ type CommonValues struct {
 	Version string
 }
 
+type PrestitoTitolo struct {
+	Prestito db.Prestito
+	Titolo   string
+}
+
 // viene inizializzato nel momento in cui viene importato il package
 var templates = template.Must(template.ParseFiles(
 	templatesDir+"/autori.html",
@@ -315,7 +320,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
 	// Estrae e controlla il token
 	token := []byte(cookie.Value)
-	_, err = auth.ParseToken(token)
+	utente, err := auth.ParseToken(token)
 
 	// Se l'autenticazione fallisce ritorna 401
 	if err != nil {
@@ -323,7 +328,23 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.ExecuteTemplate(w, "utente.html", nil)
+	prestiti, err := db.GetPrestiti(utente.Username)
+
+	prestitiTitoli := make([]PrestitoTitolo, len(prestiti))
+	for index, prestito := range prestiti {
+		libro, err := db.GetLibro(prestito.Libro)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		prestitiTitoli[index].Prestito = prestiti[index]
+		prestitiTitoli[index].Titolo = libro.Titolo
+	}
+
+	templates.ExecuteTemplate(w, "utente.html", struct {
+		Utente         string
+		PrestitiTitoli []PrestitoTitolo
+		Values         CommonValues
+	}{utente.Username, prestitiTitoli, CommonValues{Version}})
 }
 
 // Formato: /api/getLibro?qrcode=<base64-encoded code+password>
