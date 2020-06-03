@@ -25,13 +25,13 @@
 package handlers
 
 import (
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"net/http"
 	"strconv"
 	"strings"
 	"text/template"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 )
 
 const templatesDir = "web/template"
@@ -302,6 +302,26 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 // Percorso: /prestito
 // Permette di scansionare o inserire il codice di uno o più libri per prenderli in prestito scegliendone la durata.
 func HandlePrestito(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	_, err = auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "prestito.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
@@ -310,6 +330,26 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 // Percorso: /restituzione
 // Permette di restituire i libri in proprio possesso.
 func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	_, err = auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "restituzione.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
