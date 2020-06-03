@@ -221,7 +221,9 @@ func HandleAutore(w http.ResponseWriter, r *http.Request) {
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	templates.ExecuteTemplate(w, "login.html", nil)
+	templates.ExecuteTemplate(w, "login.html", struct {
+		Values CommonValues
+	}{CommonValues{Version}})
 }
 
 // Percorso: /utente
