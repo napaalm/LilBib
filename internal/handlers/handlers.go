@@ -314,7 +314,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
 	// Se non riesce ad ottenerlo ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -324,7 +324,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
 	// Se l'autenticazione fallisce ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
