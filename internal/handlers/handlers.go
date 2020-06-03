@@ -25,7 +25,7 @@
 package handlers
 
 import (
-	_ "fmt"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -221,6 +221,20 @@ func HandleAutore(w http.ResponseWriter, r *http.Request) {
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		r.ParseForm()
+		username_list, ok0 := r.Form["username"]
+		password_list, ok1 := r.Form["password"]
+		if !ok0 || !ok1 || len(username_list) != 1 || len(password_list) != 1 {
+			http.Error(w, "Bad Request", http.StatusBadRequest)
+			return
+		}
+
+		username := username_list[0]
+		password := password_list[0]
+		fmt.Println(username, password)
+	}
+
 	templates.ExecuteTemplate(w, "login.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
