@@ -92,7 +92,7 @@ func getToken(username string, isAdmin bool) ([]byte, error) {
 			Issuer:         "LilBib",
 			Subject:        username,
 			Audience:       jwt.Audience{"http://" + fqdn, "https://" + fqdn},
-			ExpirationTime: jwt.NumericDate(now.Add(30 * 24 * time.Hour)),
+			ExpirationTime: jwt.NumericDate(now.Add(24 * time.Hour)),
 			IssuedAt:       jwt.NumericDate(now),
 		},
 		IsAdmin: isAdmin,
