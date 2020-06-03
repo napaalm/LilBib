@@ -36,7 +36,7 @@
 <h2 class="libL">Genere: {{ .Libro.Genere}}</h2>
 {{ if .Libro.Prenotato }}
 <h2 class="libL">Disponibile: No</h2>
-<h2 class="libL">Prenotato da: {{ .Libro.Utente }}</h2>
+<h2 class="libL">Prenotato da: {{ .Utente }}</h2>
 {{ else }}
 <h2 class="libL">Disponibile: Si</h2>
 {{ end }}
