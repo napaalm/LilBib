@@ -650,6 +650,18 @@ margin-bottom: 100px;
 }
 
 
+div.row{
+
+width: 100%;
+text-align: center;
+
+}
+
+div.row>a{
+
+color: black;
+
+}
 
 @media screen and (max-width: 900px) {
   
