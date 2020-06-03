@@ -25,7 +25,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -102,7 +101,6 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 func HandleLibro(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/libro/")
 	idParsed, err := strconv.ParseUint(idStr, 10, 32)
-	fmt.Println(err)
 	if err != nil {
 		// id invalido: torna all'elenco
 		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
@@ -114,7 +112,7 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	templates.ExecuteTemplate(w, "libri.html", libro)
+	templates.ExecuteTemplate(w, "libro.html", libro)
 }
 
 // Formato: /libri/<page uint32>

@@ -62,7 +62,7 @@ func main() {
 	// sempre l'ultimo.
 	mux.HandleFunc("/", handlers.HandleRootOr404)
 	mux.HandleFunc("/libri/", handlers.HandleLibri)
-	mux.HandleFunc("/libro/", handlers.HandleLibri)
+	mux.HandleFunc("/libro/", handlers.HandleLibro)
 	mux.HandleFunc("/autori/", handlers.HandleAutori)
 	mux.HandleFunc("/generi", handlers.HandleGeneri)
 	mux.HandleFunc("/login", handlers.HandleLogin)

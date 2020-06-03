@@ -31,10 +31,10 @@
 
 <div class="libro">
 <h1 class="center">Nome Libro</h1>
-<h2 class="libL">Titolo:</h2>
-<h2 class="libL">Autore:</h2>
-<h2 class="libL">Genere:</h2>
-<h2 class="libL">Disponibile:</h2>
+<h2 class="libL">Titolo: {{ .Titolo }}</h2>
+<h2 class="libL">Autore: {{ .NomeAutore}} {{ .CognomeAutore}}</h2>
+<h2 class="libL">Genere: {{ .Genere}}</h2>
+<h2 class="libL">Disponibile: {{ .Prenotato}}</h2>
 
 </div>
 
