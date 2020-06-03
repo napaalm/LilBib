@@ -132,8 +132,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	titolo := q.Get("titolo")
 	nomeAutore := q.Get("autore")
-	nomeGenere := q.Get("genere")
-
+	nomeGenere := q.Get("generi")
 	autori, err := db.RicercaAutori(nomeAutore)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -153,6 +152,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	for _, g := range generi {
 		idsGeneri = append(idsGeneri, g.Codice)
 	}
+
 	libri, err := db.RicercaLibri(titolo, idsAutori, idsGeneri, page)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -189,7 +189,8 @@ func HandleAutori(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "autori.html", struct {
 		Iniziale byte
 		Autori   []db.Autore
-	}{initial, autori})
+		Values   CommonValues
+	}{initial, autori, CommonValues{Version}})
 }
 
 // Percorso: /generi
@@ -204,6 +205,12 @@ func HandleGeneri(w http.ResponseWriter, r *http.Request) {
 		Generi []db.Genere
 		Values CommonValues
 	}{generi, CommonValues{Version}})
+}
+
+//Percorso:
+//Mostra un autore
+func HandleAutore(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Percorso: /login
