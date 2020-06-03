@@ -406,6 +406,7 @@ font-family: RestoreW00-Heavy;
 span.numHome{
 
 font-size: 40px;
+text-align center;
 text-transform: uppercase;
 
 }
@@ -415,6 +416,7 @@ span.numHome1{
 font-size: 40px;
 text-transform: uppercase;
 color: green;
+text-align: center;
 
 }
 
@@ -524,7 +526,7 @@ color: white;
 
 height: 90px;
 width: 84%;
-margin-bottom: 30px;
+margin-bottom: 10px;
 background-color: #536878;
 margin-right: 8%;
 margin-left: 8%;
@@ -535,7 +537,8 @@ text-align: center;
 }
 
 div.spazio{
-width: 50px;
+width: 100%;
+height: 30px;
 
 }
 
@@ -563,7 +566,7 @@ text-transform: uppercase;
 
 
 
-h1.generi>a:hover , a>h1.autori:hover{
+a>h1.generi:hover , a>h1.autori:hover{
 
 color: #F0803C;
 

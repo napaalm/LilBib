@@ -32,18 +32,22 @@
 <div>
 	<h1 class="TitoloLib">Generi</h1>
 </div>
-<div class="spazio"> 
-</div>
 
 <div class="elencoLib">
-	{{ range $index, $value := .Generi }}
-	<div class="Box1G">
-	<h1 class="generi"><a href="">{{ $value.Nome}}</a></h1>
+	<div class="spazio"> 
 	</div>
+	{{ range $index, $value := .Generi }}
+	<a class="Box1G" href="">
+	<h1 class="generi">{{ $value.Nome}}</h1>
+	</a>
 	{{ end }}
+	<div class="spazio"> 
+	</div>
+	<div class="spazio"> 
+	</div>
 	</div>
 	
-</div>
+
 
 <footer id="Other" >
 	<p class="Other FooterLeft">© 2020 LilBib | Versione: v{{ .Values.Version }}</p>
