@@ -81,7 +81,7 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		//errore, imposto dei valori di default
 		templates.ExecuteTemplate(w, "index.html", struct {
 			Disponibili uint32
-			Prenotati   uint32
+			Totali      uint32
 			Values      CommonValues
 		}{0, 0, CommonValues{Version}})
 		return
@@ -92,7 +92,7 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		//errore, imposto dei valori di default
 		templates.ExecuteTemplate(w, "index.html", struct {
 			Disponibili uint32
-			Prenotati   uint32
+			Totali      uint32
 			Values      CommonValues
 		}{0, 0, CommonValues{Version}})
 		return
@@ -100,9 +100,9 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 
 	templates.ExecuteTemplate(w, "index.html", struct {
 		Disponibili uint32
-		Prenotati   uint32
+		Totali      uint32
 		Values      CommonValues
-	}{disp, pren, CommonValues{Version}})
+	}{disp, pren + disp, CommonValues{Version}})
 }
 
 // Percorso: /libro/<idLibro uint32>
@@ -520,8 +520,18 @@ func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
 	// Ottiene id del libro
 	id := libro.Codice
 
+	// Ottiene il prestito corrente
+	prestito, err := db.GetCurrentPrestito(id)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	idPrestito := prestito.Codice
+
 	// Imposta la restituzione
-	err = db.SetRestituzione(id)
+	err = db.SetRestituzione(idPrestito)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
