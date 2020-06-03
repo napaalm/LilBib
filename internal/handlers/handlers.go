@@ -355,6 +355,65 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 	}{CommonValues{Version}})
 }
 
+// Formato: /api/prestito?qrcode=<base64-encoded code+password>&durata=<time in seconds>
+// Aggiunge un nuovo prestito per il libro e la durata passati.
+func HandleNewPrestito(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	user, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Ottiene la password del libro e la durata del prestito
+	q := r.URL.Query()
+	password := q.Get("qrcode")
+	durataParsed, err := strconv.ParseUint(q.Get("durata"), 10, 32)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	durata := uint32(durataParsed)
+
+	// Ottiene il libro a partire dalla password
+	libro, err := hash.Verifica(password)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Ottiene username e id del libro
+	username := user.Username
+	id := libro.Codice
+
+	// Aggiunge il prestito
+	_, err = db.AddPrestito(id, username, durata)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Ritorna OK
+	http.Error(w, "OK", http.StatusOK)
+}
+
 // Percorso: /restituzione
 // Permette di restituire i libri in proprio possesso.
 func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
@@ -381,4 +440,64 @@ func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
 	templates.ExecuteTemplate(w, "restituzione.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
+}
+
+// Formato: /api/restituzione?qrcode=<base64-encoded code+password>
+// Imposta come restituito il libro passato in argomento.
+func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	_, err = auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Ottiene la password del libro
+	q := r.URL.Query()
+	password := q.Get("qrcode")
+
+	// Ottiene il libro a partire dalla password
+	libro, err := hash.Verifica(password)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Ottiene id del libro
+	id := libro.Codice
+
+	// Ottiene il prestito corrente
+	prestito, err := db.GetCurrentPrestito(id)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	idPrestito := prestito.Codice
+
+	// Imposta la restituzione
+	err = db.SetRestituzione(idPrestito)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Ritorna OK
+	http.Error(w, "OK", http.StatusOK)
 }
