@@ -25,9 +25,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/hash"
 	"net/http"
 	"strconv"
 	"strings"
@@ -166,14 +168,24 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if page == 0 {
-		if float64(page) < (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
-			templates.ExecuteTemplate(w, "libri.html", struct {
-				PaginaPrec uint16
-				Pagina     uint16
-				PaginaSucc uint16
-				Libri      []db.Libro
-				Values     CommonValues
-			}{page, page, page + 1, libri, CommonValues{Version}})
+		if float64(len(libri))/float64(config.Config.Generale.LunghezzaPagina) <= 1 {
+			if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec uint16
+					Pagina     uint16
+					PaginaSucc uint16
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page, page, page + 1, libri, CommonValues{Version}})
+			} else {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec uint16
+					Pagina     uint16
+					PaginaSucc uint16
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page, page, page, libri, CommonValues{Version}})
+			}
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
@@ -183,6 +195,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				Values     CommonValues
 			}{page, page, page, libri, CommonValues{Version}})
 		}
+
 	} else {
 		if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
 			templates.ExecuteTemplate(w, "libri.html", struct {
@@ -305,14 +318,19 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 func HandleGetLibro(w http.ResponseWriter, r *http.Request) {
 
 	// Ottiene la password del libro
-	//q := r.URL.Query()
-	//password := q.Get("qrcode")
+	q := r.URL.Query()
+	password := q.Get("qrcode")
 
-	//autori, err := db.RicercaAutori(nomeAutore)
-	//if err != nil {
-	//	http.Error(w, err.Error(), http.StatusInternalServerError)
-	//	return
-	//}
+	// Ottiene il libro a partire dalla password
+	libro, err := hash.Verifica(password)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Ritorna in JSON il libro
+	json.NewEncoder(w).Encode(libro)
 }
 
 // Percorso: /prestito
