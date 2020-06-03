@@ -25,13 +25,13 @@
 package handlers
 
 import (
+	_ "fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"net/http"
 	"strconv"
 	"strings"
 	"text/template"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 )
 
 const templatesDir = "web/template"
@@ -52,6 +52,7 @@ var templates = template.Must(template.ParseFiles(
 	templatesDir+"/login.html",
 	templatesDir+"/prestito.html",
 	templatesDir+"/restituzione.html",
+	templatesDir+"/utente.html",
 ))
 
 // Handler per qualunque percorso diverso da tutti gli altri percorsi riconosciuti.
@@ -254,39 +255,6 @@ func HandleAutore(w http.ResponseWriter, r *http.Request) {
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		r.ParseForm()
-		username_list, ok0 := r.Form["username"]
-		password_list, ok1 := r.Form["password"]
-		if !ok0 || !ok1 || len(username_list) != 1 || len(password_list) != 1 {
-			http.Error(w, "Bad Request", http.StatusBadRequest)
-			return
-		}
-
-		username := username_list[0]
-		password := password_list[0]
-
-		// Controlla le credenziali e ottiene il token
-		token, err := auth.AuthenticateUser(username, password)
-
-		// Se l'autenticazione fallisce ritorna 401
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
-			return
-		}
-
-		// Ottiene il dominio del sito web
-		fqdn := config.Config.Generale.FQDN
-
-		// Crea e imposta il cookie
-		cookie := http.Cookie{Name: "access_token", Value: string(token), Domain: fqdn, MaxAge: 86400}
-		http.SetCookie(w, &cookie)
-
-		// Reindirizza a /utente
-		http.Redirect(w, r, "/utente", http.StatusSeeOther)
-		return
-	}
-
 	templates.ExecuteTemplate(w, "login.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
@@ -295,8 +263,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 // Percorso: /utente
 // Mostra informazioni sull'utente.
 func HandleUtente(w http.ResponseWriter, r *http.Request) {
-	// TODO manca utente!
-	templates.ExecuteTemplate(w, "login.html", nil)
+
+	templates.ExecuteTemplate(w, "utente.html", nil)
 }
 
 // Percorso: /prestito

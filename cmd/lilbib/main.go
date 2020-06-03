@@ -68,6 +68,7 @@ func main() {
 	mux.HandleFunc("/login", handlers.HandleLogin)
 	mux.HandleFunc("/prestito", handlers.HandlePrestito)
 	mux.HandleFunc("/restituzione", handlers.HandleRestituzione)
+	mux.HandleFunc("/utente", handlers.HandleUtente)
 
 	// File server per servire direttamente i contenuti statici.
 	fileserver := http.FileServer(http.Dir("web/static"))
