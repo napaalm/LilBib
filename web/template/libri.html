@@ -34,7 +34,7 @@
 </div>
  
 
-<div class="elencoLib">
+<div class="elencoLib" id="DimElencoLib">
 	{{ range $index, $value := .Libri}}
 		<a href="/libro/{{ $value.Codice }}" >
 		<div class="Box1">
@@ -54,13 +54,41 @@
 	
 </div>
 <div>
-<footer id="Other" >
-	<p class="Other FooterLeft">© 2020 LilBib | Versione: v{{ .Values.Version }}</p>
-	<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
+<footer id="footerId" class="Other" >
+	<p id="text2Id" class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
+	<p id="text1Id" class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>
 </div>
 
+
+<script type="text/javascript">
+
+	var para = document.querySelector('#DimElencoLib');
+	var foot = document.querySelector('#footerId');
+	var Text1 = document.querySelector('#text2Id');
+	var Text2 = document.querySelector('#text1Id');
+	var Styles = window.getComputedStyle(para);
+	var height = parseInt(Styles.getPropertyValue('height'));
+	var prova = 1;
+	
+	if(height <= 500 && height > 0){
+		
+		foot.style.height = '60px';
+		foot.style.position= 'absolute';
+		foot.style.bottom= '0';
+		Text2.style.display= 'block';
+		Text1.style.display= 'block'; 
+		Text2.style.padding = '0';
+		Text1.style.padding = '0';
+		
+
+		
+		}
+		
+	
+	
+</script>
 
 </body>
 </html> 
