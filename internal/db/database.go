@@ -652,6 +652,13 @@ func AddPrestito(libro uint32, utente string, durata uint32) (uint32, error) {
 		return 0, err
 	}
 
+	q := `UPDATE Libro SET prenotato = 1 WHERE codice = ?`
+	rows, err := db_Connection.Query(q, libro)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
 	//Returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
 	return uint32(id), nil
 }
