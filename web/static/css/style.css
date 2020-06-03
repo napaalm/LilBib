@@ -464,7 +464,7 @@ margin-bottom: 30px;
 background-color: #536878;
 margin-left: 2.5%;
 padding-left: 3%;
-padding-top: 50px;
+padding-top: 25px;
 
 }
 
@@ -514,7 +514,7 @@ width: 94%;
 background-color: #232C33;
 opacity: 0.8;
 height: auto;
-margin-bottom: 100px;
+margin-bottom: 20px;
 display: flex;
 flex-direction: row;
 flex-wrap: wrap;
@@ -653,12 +653,16 @@ div.row{
 
 width: 100%;
 text-align: center;
+margin-bottom: 100px;
 
 }
 
 div.row>a{
 
 color: black;
+margin-bottom: 100px;
+width: 100%;
+height: 20px;
 
 }
 
@@ -686,6 +690,8 @@ width: 100%;
 text-align: center;
 
 }
+
+
 
 @media screen and (max-width: 900px) {
   

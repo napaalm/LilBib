@@ -53,6 +53,15 @@
 	{{ end }} 
 	
 </div>
+
+<div class="row">
+
+	<a class="navbar" href="/libri/{{ .PaginaPrec }}"><   </a><span> {{ .Pagina }} </span><a href="/libri/{{.PaginaSucc}} ">   ></a>
+
+</div>
+
+
+
 <div>
 <footer id="footerId" class="Other" >
 	<p id="text2Id" class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
@@ -62,11 +71,6 @@
 </div>
 
 
-<div class="row">
-
-	<a href="/libri/{{ .PaginaPrec }}"><   </a><span> {{ .Pagina }} </span><a href="/libri/{{.PaginaSucc}} ">   ></a>
-
-</div>
 
 
 <!-- <script type="text/javascript">
