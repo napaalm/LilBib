@@ -34,7 +34,7 @@ func TestAll(t *testing.T) {
 
 	fmt.Println(pass)
 
-	if len(pass) != 28 {
+	if len(pass) != 27 {
 		t.Errorf("len(pass): %d\n", len(pass))
 		return
 	}
