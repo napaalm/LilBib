@@ -602,10 +602,16 @@ func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	autori, err := db.GetAutori('a')
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
 		Generi []db.Genere
+		Autori []db.Autore
 		Values CommonValues
-	}{generi, CommonValues{Version}})
+	}{generi, autori, CommonValues{Version}})
 }
 
 func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {

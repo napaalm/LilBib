@@ -49,7 +49,8 @@
 </div>
 
 <div class="elencoLib">
-<form class="AgLib0" action="/admin/aggiungilibro" method="post">
+<form class="AgLib0" method="post">
+	<input type="hidden" name="tipo" value="genere">
 	<fieldset> 
 	<legend>
 Aggiungi Genere
@@ -62,7 +63,8 @@ Aggiungi Genere
 	
 </form>
 
-<form class="AgLib1" action="" method="post">
+<form class="AgLib1" method="post">
+<input type="hidden" name="tipo" value="autore">
 <fieldset> 
 <legend>
 Aggiungi Autore
@@ -75,7 +77,8 @@ Aggiungi Autore
 </fieldset> 
 </form class="th3">
 
-<form class="AgLib2" action="/admin/aggiungilibro" method="post">
+<form class="AgLib2" method="post">
+<input type="hidden" name="tipo" value"libro">
 
 <fieldset class="th3"> 
 <legend>
@@ -83,18 +86,16 @@ Aggiungi Libro
 </legend>
 <span>Nome:<br/><br/><input type="text" name="nome" placeholder="Nome"/></span>
 <br/>
-<span class="AgLib">Autore:<br/><br/></span><select name="autore"/>
-
-<option value="gg">gg</option>
-<option value="gg2">gg2</option>
-<option value="gg">gg3</option>
+<span class="AgLib">Genere:<br/><br/></span><select name="genere"/>
+	{{ range $idx, $genere := .Generi }}
+	<option value="{{ $genere.Codice }}">{{ $genere.Nome }}</option>
+	{{ end }}
 </select>
 <br/><br/>
 <span class="AgLib">Autore:<br/><br/></span><select name="autore"/>
-
-<option value="gg">gg</option>
-<option value="gg2">gg2</option>
-<option value="gg">gg3</option>
+	{{ range $idx, $autore := .Autori }}
+	<option value="{{ $autore.Codice }}">{{ $autore.Nome }} {{ $autore.Cognome }}</option>
+	{{ end }}
 </select>
 <br/><br/><br/>
 
