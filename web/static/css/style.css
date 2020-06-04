@@ -476,8 +476,11 @@ margin-bottom: 30px;
 background-color: #536878;
 margin-left: 4%;
 padding-left: 4%;
+padding-right: 4%;
 padding-top: 25px;
+padding-bottom: 25px;
 overflow: hidden;
+font-size: 12px;
 
 }
 
