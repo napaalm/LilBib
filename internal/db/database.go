@@ -454,7 +454,6 @@ func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, er
 	for _, g := range genere {
 		args = append(args, g)
 	}
-
 	args = append(args, uint16(page)*config.Config.Generale.LunghezzaPagina, uint16(page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
