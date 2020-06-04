@@ -10,6 +10,8 @@ Esso viene passato al client, il quale poi lo include in ogni richiesta HTTP suc
 Per comunicare con il server LDAP è necessario servirsi di questa [libreria](https://github.com/go-ldap/ldap).
 Da `internal/config` va letto l'indirizzo del server.
 
+Nota: esiste nella configurazione un'opzione `dummy_auth` la quale fa sì che il server accetti ogni utente senza controllare le credenziali.
+
 ## Token JWT
 I token JWT conservano il nome utente e il livello di privilegi dell'utente (user o admin).
 Essi sono firmati crittograficamente, e l'algoritmo scelto per questo progetto è HMAC-SHA256.
@@ -31,7 +33,7 @@ type InvalidTokenError
 
 ## Funzioni
 ```go
-func InitializeSigning() error
-func AuthenticateUser(username, password string) ([]byte, error)
-func ParseToken(token string) (UserInfo, error)
+func InitializeSigning()
+func AuthenticateUser(username, password string) ([]byte, error) // ritorna il token
+func ParseToken(token []byte) (UserInfo, error)
 ```

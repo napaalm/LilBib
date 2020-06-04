@@ -4,8 +4,7 @@
  * Pacchetto per interfacciarsi con il database SQL
  *
  * Copyright (c) 2020 Filippo Casarin <casarin.filippo17@gmail.com>
- *
- * Copyright (c) 2020 Davide Vendramin <davidevendramin5@gmail.com>
+ * Copyright (c) 2020 Davide Vendramin <natalianatiche02@gmail.com>
  *
  * This file is part of LilBib.
  *
@@ -870,4 +869,38 @@ func LibriDisponibili() (uint32, error) {
 	}
 
 	return disp, nil
+}
+
+//Funzione che conta gli autori totali
+func CountAutori() (uint32, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return 0, err
+	}
+
+	q := `SELECT COUNT(*) FROM Autore`
+	rows, err := db_Connection.Query(q)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var tot uint32
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&tot); err != nil {
+			return 0, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	return tot, nil
+
 }

@@ -1,4 +1,27 @@
--- Adminer 4.7.7 MySQL dump
+/*
+ * lilbib_example.sql
+ *
+ * Struttura del database di sviluppo per lilbib.
+ *
+ * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
+ * Copyright (c) 2020 Davide Vendramin <davidevendramin5@gmail.com>
+ *
+ * This file is part of LilBib.
+ *
+ * LilBib is free software; you can redistribute it and/or modify it
+ * under the terms of the Affero GNU General Public License as
+ * published by the Free Software Foundation; either version 3, or (at
+ * your option) any later version.
+ *
+ * LilBib is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the Affero GNU General
+ * Public License for more details.
+ *
+ * You should have received a copy of the Affero GNU General Public
+ * License along with LilBib; see the file LICENSE. If not see
+ * <http://www.gnu.org/licenses/>.
+ */
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -83,8 +106,6 @@ TRUNCATE `Prestito`;
 INSERT INTO `Prestito` (`Codice`, `Libro`, `Utente`, `Data_prenotazione`, `Durata`, `Data_restituzione`) VALUES
 (1,	1,	'Alfio.Ammannati',	1013126400,	1209600,	NULL),
 (2,	2,	'Bartolomeo.Bianchi',	1013126400,	1209600,	1014336000);
-
--- 2020-06-02 17:28:16
 
 CREATE USER 'lilbib'@'%' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON lilbib.* TO 'lilbib'@'%';

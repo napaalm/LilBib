@@ -1,9 +1,11 @@
 /*
  * handlers.go
  *
- * Descrizione del file.
+ * Package per gestire le diverse pagine ed i relativi template.
  *
- * Copyright (c) 2020 Nome Cognome <nome.cognome@example.org>
+ * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
+ * Copyright (c) 2020 Davide Vendramin <natalianatiche02@gmail.com>
+ * Copyright (c) 2020 Maxim Kovalkov <kov1maxim1al@gmail.com>
  *
  * This file is part of LilBib.
  *
@@ -22,6 +24,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+// Package per gestire le diverse pagine ed i relativi template.
 package handlers
 
 import (
@@ -98,11 +101,13 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	autoriTot, err := db.CountAutori()
 	templates.ExecuteTemplate(w, "index.html", struct {
 		Disponibili uint32
 		Totali      uint32
+		AutoriTot   uint32
 		Values      CommonValues
-	}{disp, pren + disp, CommonValues{Version}})
+	}{disp, pren + disp, autoriTot, CommonValues{Version}})
 }
 
 // Percorso: /libro/<idLibro uint32>
@@ -181,7 +186,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 					PaginaSucc uint16
 					Libri      []db.Libro
 					Values     CommonValues
-				}{page, page, page + 1, libri, CommonValues{Version}})
+				}{page, page + 1, page + 1, libri, CommonValues{Version}})
 			} else {
 				templates.ExecuteTemplate(w, "libri.html", struct {
 					PaginaPrec uint16
@@ -189,7 +194,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 					PaginaSucc uint16
 					Libri      []db.Libro
 					Values     CommonValues
-				}{page, page, page, libri, CommonValues{Version}})
+				}{page, page + 1, page, libri, CommonValues{Version}})
 			}
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
@@ -198,7 +203,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaSucc uint16
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page, page, page, libri, CommonValues{Version}})
+			}{page, page + 1, page, libri, CommonValues{Version}})
 		}
 
 	} else {
@@ -209,7 +214,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaSucc uint16
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page - 1, page, page, libri, CommonValues{Version}})
+			}{page - 1, page + 1, page, libri, CommonValues{Version}})
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
@@ -217,7 +222,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaSucc uint16
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page - 1, page, page + 1, libri, CommonValues{Version}})
+			}{page - 1, page + 1, page + 1, libri, CommonValues{Version}})
 		}
 	}
 
