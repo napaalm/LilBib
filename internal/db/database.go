@@ -503,7 +503,7 @@ func GetLibri() ([]Libro, error) {
 	}
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	q := `SELECT * FROM Libro`
+	q := `SELECT Libro.Codice, Libro.Titolo, Autore.Nome, Autore.Cognome, Genere.Nome, Libro.Prenotato, Libro.Hashz FROM Libro, Autore, Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice`
 
 	rows, err := db_Connection.Query(q)
 	//Se c'è un errore, ritorna null e l'errore
