@@ -51,7 +51,7 @@
 					{{ range $idx, $libro := .Libri }}
 					<div class="Box1G" name="libro-label">
 						<label>
-							<input name="codici[]" value="{{ $idx }}" type="checkbox">{{ $libro.Titolo }}
+							<input name="codici[]" value="{{ $libro.Codice }}" type="checkbox">{{ $libro.Titolo }}
 						</label>
 					</div>
 					{{ end }}
