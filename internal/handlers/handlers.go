@@ -300,6 +300,15 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Ottiene il cookie
+	_, err := r.Cookie("access_token")
+
+	// Se riesce ad ottenerlo reindirizza ad /utente
+	if err == nil {
+		http.Redirect(w, r, "/utente", http.StatusSeeOther)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "login.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
@@ -312,7 +321,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 	// Ottiene il cookie
 	cookie, err := r.Cookie("access_token")
 
-	// Se non riesce ad ottenerlo ritorna 401
+	// Se non riesce ad ottenerlo reindirizza a /login
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -322,7 +331,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 	token := []byte(cookie.Value)
 	utente, err := auth.ParseToken(token)
 
-	// Se l'autenticazione fallisce ritorna 401
+	// Se l'autenticazione fallisce reindirizza a /login
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -374,7 +383,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 	// Ottiene il cookie
 	cookie, err := r.Cookie("access_token")
 
-	// Se non riesce ad ottenerlo ritorna 401
+	// Se non riesce ad ottenerlo reindirizza a /login
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -384,7 +393,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 	token := []byte(cookie.Value)
 	_, err = auth.ParseToken(token)
 
-	// Se l'autenticazione fallisce ritorna 401
+	// Se l'autenticazione fallisce reindirizza a /login
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -461,7 +470,7 @@ func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
 	// Ottiene il cookie
 	cookie, err := r.Cookie("access_token")
 
-	// Se non riesce ad ottenerlo ritorna 401
+	// Se non riesce ad ottenerlo reindirizza a /login
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -471,7 +480,7 @@ func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
 	token := []byte(cookie.Value)
 	_, err = auth.ParseToken(token)
 
-	// Se l'autenticazione fallisce ritorna 401
+	// Se l'autenticazione fallisce reindirizza a /login
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
