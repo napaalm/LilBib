@@ -1,31 +1,23 @@
 body{
 
-position: absolute;
-min-width: 100%;
-min-height: 100%;
+height: 100%;
 text-decoration: none; /*Zix: se osate fare dei testi sottolineati o cancellati vi taglio le mani */
 margin: 0px;
 padding: 0px;
 border: 0px;
 /* min-width: 1350px; */
 font-family: OpenSans;
+position: static;
 
 }
 
-div.home{
-
-position: regular;
-
-}
-
-body::after{ content:''; display:block; height:140px; }
-footer{
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:140px;
-}
-
+ *{
+ 
+ box-sizing: border-box;
+ 
+ }
+ 
+ 
 *:focus {
     outline: none;
 }
@@ -298,7 +290,7 @@ font-family: RestoreW00-Heavy;		/* cambiare font*/
 *
 *
 *
-*/
+*/ 
 /*	opzioni grafiche footer*/
 
 footer.LogIn{    /*	impostazioni specifiche per /login */
@@ -314,6 +306,8 @@ opacity:0.8;
 
 footer.Other{
 
+position:absolute;
+bottom:0;
 width: 100%;
 height: 140px;
 background-color: #232C33;
@@ -532,7 +526,7 @@ width: 94%;
 background-color: #232C33;
 opacity: 0.8;
 height: auto;
-margin-bottom: 20px;
+margin-bottom: 80px;
 display: flex;
 flex-direction: row;
 flex-wrap: wrap;
@@ -556,7 +550,7 @@ text-align: center;
 
 div.spazio{
 width: 100%;
-height: 30px;
+height: 50px;
 
 }
 
@@ -662,7 +656,7 @@ p.cam1{
 
 width: 100%;
 text-align: center;
-margin-bottom:15px;
+margin-bottom:160px;
 
 }
 

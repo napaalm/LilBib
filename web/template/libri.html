@@ -14,7 +14,12 @@
 
 
 <body>
-
+<div style="min-height: 100vh;
+ overflow: hidden;
+ display: block;
+ position: relative;
+ padding-bottom: 100px; ">
+   
 <header>
 	<nav>
 		<ul>
@@ -28,7 +33,7 @@
 		</ul>
 	</nav>
 </header>
-
+<section>
 <div>
 	<h1 class="TitoloLib">Libri</h1>
 </div>
@@ -59,21 +64,16 @@
 	<a class="navbar" href="/libri/{{ .PaginaPrec }}"><   </a><span> {{ .Pagina }} </span><a href="/libri/{{.PaginaSucc}} ">   ></a>
 
 </div>
+<section/>
 
-
-
-<div>
 <footer id="footerId" class="Other" >
 	<p id="text2Id" class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
 	<p id="text1Id" class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>
-</div>
 
-
-	
-	
-</script>
+ 
+	</div>
 
 </body>
 </html> 
