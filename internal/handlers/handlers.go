@@ -33,6 +33,7 @@ import (
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/hash"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/qrcode"
 	"net/http"
 	"strconv"
 	"strings"
@@ -602,10 +603,16 @@ func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	autori, err := db.GetAutori('a')
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
 		Generi []db.Genere
+		Autori []db.Autore
 		Values CommonValues
-	}{generi, CommonValues{Version}})
+	}{generi, autori, CommonValues{Version}})
 }
 
 func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
@@ -629,6 +636,37 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !user.IsAdmin {
 		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
+		return
+	}
+
+	if r.Method == "POST" {
+		r.ParseForm()
+		codici, ok := r.Form["codici"]
+		if !ok || len(codici) < 1 {
+			http.Error(w, "Seleziona almeno un elemento!", http.StatusBadRequest)
+			return
+		}
+
+		var ids []uint32
+
+		for _, codice := range codici {
+			id, err := strconv.ParseInt(codice, 2, 32)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			ids = append(ids, uint32(id))
+		}
+
+		// Genera la pagina con i codici QR
+		page, err := qrcode.GeneratePage(ids)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		// Ritorna la pagina
+		http.Error(w, page, http.StatusOK)
 		return
 	}
 
