@@ -719,9 +719,11 @@ input.tftextinput0{
 
 width: 28%;
 margin-left: 4%;
+overflow: hidden;
 color: white;
 border-color: #536878;
 background-color: #536878;
+text-align: center;
 
 }
 
