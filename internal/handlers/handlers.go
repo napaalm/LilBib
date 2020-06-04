@@ -702,7 +702,7 @@ func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		autori, err := db.GetAutori('a')
+		autori, err := db.GetTuttiAutori()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
