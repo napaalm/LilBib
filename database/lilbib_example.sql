@@ -62,8 +62,8 @@ CREATE TABLE `Libro` (
 
 TRUNCATE `Libro`;
 INSERT INTO `Libro` (`Codice`, `Titolo`, `Autore`, `Genere`, `Prenotato`, `Hashz`) VALUES
-(1,	'Alla Ricerca Di Adele',	1,	1,	0,	''),
-(2,	'Beatrice Bortolin - La Vita',	2,	2,	1,	''),
+(1,	'Alla Ricerca Di Adele',	1,	1,	1,	''),
+(2,	'Beatrice Bortolin - La Vita',	2,	2,	0,	''),
 (4,	'Dieci E Lode',	4,	4,	0,	'');
 
 DROP TABLE IF EXISTS `Prestito`;
