@@ -666,7 +666,8 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Ritorna la pagina
-		http.Error(w, page, http.StatusOK)
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(page))
 		return
 	}
 
