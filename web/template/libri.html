@@ -45,9 +45,9 @@
 
 <div id="tfheader">
     <form id="tfnewsearch" method="get">
-           <input type="text" class="tftextinput0" id="tftextinput" name="q"  maxlength="120" placeholder="Autore">
-           <input type="text" class="tftextinput1" id="tftextinput" name="q"  maxlength="120" placeholder="Genere">
-           <input type="text" class="tftextinput2" id="tftextinput" name="q"  maxlength="120" placeholder="Libro">
+           <input type="text" class="tftextinput0" id="tftextinput" name="autori"  maxlength="120" placeholder="Autore">
+           <input type="text" class="tftextinput1" id="tftextinput" name="generi"  maxlength="120" placeholder="Genere">
+           <input type="text" class="tftextinput2" id="tftextinput" name="titolo"  maxlength="120" placeholder="Libro">
           <br/> <input type="submit" value="SEARCH" class="tfbutton">
     </form>
 </div>
@@ -92,7 +92,7 @@
     a.addEventListener('submit',function(e) {
     e.preventDefault();
     var b = document.getElementById('tftextinput').value;
-    window.location.href = '/libri/0'+b;
+	    window.location.href = "/libri/"+({{.Pagina}}+1)"?generi="+b;
     });
 </script>
 
