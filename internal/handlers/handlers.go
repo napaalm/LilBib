@@ -101,11 +101,13 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	autoriTot, err := db.CountAutori()
 	templates.ExecuteTemplate(w, "index.html", struct {
 		Disponibili uint32
 		Totali      uint32
+		AutoriTot   uint32
 		Values      CommonValues
-	}{disp, pren + disp, CommonValues{Version}})
+	}{disp, pren + disp, autoriTot, CommonValues{Version}})
 }
 
 // Percorso: /libro/<idLibro uint32>
