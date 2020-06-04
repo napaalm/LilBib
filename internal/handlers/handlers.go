@@ -626,7 +626,13 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	libri, err := db.RicercaLibri("", []uint32{}, []uint32{}, 0)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 	templates.ExecuteTemplate(w, "generaCodici.html", struct {
+		Libri  []db.Libro
 		Values CommonValues
-	}{CommonValues{Version}})
+	}{libri, CommonValues{Version}})
 }
