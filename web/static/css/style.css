@@ -3,13 +3,18 @@ body{
 position: absolute;
 min-width: 100%;
 min-height: 100%;
-
 text-decoration: none; /*Zix: se osate fare dei testi sottolineati o cancellati vi taglio le mani */
 margin: 0px;
 padding: 0px;
 border: 0px;
 /* min-width: 1350px; */
 font-family: OpenSans;
+
+}
+
+div.home{
+
+position: regular;
 
 }
 
@@ -125,7 +130,7 @@ text-align: center;
 div>img{
 
 z-index: -1;
-width: 100%;
+width: 2200px;
 
 }
 
@@ -477,6 +482,7 @@ background-color: #536878;
 margin-left: 2.5%;
 padding-left: 3%;
 padding-top: 25px;
+overflow: hidden;
 
 }
 
@@ -656,7 +662,7 @@ p.cam1{
 
 width: 100%;
 text-align: center;
-margin-bottom: 100px;
+margin-bottom:15px;
 
 }
 
@@ -717,7 +723,7 @@ padding-bottom: 25px;
 
   body{
 
-  /* min-width: 0px; */
+  min-width: 0px;
 
   }
 
