@@ -2,7 +2,7 @@
 #fqdn_sito="lilbib.example.org"
 fqdn_sito="localhost"
 porta_http=":8080"
-lunghezza_pagina=25
+lunghezza_pagina=24
 utente_admin="admin"
 chiave_firma="secret"
 #dummy_auth=false
