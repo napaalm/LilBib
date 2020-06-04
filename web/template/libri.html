@@ -32,7 +32,52 @@
 <div>
 	<h1 class="TitoloLib">Libri</h1>
 </div>
- 
+
+
+<div id="tfheader">
+    <form id="tfnewsearch" method="get">
+           <input type="text" class="tftextinput" id="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
+    </form>
+    <div class="tfclear"></div>
+</div>
+<script>
+    var a = document.getElementById('tfnewsearch');
+    a.addEventListener('submit',function(e) {
+    e.preventDefault();
+    var b = document.getElementById('tftextinput').value;
+    window.location.href = '/libri/0'+b;
+    });
+</script>
+
+<div id="tfheader">
+    <form id="tfnewsearch" method="get">
+           <input type="text" class="tftextinput" id="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
+    </form>
+    <div class="tfclear"></div>
+</div>
+<script>
+    var a = document.getElementById('tfnewsearch');
+    a.addEventListener('submit',function(e) {
+    e.preventDefault();
+    var b = document.getElementById('tftextinput').value;
+    window.location.href = '/libri/0'+b;
+    });
+</script>
+
+<div id="tfheader">
+    <form id="tfnewsearch" method="get">
+           <input type="text" class="tftextinput" id="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
+    </form>
+    <div class="tfclear"></div>
+</div>
+<script>
+    var a = document.getElementById('tfnewsearch');
+    a.addEventListener('submit',function(e) {
+    e.preventDefault();
+    var b = document.getElementById('tftextinput').value;
+    window.location.href = '/libri/0'+b;
+    });
+</script>
 
 <div class="elencoLib" id="DimElencoLib">
 	{{ range $index, $value := .Libri}}
