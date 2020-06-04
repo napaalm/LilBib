@@ -574,12 +574,58 @@ func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo reindirizza a /login
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	user, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce oppure l'utente non è admin ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	} else if !user.IsAdmin {
+		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
 }
 
 func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo reindirizza a /login
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	user, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce oppure l'utente non è admin ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	} else if !user.IsAdmin {
+		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "generaCodici.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
