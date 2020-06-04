@@ -392,6 +392,7 @@ width: 20%;
 height: 200px;
 margin-right: auto;
 margin-left: auto;
+margin-bottom: 65px;
 float:left;
 
 }
@@ -490,7 +491,7 @@ background-color: #232C33;
 opacity: 0.8;
 margin-left: 3%;
 color: white;
-padding-top: 25px;
+padding-top: 15px;
 
 }
 
