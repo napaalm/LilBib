@@ -469,7 +469,7 @@ flex-direction: row;
 
 div.Box1{
 
-height: 300px;
+height: 350px;
 width: 28%;
 margin-top: 50px;
 margin-bottom: 30px;
@@ -926,39 +926,10 @@ margin-right: 10%;
 
 }
  
-input.tftextinput0{
+.tfbutton{
 
-width: 28%;
-margin-left: 1%;
-overflow: hidden;
-color: white;
-border-color: #536878;
-background-color: #536878;
-text-align: center;
+width: 15%;
 
-}
-
-input.tftextinput1{
-
-width: 28%;
-margin-left: 4%;
-overflow: hidden;
-color: white;
-border-color: #536878;
-background-color: #536878;
-text-align: center;
-
-}
-
-input.tftextinput2{
-
-width: 28%;
-margin-left: 4%;
-overflow: hidden;
-color: white;
-border-color: #536878;
-background-color: #536878;
-text-align: center;
 
 }
  
