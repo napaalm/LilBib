@@ -476,8 +476,11 @@ margin-bottom: 30px;
 background-color: #536878;
 margin-left: 4%;
 padding-left: 4%;
+padding-right: 4%;
 padding-top: 25px;
+padding-bottom: 25px;
 overflow: hidden;
+font-size: 14px;
 
 }
 
@@ -544,8 +547,8 @@ background-color: #536878;
 margin-right: 8%;
 margin-left: 8%;
 margin-top: 40px;
-padding-top: 5px;
 text-align: center;
+font-size: 18px;
 
 }
 
@@ -843,6 +846,25 @@ height: 420px;
 
 }
 
+.centerLink{
+
+widht: 100%;
+text-align: center;
+color: white;
+
+}
+
+a.LinkUtente{
+
+background: linear-gradient(to bottom, #232C33 0%, #536878 100%); 
+border: 0px;
+height: 45px;
+width: auto;
+padding-left:10px;
+padding-right:10px;
+cursor: pointer;
+
+}
 
 @media screen and (max-width: 900px) {
 
