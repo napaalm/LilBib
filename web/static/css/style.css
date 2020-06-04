@@ -474,7 +474,7 @@ width: 28%;
 margin-top: 50px;
 margin-bottom: 30px;
 background-color: #536878;
-margin-left: 2.5%;
+margin-left: 4%;
 padding-left: 4%;
 padding-top: 25px;
 overflow: hidden;
@@ -710,36 +710,35 @@ padding-bottom: 25px;
 #tfheader{
 
 padding-top: 80px;
-width: 94%;
-margin-left: 3%;
+width: 100%;
+color:white;
 
 }
 
-.tftextinput0{
+input.tftextinput0{
 
-width: 24%;
-margin-right: 5%;
-
-}
-
-.tftextinput1{
-
-width: 24%;
-margin-right: 5%;
+width: 28%;
+margin-left: 4%;
+color: white;
+border-color: #536878;
+background-color: #536878;
 
 }
 
-.tftextinput2{
+input.tftextinput0::placeholder {
 
-width: 24%;
-margin-right: 5%;
-
+  color: white;
+  
 }
+
 
 .tfbutton{
 
 width: 10%;
 text-align: center;
+border-color: #536878;
+background-color: #536878;
+color:white;
 
 }
 
