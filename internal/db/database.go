@@ -455,9 +455,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, er
 		args = append(args, g)
 	}
 
-	if page >= 0 {
-		args = append(args, uint16(page)*config.Config.Generale.LunghezzaPagina, uint16(page+1)*config.Config.Generale.LunghezzaPagina)
-	}
+	args = append(args, uint16(page)*config.Config.Generale.LunghezzaPagina, uint16(page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
 	q := `SELECT Libro.Codice,Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
@@ -467,9 +465,8 @@ func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, er
 	if len(genere) > 0 {
 		q += ` AND genere IN (?` + strings.Repeat(`,?`, len(genere)-1) + `)`
 	}
-	if page >= 0 {
-		q += ` LIMIT ?,?`
-	}
+
+	q += ` LIMIT ?,?`
 
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
