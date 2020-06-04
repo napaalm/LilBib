@@ -15,5 +15,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request)
 func HandleNewPrestito(w http.ResponseWriter, r *http.Request)
 func HandleRestituzione(w http.ResponseWriter, r *http.Request)
 func HandleSetRestituzione(w http.ResponseWriter, r *http.Request)
+func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
+func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 ```
 
