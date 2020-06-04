@@ -44,6 +44,11 @@ type CommonValues struct {
 	Version string
 }
 
+type PrestitoTitolo struct {
+	Prestito db.Prestito
+	Titolo   string
+}
+
 // viene inizializzato nel momento in cui viene importato il package
 var templates = template.Must(template.ParseFiles(
 	templatesDir+"/autori.html",
@@ -76,7 +81,7 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		//errore, imposto dei valori di default
 		templates.ExecuteTemplate(w, "index.html", struct {
 			Disponibili uint32
-			Prenotati   uint32
+			Totali      uint32
 			Values      CommonValues
 		}{0, 0, CommonValues{Version}})
 		return
@@ -87,7 +92,7 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		//errore, imposto dei valori di default
 		templates.ExecuteTemplate(w, "index.html", struct {
 			Disponibili uint32
-			Prenotati   uint32
+			Totali      uint32
 			Values      CommonValues
 		}{0, 0, CommonValues{Version}})
 		return
@@ -95,9 +100,9 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 
 	templates.ExecuteTemplate(w, "index.html", struct {
 		Disponibili uint32
-		Prenotati   uint32
+		Totali      uint32
 		Values      CommonValues
-	}{disp, pren, CommonValues{Version}})
+	}{disp, pren + disp, CommonValues{Version}})
 }
 
 // Percorso: /libro/<idLibro uint32>
@@ -304,7 +309,42 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 // Mostra informazioni sull'utente.
 func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
-	templates.ExecuteTemplate(w, "utente.html", nil)
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	utente, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	prestiti, err := db.GetPrestiti(utente.Username)
+
+	prestitiTitoli := make([]PrestitoTitolo, len(prestiti))
+	for index, prestito := range prestiti {
+		libro, err := db.GetLibro(prestito.Libro)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		prestitiTitoli[index].Prestito = prestiti[index]
+		prestitiTitoli[index].Titolo = libro.Titolo
+	}
+
+	templates.ExecuteTemplate(w, "utente.html", struct {
+		Utente         string
+		PrestitiTitoli []PrestitoTitolo
+		Values         CommonValues
+	}{utente.Username, prestitiTitoli, CommonValues{Version}})
 }
 
 // Formato: /api/getLibro?qrcode=<base64-encoded code+password>
@@ -336,7 +376,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 
 	// Se non riesce ad ottenerlo ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -346,7 +386,7 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 
 	// Se l'autenticazione fallisce ritorna 401
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -355,9 +395,96 @@ func HandlePrestito(w http.ResponseWriter, r *http.Request) {
 	}{CommonValues{Version}})
 }
 
+// Formato: /api/prestito?qrcode=<base64-encoded code+password>&durata=<time in seconds>
+// Aggiunge un nuovo prestito per il libro e la durata passati.
+func HandleNewPrestito(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	user, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// Ottiene la password del libro e la durata del prestito
+	q := r.URL.Query()
+	password := q.Get("qrcode")
+	durataParsed, err := strconv.ParseUint(q.Get("durata"), 10, 32)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	durata := uint32(durataParsed)
+
+	// Ottiene il libro a partire dalla password
+	libro, err := hash.Verifica(password)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Ottiene username e id del libro
+	username := user.Username
+	id := libro.Codice
+
+	// Aggiunge il prestito
+	_, err = db.AddPrestito(id, username, durata)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Ritorna OK
+	http.Error(w, "OK", http.StatusOK)
+}
+
 // Percorso: /restituzione
 // Permette di restituire i libri in proprio possesso.
 func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo ritorna 401
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	_, err = auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce ritorna 401
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	templates.ExecuteTemplate(w, "restituzione.html", struct {
+		Values CommonValues
+	}{CommonValues{Version}})
+}
+
+// Formato: /api/restituzione?qrcode=<base64-encoded code+password>
+// Imposta come restituito il libro passato in argomento.
+func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
 
 	// Ottiene il cookie
 	cookie, err := r.Cookie("access_token")
@@ -378,7 +505,39 @@ func HandleRestituzione(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.ExecuteTemplate(w, "restituzione.html", struct {
-		Values CommonValues
-	}{CommonValues{Version}})
+	// Ottiene la password del libro
+	q := r.URL.Query()
+	password := q.Get("qrcode")
+
+	// Ottiene il libro a partire dalla password
+	libro, err := hash.Verifica(password)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Ottiene id del libro
+	id := libro.Codice
+
+	// Ottiene il prestito corrente
+	prestito, err := db.GetCurrentPrestito(id)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	idPrestito := prestito.Codice
+
+	// Imposta la restituzione
+	err = db.SetRestituzione(idPrestito)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Ritorna OK
+	http.Error(w, "OK", http.StatusOK)
 }

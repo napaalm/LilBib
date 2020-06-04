@@ -12,6 +12,12 @@
 <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<script>
+	function logout() {
+		document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		window.location = '/login';
+	}
+</script>
 
 <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 
@@ -43,7 +49,7 @@
 
 <div class="containerUtente">
 
-<h2 class="Utente"> Albero</h2>
+<h2 class="Utente">{{ .Utente }}</h2>
 <h2 class="Utente">Storico</h2>
 <div style="padding-left: 40px; padding-right: 40px; margin-bottom: 40px;">
 <table id="fancytable" class="ggTable">
@@ -59,18 +65,21 @@
         </tr>
     </thead>
     <tbody>
+	 {{ range $index, $value := .PrestitiTitoli }}
          <tr>
-            <td>albero birillo</td>
-            <td>bella merda gg</td>
-            <td>ggmerda bella</td>
-        </tr>
+	    <td>{{ $value.Titolo }}</td>
+	    <td>{{ $value.Prestito.Data_prenotazione }}</td>
+	    <td>{{ $value.Prestito.Data_restituzione }}</td>
+         </tr>
+	 {{ end }}
+
       
     </tbody>
 
 </table>
 <div class="spazio"></div>
 <div style="width: 100%; text-align: center;">
-<button onclick="alert('sei un coglione!!!!')" type="button" style="color: white; background: 
+<button onclick="logout()" type="button" style="color: white; background: 
 linear-gradient(to bottom, #232C33 0%, #536878 100%); border: 0px; cursor: pointer; width: 70px; height: 25px;">Esci</button>
 </div>
 <div class="spazio"></div>

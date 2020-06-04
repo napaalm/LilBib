@@ -1,5 +1,5 @@
 /*
- * database.go
+ * db_test.go
  *
  * Pacchetto per interfacciarsi con il database SQL
  *
@@ -28,6 +28,7 @@
 package db
 
 import (
+	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"testing"
 )
@@ -85,6 +86,21 @@ func TestAll(t *testing.T) {
 		t.Error(err)
 		return
 	}
+
+	if _, err := AddPrestito(1, "test_user", 10000); err != nil {
+		t.Error(err)
+		return
+	}
+
+	if err := SetRestituzione(1); err != nil {
+		t.Error(err)
+		return
+	}
+
+	//suqi, err := GetCurrentPrestito(2)
+	//fmt.Println(GetCurrentPrestito(2))
+	//err = SetRestituzione(2)
+	//fmt.Println(GetCurrentPrestito(2))
 
 	// id, err := db.AddPrestito(8, "marcoilbeffardo", time.Now(), 100)
 	// auths, err := db.RicercaAutori("")
