@@ -742,6 +742,69 @@ text-align: center;
 
 }
 
+form.AgLib0{
+
+margin-top: 70px;
+width: 35%;
+margin-left: 10%;
+margin-right: 5%;
+color: white;	
+
+
+}
+
+form.AgLib1{
+
+margin-top: 70px;
+width: 35%;
+margin-left: 5%;
+margin-right: 10%;
+color: white;	
+
+}
+
+form.AgLib2{
+
+margin-top: 70px;
+width: 80%;
+margin-left: 10%;
+margin-right: 10%;
+color: white;	
+margin-bottom: 100px;
+
+}
+
+
+fieldset{
+
+border-radius: 10px;
+border: 1px solid #536878;
+padding: 25px;
+height: 300px;
+
+} 
+
+legend{
+
+background-color: #536878;
+color: white;
+border-radius: 10px;
+border 1px solid #07393C;
+padding: 10px 20px;
+opacity: 0.8;
+text-align: left;
+
+}
+
+form>fieldset.th3{
+
+border-radius: 10px;
+border: 1px solid #536878;
+padding: 25px;
+height: 420px;
+
+}
+
 
 @media screen and (max-width: 900px) {
 
