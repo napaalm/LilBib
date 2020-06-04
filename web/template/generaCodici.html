@@ -15,6 +15,11 @@
 				for (let libro of document.getElementsByName('libro-label'))
 					libro.hidden = !libro.innerText.toLowerCase().includes(search);
 			}
+
+			function setAll(value) {
+				for (let libro of document.getElementsByName('libro-label'))
+					libro.children[0].children[0].checked = value;
+			}
 		</script>
 	</head>
 
@@ -46,6 +51,8 @@
 			<div class="elencoLib">
 				<!-- <div class="spazio"></div> -->
 				<input type="text" onchange="filter(this.value)">
+				<button onclick="setAll(true)">Seleziona tutto</button>
+				<button onclick="setAll(false)">Deseleziona tutto</button>
 				<form method="POST" style="width: 100%">
 					<input type="submit" value="Genera codici"><br>
 					{{ range $idx, $libro := .Libri }}
