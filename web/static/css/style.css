@@ -846,6 +846,25 @@ height: 420px;
 
 }
 
+.centerLink{
+
+widht: 100%;
+text-align: center;
+color: white;
+
+}
+
+a.LinkUtente{
+
+background: linear-gradient(to bottom, #232C33 0%, #536878 100%); 
+border: 0px;
+height: 45px;
+width: auto;
+padding-left:10px;
+padding-right:10px;
+cursor: pointer;
+
+}
 
 @media screen and (max-width: 900px) {
 

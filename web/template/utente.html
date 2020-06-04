@@ -83,12 +83,11 @@
 
 </table>
 {{ if .Utente.IsAdmin }}
-<div class="spazio"></div>
 <div style="widht: 100%; color: white;">
-<p style="width: 100%; text-align: center;">Admin</p>
-<div style="color: white align-text: center;">
-<a style="margin-left: 38%; text-align: center; widht: 6%; align-text:center; margin-right: 3%;" href="/admin/aggiungiLibro">Aggiungi libri</a>
-<a style="color: white"><a style=" text-align: center; align-text:center; margin-left: 3%;" href="/admin/generaCodici">Genera codici</a>
+<h2 class="Utente">Admin</h2>
+<div class="centerLink">
+<a style="margin-rigth: 3%;" class="LinkUtente" href="/generaCodici">Genera Codici</a>
+<a style="margin-left: 3%;" class="LinkUtente" href="/aggiungiLibro">Aggiungi Libro</a>
 </div> 
 </div>
 {{ end }}
