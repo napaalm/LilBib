@@ -11,12 +11,12 @@
 	</head>
 
 	<body>
-
 		<div style="min-height: 100vh;
 					overflow: hidden;
 					display: block;
 					position: relative;
 					padding-bottom: 100px; ">
+
 			<header>
 				<nav>
 					<ul>
@@ -32,21 +32,21 @@
 			</header>
 
 			<div>
-				<h1 class="TitoloLib">Generi</h1>
+				<h1 class="TitoloLib">Libri</h1>
 			</div>
 
 			<div class="elencoLib">
 				<!-- <div class="spazio"></div> -->
-				<form action="/generaCodici" method="POST">
+				<input id="search" type="text">
+				<form method="POST">
+					<input type="submit" value="Genera codici">
 					{{ range $idx, $libro := .Libri }}
-					<input value="{{ $idx }}" type="checkbox">{{ $libro.Titolo }}
+					<label id="libro-label"><input name="codici[]" value="{{ $idx }}" type="checkbox">{{ $libro.Titolo }}</label>
 					{{ end }}
 				</form>
 				<!-- <div class="spazio"></div> -->
 				<!-- <div class="spazio"></div> -->
 			</div>
-
-
 
 			<footer class="Other" >
 				<p class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
