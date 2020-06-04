@@ -38,56 +38,25 @@
 	<h1 class="TitoloLib">Libri</h1>
 </div>
 
+<div style="position: static">
 
-<div id="tfheader">
-    <form id="tfnewsearch" method="get">
-           <input type="text" class="tftextinput" id="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
-    </form>
-    <div class="tfclear"></div>
-</div>
-<script>
-    var a = document.getElementById('tfnewsearch');
-    a.addEventListener('submit',function(e) {
-    e.preventDefault();
-    var b = document.getElementById('tftextinput').value;
-    window.location.href = '/libri/0'+b;
-    });
-</script>
-
-<div id="tfheader">
-    <form id="tfnewsearch" method="get">
-           <input type="text" class="tftextinput" id="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
-    </form>
-    <div class="tfclear"></div>
-</div>
-<script>
-    var a = document.getElementById('tfnewsearch');
-    a.addEventListener('submit',function(e) {
-    e.preventDefault();
-    var b = document.getElementById('tftextinput').value;
-    window.location.href = '/libri/0'+b;
-    });
-</script>
-
-<div id="tfheader">
-    <form id="tfnewsearch" method="get">
-           <input type="text" class="tftextinput" id="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
-    </form>
-    <div class="tfclear"></div>
-</div>
-<script>
-    var a = document.getElementById('tfnewsearch');
-    a.addEventListener('submit',function(e) {
-    e.preventDefault();
-    var b = document.getElementById('tftextinput').value;
-    window.location.href = '/libri/0'+b;
-    });
-</script>
 
 <div class="elencoLib" id="DimElencoLib">
+
+<div id="tfheader">
+    <form id="tfnewsearch" method="get">
+           <input type="text" class="tftextinput0" id="tftextinput" name="q"  maxlength="120" placeholder="Autore">
+           <input type="text" class="tftextinput1" id="tftextinput" name="q"  maxlength="120" placeholder="Genere">
+           <input type="text" class="tftextinput2" id="tftextinput" name="q"  maxlength="120" placeholder="Libro">
+          <br/> <input type="submit" value="SEARCH" class="tfbutton">
+    </form>
+</div>
+
+
 	{{ range $index, $value := .Libri}}
-		<a href="/libro/{{ $value.Codice }}" >
+		
 		<div class="Box1">
+			<a href="/libro/{{ $value.Codice }}" >
 			<h2>Titolo: {{$value.Titolo}}</h2>
 			<h2>Autore: {{$value.NomeAutore}} {{$value.CognomeAutore}}</h2>
 			<h2>Genere: {{$value.Genere}}</h2>
@@ -109,6 +78,7 @@
 	<a class="navbar" href="/libri/{{ .PaginaPrec }}"><   </a><span> {{ .Pagina }} </span><a href="/libri/{{.PaginaSucc}} ">   ></a>
 
 </div>
+</div>
 <section/>
 
 <footer id="footerId" class="Other" >
@@ -116,6 +86,15 @@
 	<p id="text1Id" class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
 	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
 </footer>
+
+ <script>
+    var a = document.getElementById('tfnewsearch');
+    a.addEventListener('submit',function(e) {
+    e.preventDefault();
+    var b = document.getElementById('tftextinput').value;
+    window.location.href = '/libri/0'+b;
+    });
+</script>
 
  
 	</div>

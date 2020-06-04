@@ -469,12 +469,12 @@ flex-direction: row;
 div.Box1{
 
 height: 300px;
-width: 27%;
+width: 28%;
 margin-top: 50px;
 margin-bottom: 30px;
 background-color: #536878;
 margin-left: 2.5%;
-padding-left: 3%;
+padding-left: 4%;
 padding-top: 25px;
 overflow: hidden;
 
@@ -705,6 +705,43 @@ color: white;
 padding-bottom: 25px;
 
 }
+
+#tfheader{
+
+padding-top: 80px;
+width: 94%;
+margin-left: 3%;
+
+}
+
+.tftextinput0{
+
+width: 24%;
+margin-right: 5%;
+
+}
+
+.tftextinput1{
+
+width: 24%;
+margin-right: 5%;
+
+}
+
+.tftextinput2{
+
+width: 24%;
+margin-right: 5%;
+
+}
+
+.tfbutton{
+
+width: 10%;
+text-align: center;
+
+}
+
 
 @media screen and (max-width: 900px) {
 
