@@ -45,12 +45,23 @@ CREATE TABLE `Autore` (
 TRUNCATE `Autore`;
 INSERT INTO `Autore` (`Codice`, `Nome`, `Cognome`) VALUES
 (1,	'Alice',	'Adelfi'),
-(2,	'Barbara',	'Bonato'),
-(3,	'Carlo',	'Carraretto'),
-(4,	'Dario',	'Donati'),
-(5,	'Enrico',	'Emilietti'),
-(6,	'Fulvio',	'Fabbian'),
-(7,	'Gerardo',	'Gianfigliazzi');
+(2,	'Abdul',	'Abdullah'),
+(3,	'Barbara',	'Bonato'),
+(4,	'Baldassarre',	'Baccani'),
+(5,	'Carlo',	'Carraretto'),
+(6,	'Cinzia',	'Camilleri'),
+(7,	'Dario',	'Donati'),
+(8,	'Duccio',	'Doritos'),
+(9,	'Dalila',	'Danzanti'),
+(10,	'Enrico',	'Emilietti'),
+(11,	'Elio',		'E le storie tese'),
+(12,	'Fulvio',	'Fabbian'),
+(13,	'Gerardo',	'Gianfigliazzi'),
+(14,	'Gaia',		'Gibboni'),
+(15,	'Gabriele',	'Gastrite'),
+(16,	'Harald',	'Hardrada'),
+(17,	'Ivan',		'Iacopini'),
+(18,	'Irene',	'Iddau');
 
 DROP TABLE IF EXISTS `Genere`;
 CREATE TABLE `Genere` (
@@ -63,13 +74,16 @@ TRUNCATE `Genere`;
 INSERT INTO `Genere` (`Codice`, `Nome`) VALUES
 (1,	'Avventura e azione'),
 (2,	'Biografia'),
+(3,	'Carme'),
 (4,	'Distopia'),
 (5,	'Erotico'),
 (6,	'Fantascienza'),
-(7,	'Giallo');
+(7,	'Giallo'),
+(8,	'Horror'),
+(9,	'Imeneo (lirica corale)');
 
 DROP TABLE IF EXISTS `Libro`;
-CREATE TABLE `Libro` (
+CREATE TABLE `Libro` ( 
   `Codice` int(11) NOT NULL AUTO_INCREMENT,
   `Titolo` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Autore` int(11) NOT NULL,
@@ -86,8 +100,37 @@ CREATE TABLE `Libro` (
 TRUNCATE `Libro`;
 INSERT INTO `Libro` (`Codice`, `Titolo`, `Autore`, `Genere`, `Prenotato`, `Hashz`) VALUES
 (1,	'Alla Ricerca Di Adele',	1,	1,	1,	''),
-(2,	'Beatrice Bortolin - La Vita',	2,	2,	0,	''),
-(4,	'Dieci E Lode',	4,	4,	0,	'');
+(2,	'Alla Salute!',	2,	1,	0,	''),
+(3,	'Argo Is Better Than Nuvola. Change My Mind.',	2,	1,	0,	''),
+(4,	'Beatrice Bortolin - La Vita',	4,	2,	0,	''),
+(5,	'Bear Grylls',	3,	2,	0,	''),
+(6,	'Cucinare Cipolle',	5,	3,	0,	''),
+(7,	'Caporin - Riscaldamento Funicella',	5,	3,	0,	''),
+(8,	'Cicciogamer89 - Guida Di Fortnite',	5,	3,	0,	''),
+(9,	'C++ E Java A Colazione',	6,	3,	0,	''),
+(10,	'Dieci E Lode',	7,	4,	0,	''),
+(11,	'Duffy Duck E Il Calice Di Fuoco',	8,	4,	0,	''),
+(11,	"Dragon Ball Z - Goku Si Converte All'Islam",	8,	4,	0,	''),
+(12,	'Dente Di Leone',	9,	4,	0,	''),
+(13,	'Durlindana Si Spezza',	7,	4,	0,	''),
+(14,	'Elton John: Vite Parallele',	10,	5,	0,	''),
+(15,	'Edimburgo Ad Aprile',	10,	5,	0,	''),
+(16,	'Edin Dzeko Gelataio',	11,	5,	0,	''),
+(17,	'Ettore, Andromaca E Priamo',	11,	5,	0,	''),
+(18,	'Funghi Nucleari',	12,	6,	0,	''),
+(19,	'Fallimenti Aziendali',	12,	6,	0,	''),
+(20,	'George Floyd: Cosa Le Autorità Non Ci Dicono',	13,	7,	0,	''),
+(21,	"Gigi D'Alessio, Il Killer Di Apparati Uditivi",	13,	7,	0,	''),
+(22,	'Gallio',	14,	7,	0,	''),
+(23,	'Gelsomino Turlupinato',	15,	7,	0,	''),
+(24,	'Ho La Faringe Infiammata',	16,	8,	0,	''),
+(25,	'Highway To Hell',	16,	8,	0,	''),
+(26,	'Io Voto Salvini!',	17,	9,	0,	''),
+(27,	'Istrici A Colazione',	17,	9,	0,	''),
+(28,	'Io Sono Dio',	17,	9,	0,	''),
+(29,	'Isabella Di Castiglia',	18,	9,	0,	''),
+(30,	'Io Voto Di Maio',	18,	9,	0,	''),
+;
 
 DROP TABLE IF EXISTS `Prestito`;
 CREATE TABLE `Prestito` (
