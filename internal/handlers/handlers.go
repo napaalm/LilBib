@@ -181,7 +181,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 					PaginaSucc uint16
 					Libri      []db.Libro
 					Values     CommonValues
-				}{page, page, page + 1, libri, CommonValues{Version}})
+				}{page, page + 1, page + 1, libri, CommonValues{Version}})
 			} else {
 				templates.ExecuteTemplate(w, "libri.html", struct {
 					PaginaPrec uint16
@@ -189,7 +189,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 					PaginaSucc uint16
 					Libri      []db.Libro
 					Values     CommonValues
-				}{page, page, page, libri, CommonValues{Version}})
+				}{page, page + 1, page, libri, CommonValues{Version}})
 			}
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
@@ -198,7 +198,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaSucc uint16
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page, page, page, libri, CommonValues{Version}})
+			}{page, page + 1, page, libri, CommonValues{Version}})
 		}
 
 	} else {
@@ -209,7 +209,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaSucc uint16
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page - 1, page, page, libri, CommonValues{Version}})
+			}{page - 1, page + 1, page, libri, CommonValues{Version}})
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
@@ -217,7 +217,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaSucc uint16
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page - 1, page, page + 1, libri, CommonValues{Version}})
+			}{page - 1, page + 1, page + 1, libri, CommonValues{Version}})
 		}
 	}
 
