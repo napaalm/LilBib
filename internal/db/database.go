@@ -465,7 +465,6 @@ func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, er
 	if len(genere) > 0 {
 		q += ` AND genere IN (?` + strings.Repeat(`,?`, len(genere)-1) + `)`
 	}
-
 	q += ` LIMIT ?,?`
 
 	rows, err := db_Connection.Query(q, args...)
