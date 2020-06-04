@@ -632,7 +632,7 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	libri, err := db.RicercaLibri("", []uint32{}, []uint32{}, 0)
+	libri, err := db.RicercaLibri("", []uint32{}, []uint32{}, -1)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
