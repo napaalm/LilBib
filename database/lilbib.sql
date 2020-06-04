@@ -1,4 +1,27 @@
--- Adminer 4.7.7 MySQL dump
+/*
+ * lilbib.sql
+ *
+ * Struttura del database per lilbib.
+ *
+ * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
+ * Copyright (c) 2020 Davide Vendramin <davidevendramin5@gmail.com>
+ *
+ * This file is part of LilBib.
+ *
+ * LilBib is free software; you can redistribute it and/or modify it
+ * under the terms of the Affero GNU General Public License as
+ * published by the Free Software Foundation; either version 3, or (at
+ * your option) any later version.
+ *
+ * LilBib is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the Affero GNU General
+ * Public License for more details.
+ *
+ * You should have received a copy of the Affero GNU General Public
+ * License along with LilBib; see the file LICENSE. If not see
+ * <http://www.gnu.org/licenses/>.
+ */
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -55,6 +78,3 @@ CREATE TABLE `Prestito` (
   KEY `Libro` (`Libro`),
   CONSTRAINT `Prestito_ibfk_2` FOREIGN KEY (`Libro`) REFERENCES `Libro` (`Codice`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
--- 2020-06-02 16:36:59

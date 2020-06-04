@@ -4,8 +4,7 @@
  * Pacchetto per interfacciarsi con il database SQL
  *
  * Copyright (c) 2020 Filippo Casarin <casarin.filippo17@gmail.com>
- *
- * Copyright (c) 2020 Davide Vendramin <davidevendramin5@gmail.com>
+ * Copyright (c) 2020 Davide Vendramin <natalianatiche02@gmail.com>
  *
  * This file is part of LilBib.
  *

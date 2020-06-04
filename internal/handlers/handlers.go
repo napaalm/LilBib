@@ -1,9 +1,11 @@
 /*
  * handlers.go
  *
- * Descrizione del file.
+ * Package per gestire le diverse pagine ed i relativi template.
  *
- * Copyright (c) 2020 Nome Cognome <nome.cognome@example.org>
+ * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
+ * Copyright (c) 2020 Davide Vendramin <natalianatiche02@gmail.com>
+ * Copyright (c) 2020 Maxim Kovalkov <kov1maxim1al@gmail.com>
  *
  * This file is part of LilBib.
  *
@@ -22,6 +24,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+// Package per gestire le diverse pagine ed i relativi template.
 package handlers
 
 import (
