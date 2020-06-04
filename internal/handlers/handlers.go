@@ -184,26 +184,35 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 					PaginaPrec uint16
 					Pagina     uint16
 					PaginaSucc uint16
+					Titolo     string
+					Autori     string
+					Generi     string
 					Libri      []db.Libro
 					Values     CommonValues
-				}{page, page + 1, page + 1, libri, CommonValues{Version}})
+				}{page, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 			} else {
 				templates.ExecuteTemplate(w, "libri.html", struct {
 					PaginaPrec uint16
 					Pagina     uint16
 					PaginaSucc uint16
+					Titolo     string
+					Autori     string
+					Generi     string
 					Libri      []db.Libro
 					Values     CommonValues
-				}{page, page + 1, page, libri, CommonValues{Version}})
+				}{page, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 			}
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
 				Pagina     uint16
 				PaginaSucc uint16
+				Titolo     string
+				Autori     string
+				Generi     string
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page, page + 1, page, libri, CommonValues{Version}})
+			}{page, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 		}
 
 	} else {
@@ -212,17 +221,23 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				PaginaPrec uint16
 				Pagina     uint16
 				PaginaSucc uint16
+				Titolo     string
+				Autori     string
+				Generi     string
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page - 1, page + 1, page, libri, CommonValues{Version}})
+			}{page - 1, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
 				Pagina     uint16
 				PaginaSucc uint16
+				Titolo     string
+				Autori     string
+				Generi     string
 				Libri      []db.Libro
 				Values     CommonValues
-			}{page - 1, page + 1, page + 1, libri, CommonValues{Version}})
+			}{page - 1, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 		}
 	}
 

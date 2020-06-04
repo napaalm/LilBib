@@ -45,9 +45,9 @@
 
 <div id="tfheader">
     <form id="tfnewsearch" method="get">
-           <input type="text" class="tftextinput0" id="tftextinput" name="autori"  maxlength="120" placeholder="Autore">
-           <input type="text" class="tftextinput1" id="tftextinput" name="generi"  maxlength="120" placeholder="Genere">
-           <input type="text" class="tftextinput2" id="tftextinput" name="titolo"  maxlength="120" placeholder="Libro">
+	    <input type="text" class="tftextinput0" id="tftextinput" name="autori"  maxlength="120" placeholder="Autore" value="{{.Autori}}">
+	    <input type="text" class="tftextinput1" id="tftextinput" name="generi"  maxlength="120" placeholder="Genere" value="{{.Generi}}">
+	    <input type="text" class="tftextinput2" id="tftextinput" name="titolo"  maxlength="120" placeholder="Libro" value="{{.Titolo}}">
           <br/> <input type="submit" value="SEARCH" class="tfbutton">
     </form>
 </div>
