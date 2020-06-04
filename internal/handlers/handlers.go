@@ -63,6 +63,7 @@ var templates = template.Must(template.ParseFiles(
 	templatesDir+"/prestito.html",
 	templatesDir+"/restituzione.html",
 	templatesDir+"/utente.html",
+	templatesDir+"/aggiungiLibro.html",
 ))
 
 // Handler per qualunque percorso diverso da tutti gli altri percorsi riconosciuti.
@@ -569,4 +570,10 @@ func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
 
 	// Ritorna OK
 	http.Error(w, "OK", http.StatusOK)
+}
+
+func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
+	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
+		Values CommonValues
+	}{CommonValues{Version}})
 }
