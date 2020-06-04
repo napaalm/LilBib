@@ -80,7 +80,7 @@ INSERT INTO `Genere` (`Codice`, `Nome`) VALUES
 (6,	'Fantascienza'),
 (7,	'Giallo'),
 (8,	'Horror'),
-(9,	'Imeneo (lirica corale)');
+(9,	'Imeneo (lirica)');
 
 DROP TABLE IF EXISTS `Libro`;
 CREATE TABLE `Libro` ( 

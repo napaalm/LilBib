@@ -597,9 +597,15 @@ func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	generi, err := db.GetGeneri()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
+		Generi []db.Genere
 		Values CommonValues
-	}{CommonValues{Version}})
+	}{generi, CommonValues{Version}})
 }
 
 func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
@@ -626,7 +632,7 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	libri, err := db.RicercaLibri("", []uint32{}, []uint32{}, 0)
+	libri, err := db.RicercaLibri("", []uint32{}, []uint32{}, -1)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
