@@ -41,5 +41,7 @@ func RemovePrestito(codice uint32) error
 
 func LibriPrenotati() (uint32, error)
 func LibriDisponibili() (uint32, error)
+
+func CountaAutori() (uint32, error)
 ```
 
