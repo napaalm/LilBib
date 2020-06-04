@@ -601,7 +601,7 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 	}
 	q := ``
 	if len(args) > 0 {
-		q = `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(args)-1)
+		q = `SELECT * FROM Genere WHERE 0 = 0` + strings.Repeat(` AND nome LIKE ?`, len(args))
 	} else {
 		q = `SELECT * FROM Genere`
 	}
