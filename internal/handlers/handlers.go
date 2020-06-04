@@ -64,6 +64,7 @@ var templates = template.Must(template.ParseFiles(
 	templatesDir+"/restituzione.html",
 	templatesDir+"/utente.html",
 	templatesDir+"/aggiungiLibro.html",
+	templatesDir+"/generaCodici.html",
 ))
 
 // Handler per qualunque percorso diverso da tutti gli altri percorsi riconosciuti.
@@ -146,7 +147,7 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/libri/0", http.StatusSeeOther)
 		return
 	}
-	page := uint16(pageParsed)
+	page := int16(pageParsed)
 
 	q := r.URL.Query()
 	titolo := q.Get("titolo")
@@ -182,9 +183,9 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 		if float64(len(libri))/float64(config.Config.Generale.LunghezzaPagina) <= 1 {
 			if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
 				templates.ExecuteTemplate(w, "libri.html", struct {
-					PaginaPrec uint16
-					Pagina     uint16
-					PaginaSucc uint16
+					PaginaPrec int16
+					Pagina     int16
+					PaginaSucc int16
 					Titolo     string
 					Autori     string
 					Generi     string
@@ -193,9 +194,9 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				}{page, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 			} else {
 				templates.ExecuteTemplate(w, "libri.html", struct {
-					PaginaPrec uint16
-					Pagina     uint16
-					PaginaSucc uint16
+					PaginaPrec int16
+					Pagina     int16
+					PaginaSucc int16
 					Titolo     string
 					Autori     string
 					Generi     string
@@ -205,9 +206,9 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
-				PaginaPrec uint16
-				Pagina     uint16
-				PaginaSucc uint16
+				PaginaPrec int16
+				Pagina     int16
+				PaginaSucc int16
 				Titolo     string
 				Autori     string
 				Generi     string
@@ -219,9 +220,9 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 	} else {
 		if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
 			templates.ExecuteTemplate(w, "libri.html", struct {
-				PaginaPrec uint16
-				Pagina     uint16
-				PaginaSucc uint16
+				PaginaPrec int16
+				Pagina     int16
+				PaginaSucc int16
 				Titolo     string
 				Autori     string
 				Generi     string
@@ -230,9 +231,9 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 			}{page - 1, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 		} else {
 			templates.ExecuteTemplate(w, "libri.html", struct {
-				PaginaPrec uint16
-				Pagina     uint16
-				PaginaSucc uint16
+				PaginaPrec int16
+				Pagina     int16
+				PaginaSucc int16
 				Titolo     string
 				Autori     string
 				Generi     string
@@ -573,7 +574,65 @@ func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo reindirizza a /login
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	user, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce oppure l'utente non è admin ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	} else if !user.IsAdmin {
+		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
+		return
+	}
+
 	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
 		Values CommonValues
 	}{CommonValues{Version}})
+}
+
+func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
+
+	// Ottiene il cookie
+	cookie, err := r.Cookie("access_token")
+
+	// Se non riesce ad ottenerlo reindirizza a /login
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Estrae e controlla il token
+	token := []byte(cookie.Value)
+	user, err := auth.ParseToken(token)
+
+	// Se l'autenticazione fallisce oppure l'utente non è admin ritorna 401
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	} else if !user.IsAdmin {
+		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
+		return
+	}
+
+	libri, err := db.RicercaLibri("", []uint32{}, []uint32{}, 0)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	templates.ExecuteTemplate(w, "generaCodici.html", struct {
+		Libri  []db.Libro
+		Values CommonValues
+	}{libri, CommonValues{Version}})
 }

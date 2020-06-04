@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>LilBib</title>
+		<meta name="description" content="Lightweight Integrated Logistics for Book Indexing and Borrowing"/>
+		<meta name="keywords" content="libri, prenotazione, liceo, vinci, dav"> <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
+		<meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
+		<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+		<script>
+			function filter(search) {
+				search = search.toLowerCase();
+				for (let libro of document.getElementsByName('libro-label'))
+					libro.hidden = !libro.innerText.toLowerCase().includes(search);
+			}
+		</script>
+	</head>
+
+	<body>
+		<div style="min-height: 100vh;
+					overflow: hidden;
+					display: block;
+					position: relative;
+					padding-bottom: 100px; ">
+
+			<header>
+				<nav>
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="/libri">Libri</a></li>   <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
+						<li><a href="/autori">Autori</a></li>
+						<li><a href="/generi">Generi</a></li>
+						<li><a href="/prestito">Prestito</a></li>
+						<li><a href="/restituzione">Restituzione</a></li>
+						<li><span class="footerRight"><a href="/login"> <!--<i class="material-icons">person</i>--><span class="login">Login</span></a></span></li>
+					</ul>
+				</nav>
+			</header>
+
+			<div>
+				<h1 class="TitoloLib">Libri</h1>
+			</div>
+
+			<div class="elencoLib">
+				<!-- <div class="spazio"></div> -->
+				<input type="text" onchange="filter(this.value)">
+				<form method="POST" style="width: 100%">
+					<input type="submit" value="Genera codici"><br>
+					{{ range $idx, $libro := .Libri }}
+					<div class="Box1G" name="libro-label">
+						<label>
+							<input name="codici[]" value="{{ $idx }}" type="checkbox">{{ $libro.Titolo }}
+						</label>
+					</div>
+					{{ end }}
+				</form>
+				<!-- <div class="spazio"></div> -->
+				<!-- <div class="spazio"></div> -->
+			</div>
+
+			<footer class="Other" >
+				<p class="Other FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
+				<p class="Other FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a>
+				| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
+			</footer>
+		</div>
+	</body>
+</html>
