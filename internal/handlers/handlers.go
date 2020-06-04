@@ -650,7 +650,7 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		var ids []uint32
 
 		for _, codice := range codici {
-			id, err := strconv.ParseInt(codice, 2, 32)
+			id, err := strconv.ParseInt(codice, 10, 32)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
