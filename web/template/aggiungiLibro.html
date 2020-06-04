@@ -9,9 +9,7 @@
 <link rel="stylesheet" type="text/css" href="/static/css/960_12_col.css"> <!-- questo e' un tentativo che per ora e fallito--> 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
 <link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
-<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/css/dataTables.css">
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+
 	<script>
 		        function logout() {
 				                document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -47,8 +45,66 @@
 </header>
 
 <div>
-	        <h1 class="TitoloLib">Aggiungi Libro</h1>
+	<h1 class="TitoloLib">Aggiungi Libro</h1>
 </div>
+
+<div class="elencoLib">
+<form class="AgLib0" action="/admin/aggiungilibro" method="post">
+	<fieldset> 
+	<legend>
+Aggiungi Genere
+	</legend>
+	<br/><br/>
+	<span class="AgLib">Genere:<br/><br/><input type="text" name="genere" placeholder="Genere"/></span>
+	<br/>
+	<input style="width: 75px;" type="submit" value="Crea"/>
+	</fieldset> 
+	
+</form>
+
+<form class="AgLib1" action="" method="post">
+<fieldset> 
+<legend>
+Aggiungi Autore
+</legend>
+<span>Nome:<br/><br/><input type="text" name="nome" placeholder="Nome"/></span>
+<br/>
+<span class="AgLib">Cognome:<br/><br/><input type="text" name="cognome" placeholder="Cognome"/></span><br/>
+<input style="width: 75px;" type="submit" value="Crea"/>
+
+</fieldset> 
+</form class="th3">
+
+<form class="AgLib2" action="/admin/aggiungilibro" method="post">
+
+<fieldset class="th3"> 
+<legend>
+Aggiungi Libro
+</legend>
+<span>Nome:<br/><br/><input type="text" name="nome" placeholder="Nome"/></span>
+<br/>
+<span class="AgLib">Autore:<br/><br/></span><select name="autore"/>
+
+<option value="gg">gg</option>
+<option value="gg2">gg2</option>
+<option value="gg">gg3</option>
+</select>
+<br/><br/>
+<span class="AgLib">Autore:<br/><br/></span><select name="autore"/>
+
+<option value="gg">gg</option>
+<option value="gg2">gg2</option>
+<option value="gg">gg3</option>
+</select>
+<br/><br/><br/>
+
+<input style="width: 75px;" type="submit" value="Crea"/>
+
+</fieldset> 
+
+</form>
+</div>
+
 
 
 <div>

@@ -392,6 +392,7 @@ width: 20%;
 height: 200px;
 margin-right: auto;
 margin-left: auto;
+margin-bottom: 65px;
 float:left;
 
 }
@@ -490,7 +491,7 @@ background-color: #232C33;
 opacity: 0.8;
 margin-left: 3%;
 color: white;
-padding-top: 25px;
+padding-top: 15px;
 
 }
 
@@ -742,6 +743,69 @@ text-align: center;
 
 }
 
+form.AgLib0{
+
+margin-top: 70px;
+width: 35%;
+margin-left: 10%;
+margin-right: 5%;
+color: white;	
+
+
+}
+
+form.AgLib1{
+
+margin-top: 70px;
+width: 35%;
+margin-left: 5%;
+margin-right: 10%;
+color: white;	
+
+}
+
+form.AgLib2{
+
+margin-top: 70px;
+width: 80%;
+margin-left: 10%;
+margin-right: 10%;
+color: white;	
+margin-bottom: 100px;
+
+}
+
+
+fieldset{
+
+border-radius: 10px;
+border: 1px solid #536878;
+padding: 25px;
+height: 300px;
+
+} 
+
+legend{
+
+background-color: #536878;
+color: white;
+border-radius: 10px;
+border 1px solid #07393C;
+padding: 10px 20px;
+opacity: 0.8;
+text-align: left;
+
+}
+
+form>fieldset.th3{
+
+border-radius: 10px;
+border: 1px solid #536878;
+padding: 25px;
+height: 420px;
+
+}
+
 
 @media screen and (max-width: 900px) {
 
@@ -806,6 +870,22 @@ text-align: center;
 	margin-left: 12%;
 	overflow: hidden;
 
+
+}
+
+form.AgLib0{
+
+width: 80%;
+margin-left: 10%;
+margin-right: 10%;
+
+}
+
+form.AgLib1{
+
+width: 80%;
+margin-left: 10%;
+margin-right: 10%;
 
 }
   
