@@ -355,10 +355,10 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 	}
 
 	templates.ExecuteTemplate(w, "utente.html", struct {
-		Utente         string
+		Utente         auth.UserInfo
 		PrestitiTitoli []PrestitoTitolo
 		Values         CommonValues
-	}{utente.Username, prestitiTitoli, CommonValues{Version}})
+	}{utente, prestitiTitoli, CommonValues{Version}})
 }
 
 // Formato: /api/getLibro?qrcode=<base64-encoded code+password>
