@@ -435,7 +435,7 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 }
 
 //Funzione per la ricerca dei libri
-func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, error) {
+func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
