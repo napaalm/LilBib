@@ -5,6 +5,8 @@ Sistema di gestione bibliotecaria.
 # Come contribuire
 
 ## Setup
+È necessario installare `docker` e `docker-compose` per eseguire il database di sviluppo.
+
 Per contribuire al codice è consigliato eseguire dalla directory principale del repository il seguente comando:
 ```bash
 $ ./scripts/setup.sh
@@ -13,7 +15,7 @@ $ ./scripts/setup.sh
 ## Compilazione
 Per compilare ed eseguire è possibile usare `make`:
 ```bash
-$ make build && make run
+$ make run
 ```
 È possibile anche generare un binario di release:
 ```bash
@@ -31,23 +33,29 @@ Basata su [questo](https://github.com/golang-standards/project-layout).
 ### `/cmd/lilbib`
 Contiene il main.
 
+### `/config`
+Contiene il file di configurazione di default.
+
+### `/database`
+Contiene la struttura del database ed un file docker-compose per avviare il database di sviluppo.
+
+### `/githooks`
+Contiene degli hook utili allo sviluppatore.
+
 ### `/internal`
 Contiene i packages interni da cui è composto il software.
-
-### `/vendor`
-Contiene le dipendenze del progetto.
-
-### `/web`
-Contiene gli asset statici e i template HTML.
 
 ### `/scripts`
 Contiene script utili allo sviluppatore.
 
-### `/release`
-Contiene i binari di rilascio.
+### `/web`
+Contiene gli asset statici e i template HTML.
 
-### `/githooks`
-Contiene degli hook utili allo sviluppatore.
+### `/sandbox`
+Contiene un ambiente di prova per i risultati della compilazione. (generata da `make`)
+
+### `/release`
+Contiene i binari di rilascio. (generata da `make`)
 
 # Struttura del progetto
 
@@ -94,7 +102,8 @@ Contiene informazioni sull'utente, come il nome utente e la storia dei prestiti.
 
 ### `/prestito`
 Permette di scansionare o inserire il codice di uno o più libri per prenderli in prestito scegliendone la durata.
-In caso non sia stato effettuato l'accesso verranno richieste le proprie credenziali, senza però restituire un token (caso d'uso: computer comune in biblioteca per prendere in prestito e restituire libri).
+~~In caso non sia stato effettuato l'accesso verranno richieste le proprie credenziali, senza però restituire un token (caso d'uso: computer comune in biblioteca per prendere in prestito e restituire libri).~~
+In caso non sia stato effettuato l'accesso reindirizza a `/login`.
 
 ### `/restituzione`
 Permette di restituire i libri in proprio possesso.
@@ -103,36 +112,45 @@ Funzionamento identico a `/prestito`.
 ### `/static`
 Endpoint per servire contenuti statici da `web/static`.
 
+### `/api/getLibro?qrcode=<base64-encoded code+password>`
+Endpoint per ottenere informazioni su un libro in formato JSON a partire dal contenuto del suo QR code (necessaria previa autenticazione).
+
+### `/api/prestito?qrcode=<base64-encoded code+password>&durata=<time in seconds>`
+Endpoint per prendere in prestito un libro per una certa durata (necessaria previa autenticazione).
+
+### `/api/restituzione?qrcode=<base64-encoded code+password>`
+Endpoint per restituire un libro (necessaria previa autenticazione).
+
 ## Tabelle SQL
 
 ### Libro
-* `codice`
-* `titolo`
-* `autore`
-* `genere`
-* `prenotato`
-* `hash`
+* `Codice` (primary key)
+* `Titolo`
+* `Autore`
+* `Genere`
+* `Prenotato`
+* `Hashz`
 
 ### Genere
-* `codice`
-* `nome`
+* `Codice` (primary key)
+* `Nome`
 
 ### Autore
-* `codice`
-* `nome`
-* `cognome`
+* `Codice` (primary key)
+* `Nome`
+* `Cognome`
 
 ### Prestito
-* `codice`
-* `libro`
-* `utente`
-* `data_prenotazione`
-* `durata`
-* `data_restituzione`
+* `Codice` (primary key)
+* `Libro` (foreign key)
+* `Utente` (foreign key)
+* `Data_prenotazione`
+* `Durata`
+* `Data_restituzione`
 
 ## Backend GO
 In ogni package è presente un file README dove sono indicate le funzionalità da implementare, i tipi e le funzioni esportate.
-Si consiglia di scrivere funzioni interne al package per evitare funzioni troppo lunghe.
+Si consiglia di scrivere funzioni interne al package per evitare che queste diventino troppo lunghe.
 
 ### Packages
 * `auth`
@@ -140,6 +158,7 @@ Si consiglia di scrivere funzioni interne al package per evitare funzioni troppo
 * `db`
 * `handlers`
 * `hash`
+* `qrcode`
 
 ### Template codice sorgente
 Questo template va incluso all'inizio di ogni file.
