@@ -22,7 +22,7 @@ func GetGeneri() ([]Genere, error)
 func GetPrestiti(utente string) ([]Prestito, error)
 func GetAssegnatario(cod uint32) (string, error)
 
-func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, error) // passare un numero negativo a page per ottenere tutti i libri
+func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, error)
 func RicercaAutori(nome string) ([]Autore, error)
 func RicercaGeneri(nome string) ([]Genere, error)
 

@@ -180,32 +180,10 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tot, err := db.CountLibri()
+
 	if page == 0 {
-		if float64(len(libri))/float64(config.Config.Generale.LunghezzaPagina) <= 1 {
-			if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
-				templates.ExecuteTemplate(w, "libri.html", struct {
-					PaginaPrec int16
-					Pagina     int16
-					PaginaSucc int16
-					Titolo     string
-					Autori     string
-					Generi     string
-					Libri      []db.Libro
-					Values     CommonValues
-				}{page, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
-			} else {
-				templates.ExecuteTemplate(w, "libri.html", struct {
-					PaginaPrec int16
-					Pagina     int16
-					PaginaSucc int16
-					Titolo     string
-					Autori     string
-					Generi     string
-					Libri      []db.Libro
-					Values     CommonValues
-				}{page, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
-			}
-		} else {
+		if float32(page+1) >= (float32(tot) / float32(config.Config.Generale.LunghezzaPagina)) {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec int16
 				Pagina     int16
@@ -216,10 +194,21 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				Libri      []db.Libro
 				Values     CommonValues
 			}{page, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
-		}
+		} else {
+			templates.ExecuteTemplate(w, "libri.html", struct {
+				PaginaPrec int16
+				Pagina     int16
+				PaginaSucc int16
+				Titolo     string
+				Autori     string
+				Generi     string
+				Libri      []db.Libro
+				Values     CommonValues
+			}{page, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
 
+		}
 	} else {
-		if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+		if float32(page+1) >= (float32(tot) / float32(config.Config.Generale.LunghezzaPagina)) {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec int16
 				Pagina     int16
@@ -241,8 +230,74 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				Libri      []db.Libro
 				Values     CommonValues
 			}{page - 1, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
+
 		}
 	}
+
+	/*
+		if page == 0 {
+			if float64(len(libri))/float64(config.Config.Generale.LunghezzaPagina) <= 1 {
+				if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+					templates.ExecuteTemplate(w, "libri.html", struct {
+						PaginaPrec int16
+						Pagina     int16
+						PaginaSucc int16
+						Titolo     string
+						Autori     string
+						Generi     string
+						Libri      []db.Libro
+						Values     CommonValues
+					}{page, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
+				} else {
+					templates.ExecuteTemplate(w, "libri.html", struct {
+						PaginaPrec int16
+						Pagina     int16
+						PaginaSucc int16
+						Titolo     string
+						Autori     string
+						Generi     string
+						Libri      []db.Libro
+						Values     CommonValues
+					}{page, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
+				}
+			} else {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec int16
+					Pagina     int16
+					PaginaSucc int16
+					Titolo     string
+					Autori     string
+					Generi     string
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
+			}
+
+		} else {
+			if float64(page) > (float64(len(libri)) / float64(config.Config.Generale.LunghezzaPagina)) {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec int16
+					Pagina     int16
+					PaginaSucc int16
+					Titolo     string
+					Autori     string
+					Generi     string
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page - 1, page + 1, page, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
+			} else {
+				templates.ExecuteTemplate(w, "libri.html", struct {
+					PaginaPrec int16
+					Pagina     int16
+					PaginaSucc int16
+					Titolo     string
+					Autori     string
+					Generi     string
+					Libri      []db.Libro
+					Values     CommonValues
+				}{page - 1, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
+			}
+		}*/
 
 }
 
@@ -650,7 +705,7 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		var ids []uint32
 
 		for _, codice := range codici {
-			id, err := strconv.ParseInt(codice, 2, 32)
+			id, err := strconv.ParseInt(codice, 10, 32)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
@@ -666,7 +721,8 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Ritorna la pagina
-		http.Error(w, page, http.StatusOK)
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(page))
 		return
 	}
 
