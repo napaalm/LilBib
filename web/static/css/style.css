@@ -718,6 +718,30 @@ color:white;
 input.tftextinput0{
 
 width: 28%;
+margin-left: 1%;
+overflow: hidden;
+color: white;
+border-color: #536878;
+background-color: #536878;
+text-align: center;
+
+}
+
+input.tftextinput1{
+
+width: 28%;
+margin-left: 4%;
+overflow: hidden;
+color: white;
+border-color: #536878;
+background-color: #536878;
+text-align: center;
+
+}
+
+input.tftextinput2{
+
+width: 28%;
 margin-left: 4%;
 overflow: hidden;
 color: white;
@@ -728,6 +752,18 @@ text-align: center;
 }
 
 input.tftextinput0::placeholder {
+
+  color: white;
+  
+}
+
+input.tftextinput1::placeholder {
+
+  color: white;
+  
+}
+
+input.tftextinput2::placeholder {
 
   color: white;
   
@@ -889,5 +925,42 @@ margin-left: 10%;
 margin-right: 10%;
 
 }
+ 
+input.tftextinput0{
+
+width: 28%;
+margin-left: 1%;
+overflow: hidden;
+color: white;
+border-color: #536878;
+background-color: #536878;
+text-align: center;
+
+}
+
+input.tftextinput1{
+
+width: 28%;
+margin-left: 4%;
+overflow: hidden;
+color: white;
+border-color: #536878;
+background-color: #536878;
+text-align: center;
+
+}
+
+input.tftextinput2{
+
+width: 28%;
+margin-left: 4%;
+overflow: hidden;
+color: white;
+border-color: #536878;
+background-color: #536878;
+text-align: center;
+
+}
+ 
   
 }
