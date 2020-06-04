@@ -309,7 +309,7 @@ footer.Other{
 position:absolute;
 bottom:0;
 width: 100%;
-height: 140px;
+height: 60px;
 background-color: #232C33;
 opacity:0.8;
 
@@ -481,6 +481,7 @@ padding-top: 25px;
 padding-bottom: 25px;
 overflow: hidden;
 font-size: 14px;
+border-radius: 8px;
 
 }
 
@@ -549,6 +550,7 @@ margin-left: 8%;
 margin-top: 40px;
 text-align: center;
 font-size: 18px;
+border-radius: 8px;
 
 }
 
