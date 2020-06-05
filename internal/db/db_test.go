@@ -28,7 +28,6 @@
 package db
 
 import (
-	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"testing"
 )
