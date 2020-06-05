@@ -361,6 +361,10 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 	}
 
 	prestiti, err := db.GetPrestiti(utente.Username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	prestitiTitoli := make([]PrestitoTitolo, len(prestiti))
 	for index, prestito := range prestiti {
