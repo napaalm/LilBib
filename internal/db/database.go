@@ -878,7 +878,7 @@ func SetRestituzione(libro uint32) error {
 	defer rows.Close()
 
 	q2 := `UPDATE Libro SET prenotato = 0 WHERE codice = ?`
-	rows2, err := db_Connection.Query(q2, prestito)
+	rows2, err := db_Connection.Query(q2, libro)
 	if err != nil {
 		return err
 	}
