@@ -64,13 +64,13 @@
         </tr>
     </thead>
     <tbody>
-	 {{ range $index, $value := .PrestitiTitoli }}
-         <tr>
-	    <td>{{ $value.Titolo }}</td>
-	    <td>{{ $value.Prestito.Data_prenotazione }}</td>
-	    <td>{{ $value.Prestito.Data_restituzione }}</td>
-         </tr>
-	 {{ end }}
+		{{ range $index, $value := .PrestitiTitoli }}
+		<tr>
+			<td style="text-align: center">{{ $value.Titolo }}</td>
+			<td style="text-align: center">{{ $value.Prestito.Data_prenotazione }}</td>
+			<td style="text-align: center">{{ if $value.Prestito.Data_restituzione.Valid }} {{ $value.Prestito.Data_restituzione.Time }} {{ else }} Non restituito {{ end }}</td>
+		</tr>
+		{{ end }}
 
       
     </tbody>
