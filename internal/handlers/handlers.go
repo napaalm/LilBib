@@ -761,3 +761,22 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 		Values CommonValues
 	}{libri, CommonValues{Version}})
 }
+
+// Percorso: /logout
+func HandleLogout(w http.ResponseWriter, r *http.Request) {
+	// Ottiene la configurazione per i cookie
+	fqdn := config.Config.Generale.FQDN
+	secure := config.Config.Generale.SecureCookies
+
+	// Crea e imposta il cookie
+	cookie := http.Cookie{
+		Name:   "access_token",
+		Value:  "",
+		Domain: fqdn,
+		MaxAge: -1,
+		Secure: secure,
+	}
+	http.SetCookie(w, &cookie)
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}

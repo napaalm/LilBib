@@ -66,6 +66,7 @@ func main() {
 	mux.HandleFunc("/autori/", handlers.HandleAutori)
 	mux.HandleFunc("/generi", handlers.HandleGeneri)
 	mux.HandleFunc("/login", handlers.HandleLogin)
+	mux.HandleFunc("/logout", handlers.HandleLogout)
 	mux.HandleFunc("/prestito", handlers.HandlePrestito)
 	mux.HandleFunc("/restituzione", handlers.HandleRestituzione)
 	mux.HandleFunc("/utente", handlers.HandleUtente)
