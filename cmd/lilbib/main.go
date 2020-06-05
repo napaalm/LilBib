@@ -48,6 +48,8 @@ func main() {
 		return
 	}
 
+	defer db.ChiudiDB()
+
 	auth.InitializeSigning()
 
 	fmt.Println("LilBib versione: " + Version)
