@@ -383,7 +383,8 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 		return Prestito{}, err
 	}
 
-	q := `SELECT COUNT(*) FROM Prestito WHERE Libro = ? AND Data_restituzione IS NULL`
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	q := `SELECT Codice,Libro,Utente,Data_prenotazione,Durata FROM Prestito WHERE Libro = ? AND Data_restituzione IS NULL`
 	//Applico la query al database. Salvo i risultati in rows
 	rows, err := db_Connection.Query(q, codice)
 	//Se c'è un errore, ritorna null e l'errore
@@ -393,29 +394,8 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
 
-	var count uint32
-	for rows.Next() {
-		if err := rows.Scan(&count); err != nil {
-			return Prestito{}, err
-		}
-	}
-
-	if count == 0 {
-		return Prestito{}, &NoCurrentPrestitoError{codice}
-	}
-
-	//Salvo la query che eseguirà l'sql in una variabile stringa
-	q = `SELECT Codice,Libro,Utente,Data_prenotazione,Durata FROM Prestito WHERE Libro = ? AND Data_restituzione IS NULL`
-	//Applico la query al database. Salvo i risultati in rows
-	rows, err = db_Connection.Query(q, codice)
-	//Se c'è un errore, ritorna null e l'errore
-	if err != nil {
-		return Prestito{}, err
-	}
-	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
-	defer rows.Close()
-
 	var pres Prestito
+	var count uint32
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		var data_pre int64
@@ -425,10 +405,16 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 		}
 		//Salvo data_pre in pres convertendola in timestamp unix
 		pres.Data_prenotazione = time.Unix(data_pre, 0)
+
+		count += 1
 	}
 	//Se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
 		return Prestito{}, err
+	}
+
+	if count != 1 {
+		return Prestito{}, &NoCurrentPrestitoError{codice}
 	}
 
 	//Returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
