@@ -496,31 +496,35 @@ opacity: 0.8;
 margin-left: 3%;
 color: white;
 padding-top: 15px;
+overflow: hidden;
+display: flex;
+justify-content: center;
 
 }
 
 div>a.menuLib0{
 
 color: white;
-padding-left: 6%;
-padding-right: 1%;
+width: 1%;
+overflow: hidden;
 
 }
 
 div>a.menuLib1{
 
 color: white;
-padding-right: 6%;
-padding-left: 1%;
-
+width: 1%;
+margin-left: 2%;
+overflow: hidden;
 
 }
 
 div>a.menuLib{
 
 color: white;
-padding-right: 1%;
-padding-left: 1%;
+width: 1%;
+margin-left: 2%;
+overflow: hidden;
 
 }
 
@@ -1011,5 +1015,10 @@ width: 15%;
 
 }
  
+ div.menuLib{
+
+font-size: 10px;
+
+}
   
 }
