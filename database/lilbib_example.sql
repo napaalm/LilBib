@@ -106,11 +106,11 @@ INSERT INTO `Libro` (`Codice`, `Titolo`, `Autore`, `Genere`, `Prenotato`, `Hashz
 (5,	'Bear Grylls',	3,	2,	0,	''),
 (6,	'Complotto Terrapiattista',	5,	3,	0,	''),
 (7,	'Castagne Autunnali',	5,	3,	0,	''),
-(8,	'Cigarini All''Atalanta',	5,	3,	0,	''),
+(8,	'Cigarini All''Atalanta',	5,	3,	1,	''),
 (9,	'C++ E Java A Colazione',	6,	3,	0,	''),
 (10,	'Dieci E Lode',	7,	4,	0,	''),
 (11,	'Duffy Duck E Il Calice Di Fuoco',	8,	4,	0,	''),
-(12,	'Dragon Ball Z - Goku Si Converte Al GodSucca',	8,	4,	0,	''),
+(12,	'Dragon Ball Z - Goku Si Converte Al GodSucca',	8,	4,	1,	''),
 (13,	'Dente Di Leone',	9,	4,	0,	''),
 (14,	'Durlindana Si Spezza',	7,	4,	0,	''),
 (15,	'Elton John: Vite Parallele',	10,	5,	0,	''),
@@ -118,7 +118,7 @@ INSERT INTO `Libro` (`Codice`, `Titolo`, `Autore`, `Genere`, `Prenotato`, `Hashz
 (17,	'Edin Dzeko Gelataio',	11,	5,	0,	''),
 (18,	'Ettore, Andromaca E Priamo',	11,	5,	0,	''),
 (19,	'Funghi Nucleari',	12,	6,	0,	''),
-(20,	'Fallimenti Aziendali',	12,	6,	0,	''),
+(20,	'Fallimenti Aziendali',	12,	6,	1,	''),
 (21,	'Gas A Martello, PRIMA DENTROOO',	13,	7,	0,	''),
 (22,	'Gigi D''Alessio, Il Killer Di Apparati Uditivi',	13,	7,	0,	''),
 (23,	'Gallio',	14,	7,	0,	''),
@@ -146,8 +146,12 @@ CREATE TABLE `Prestito` (
 
 TRUNCATE `Prestito`;
 INSERT INTO `Prestito` (`Codice`, `Libro`, `Utente`, `Data_prenotazione`, `Durata`, `Data_restituzione`) VALUES
-(1,	1,	'Alfio.Ammannati',	1013126400,	1209600,	NULL),
-(2,	2,	'Bartolomeo.Bianchi',	1013126400,	1209600,	1014336000);
+(1,	1,	'alfio.ammannati',	1013126400,	1209600,	NULL),
+(2,	4,	'bartolomeo.bianchi',	1013126400,	1209600,	1014336000),
+(3,	5,	'badr.bousselham',	1013126400,	1209600,	1014536000),
+(4,	8,	'carlo.conti',		1015126400,	1209600,	NULL),
+(5,	12,	'dalila.diurni',	1019126400,	1209600,	NULL),
+(6,	20,	'fabio.fermi',		1016126400,	1209600,	NULL);
 
 CREATE USER 'lilbib'@'%' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON lilbib.* TO 'lilbib'@'%';
