@@ -12,16 +12,16 @@
 		<script>
 			function filter(search) {
 				search = search.toLowerCase();
-				for (let libro of document.getElementsByName('codici'))
+				for (let libro of document.getElementsByName('libro-row'))
 					libro.hidden = !libro.innerText.toLowerCase().includes(search);
 			}
 
 			function setAll(value) {
-				for (let libro of document.getElementsByName('codici'))
+				for (let libro of document.getElementsByName('libro-row'))
 					libro.children[0].children[0].checked = value;
 			}
 		</script>
-		
+
 	</head>
 
 	<body>
@@ -53,7 +53,7 @@
 			<h2 style=" padding-top: 35px; text-align: center; color: #F0803C;">ATTENZIONE: GENERARE UN NUOVO CODICE PER UN LIBRO RENDERA' INVALIDO QUELLO VECCHIO!!</h2>
 				</div><!-- <div class="spazio"></div> -->
 				<input class="LinkGenCod" placeholder="ricerca" type="text" onchange="filter(this.value)">
-				
+
 				<br/><div style="width: 100%; text-align: center;">
 				<button class="LinkUtente" style="margin-right: 3% color: white;" onclick="setAll(true)">Seleziona tutto</button>
 				<button class="LinkUtente" style="margin-left: 3%; color: white;" onclick="setAll(false)">Deseleziona tutto</button>
@@ -61,27 +61,25 @@
 				<br/>
 				<br/>
 				<br/>
-				
+
 				<form class="AgLib5" method="POST" style="width: 100%">
 				<input style="color: white;" class="LinkUtente" type="submit" value="Genera codici"><br>
-				
+
 				<fieldset class="GenLib">
 				<legend>
 					Libri
 				</legend>
-				
-					
+
+
+				<table>
 					{{ range $idx, $libro := .Libri }}
-					<table>	
-					<label>	
-						<tr>
-							<td><input style="text-align: left;" name="codici" value="{{ $libro.Codice }}" type="checkbox"></td><td>{{ $libro.Titolo }}</td>
-						</tr>				
-						</label>
-						<br/>
+					<tr name='libro-row'>
+						<td style="text-align: left"><input style="text-align: left;" name="codici" value="{{ $libro.Codice }}" type="checkbox"></td>
+						<td style="text-align: left">{{ $libro.Titolo }}</td>
+					</tr>
 					{{ end }}
-					</table>
-					
+				</table>
+
 					</fieldset>
 				</form>
 				<!-- <div class="spazio"></div> -->
