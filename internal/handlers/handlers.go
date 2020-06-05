@@ -131,12 +131,12 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	assegnatario, err := db.GetAssegnatario(idLibro)
+	prestito, err := db.GetCurrentPrestito(idLibro)
 	templates.ExecuteTemplate(w, "libro.html", struct {
 		Libro  db.Libro
 		Utente string
 		Values CommonValues
-	}{libro, assegnatario, CommonValues{Version}})
+	}{libro, prestito.Utente, CommonValues{Version}})
 }
 
 // Formato: /libri/<page uint32>

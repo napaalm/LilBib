@@ -124,59 +124,6 @@ func GetLibro(cod uint32) (Libro, error) {
 	return lib, nil
 }
 
-//Funzione per trovare l'assegnatario di un libro
-func GetAssegnatario(cod uint32) (string, error) {
-	//Verifico se il server è ancora disponibile
-	//Se c'è un errore, ritorna un libro vuoto e l'errore
-	if err := db_Connection.Ping(); err != nil {
-		return "", err
-	}
-
-	//Salvo la query che eseguirà l'sql in una variabile stringa
-	qpre := `SELECT COUNT(*) FROM Prestito WHERE Prestito.Libro = ?`
-	//Applico la query al database. Salvo i risultati in rows
-	rows, err := db_Connection.Query(qpre, cod)
-	//Se c'è un errore, ritorna un libro vuoto e l'errore
-	if err != nil {
-		return "", err
-	}
-	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
-	defer rows.Close()
-
-	var count uint32
-	for rows.Next() {
-		if err := rows.Scan(&count); err != nil {
-			return "", err
-		}
-	}
-	if count == 0 {
-		return "", nil
-	}
-
-	//Salvo la query che eseguirà l'sql in una variabile stringa
-	q := `SELECT Prestito.Utente FROM Prestito WHERE Prestito.Libro = ?`
-	//Applico la query al database. Salvo i risultati in rows
-	rows, err = db_Connection.Query(q, cod)
-	//Se c'è un errore, ritorna un libro vuoto e l'errore
-	if err != nil {
-		return "", err
-	}
-	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
-	defer rows.Close()
-
-	//Creo una stringa in cui salvare il risultato della query
-	var assegnatario string
-	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
-	for rows.Next() {
-		//Tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
-		if err := rows.Scan(&assegnatario); err != nil {
-			return "", err
-		}
-	}
-	return assegnatario, err
-
-}
-
 //Funzione per contare tutti i libri
 func CountLibri() (uint32, error) {
 	//Verifico se il server è ancora disponibile
