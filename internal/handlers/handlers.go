@@ -29,6 +29,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
@@ -176,10 +177,11 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 
 	libriTot, err := db.RicercaLibriNoPage(titolo, idsAutori, idsGeneri)
 	if float32(page) > float32(len(libriTot))/float32(config.Config.Generale.LunghezzaPagina) {
-		page -= 1
+		http.Redirect(w, r, fmt.Sprintf("/libri/%d?titolo=%s&autori=%s&generi=%s", len(libriTot)/int(config.Config.Generale.LunghezzaPagina), titolo, nomeAutore, nomeGenere), http.StatusSeeOther)
+		return
 	}
-	libri, err := db.RicercaLibri(titolo, idsAutori, idsGeneri, page)
 
+	libri, err := db.RicercaLibri(titolo, idsAutori, idsGeneri, page)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -233,10 +235,8 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 				Libri      []db.Libro
 				Values     CommonValues
 			}{page - 1, page + 1, page + 1, titolo, nomeAutore, nomeGenere, libri, CommonValues{Version}})
-
 		}
 	}
-
 }
 
 // Percorso: /autori/<iniziale byte>
