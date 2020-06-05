@@ -50,18 +50,32 @@
 
 			<div class="elencoLib">
 				<!-- <div class="spazio"></div> -->
-				<input type="text" onchange="filter(this.value)">
-				<button onclick="setAll(true)">Seleziona tutto</button>
-				<button onclick="setAll(false)">Deseleziona tutto</button>
-				<form method="POST" style="width: 100%">
-					<input type="submit" value="Genera codici"><br>
+				<input class="LinkGenCod" placeholder="ricerca" type="text" onchange="filter(this.value)">
+				
+				<br/><div style="width: 100%; text-align: center;">
+				<button class="LinkUtente" style="margin-right: 3% color: white;" onclick="setAll(true)">Seleziona tutto</button>
+				<button class="LinkUtente" style="margin-left: 3%; color: white;" onclick="setAll(false)">Deseleziona tutto</button>
+				</div>
+				<br/>
+				<br/>
+				<br/>
+				
+				<form class="AgLib5" method="POST" style="width: 100%">
+				<input style="color: white;" class="LinkUtente" type="submit" value="Genera codici"><br>
+				
+				<fieldset class="GenLib">
+				<legend>
+					Libri
+				</legend>
+				
+					
 					{{ range $idx, $libro := .Libri }}
-					<div class="Box1G" name="libro-label">
 						<label>
-							<input name="codici" value="{{ $libro.Codice }}" type="checkbox">{{ $libro.Titolo }}
+							<input style="text-align: left;" name="codici" value="{{ $libro.Codice }}" type="checkbox">{{ $libro.Titolo }}
 						</label>
-					</div>
+						<br/>
 					{{ end }}
+					</fieldset>
 				</form>
 				<!-- <div class="spazio"></div> -->
 				<!-- <div class="spazio"></div> -->

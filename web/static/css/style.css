@@ -481,7 +481,6 @@ padding-top: 25px;
 padding-bottom: 25px;
 overflow: hidden;
 font-size: 14px;
-border-radius: 8px;
 
 }
 
@@ -550,7 +549,6 @@ margin-left: 8%;
 margin-top: 40px;
 text-align: center;
 font-size: 18px;
-border-radius: 8px;
 
 }
 
@@ -817,6 +815,26 @@ margin-bottom: 100px;
 
 }
 
+form.AgLib5{
+
+width: 80%;
+margin-left: 10%;
+margin-right: 10%;
+color: white;	
+margin-bottom: 100px;
+
+}
+
+
+fieldset.GenLib{
+
+border-radius: 10px;
+border: 1px solid #536878;
+padding: 25px;
+height: auto;
+margin-bottom: 100px;
+
+} 
 
 fieldset{
 
@@ -867,6 +885,39 @@ padding-right:10px;
 cursor: pointer;
 
 }
+
+.LinkUtente{
+
+background: linear-gradient(to bottom, #232C33 0%, #536878 100%); 
+border: 0px;
+height: 45px;
+width: auto;
+padding-left:10px;
+padding-right:10px;
+cursor: pointer;
+
+}
+
+
+input.LinkGenCod{
+
+text-align: center;
+width: 14%;
+margin-top: 80px;
+margin-left: 43%;
+margin-right: 43%; 
+color: white;
+border-color: #536878;
+background-color: #536878;
+
+}
+
+input.LinkGenCod::placeholder {
+
+  color: white;
+  
+}
+
 
 @media screen and (max-width: 900px) {
 
