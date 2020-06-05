@@ -63,7 +63,7 @@ type Prestito struct {
 	Utente            string
 	Data_prenotazione time.Time
 	Durata            uint32
-	Data_restituzione time.Time
+	Data_restituzione sql.NullTime
 }
 
 type NoCurrentPrestitoError struct {
@@ -352,7 +352,7 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		var data_pre int64
-		var data_rest int64
+		var data_rest sql.NullInt64
 		var fabrizio Prestito
 		//Tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Libro, &fabrizio.Utente, &data_pre, &fabrizio.Durata, &data_rest); err != nil {
@@ -361,7 +361,8 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 		//Salvo data_pre in fabrizio convertendola in timestamp unix
 		fabrizio.Data_prenotazione = time.Unix(data_pre, 0)
 		//Salvo data_rest in fabrizio convertendola in timestamp unix
-		fabrizio.Data_restituzione = time.Unix(data_rest, 0)
+		fabrizio.Data_restituzione.Valid = data_rest.Valid
+		fabrizio.Data_restituzione.Time = time.Unix(data_rest.Int64, 0)
 		//Copio la variabile temporanea nell'ultima posizione dell'array
 		prests = append(prests, fabrizio)
 	}
