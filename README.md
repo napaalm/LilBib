@@ -5,9 +5,14 @@ Sistema di gestione bibliotecaria.
 # Come contribuire
 
 ## Setup
-È necessario installare `docker` e `docker-compose` per eseguire il database di sviluppo.
+### Prerequisiti
+È necessario installare [golang](https://golang.org/) e `make` per compilare il codice, `docker` e `docker-compose` per eseguire il database di sviluppo, e `zip` per comprimere i file di rilascio.
 
-Per contribuire al codice è consigliato eseguire dalla directory principale del repository il seguente comando:
+**Nota per gli utenti Windows**: si consiglia di installare [git for windows](https://gitforwindows.org/) poiché fornisce un set di tool simile ai sistemi Unix, il che è fondamentale al fine di eseguire il Makefile ed i git hooks. Inoltre, per installare `make` e `zip` si consiglia un package manager come [Chocolatey](https://chocolatey.org/).
+
+### Inizializzazione progetto
+
+Per contribuire al codice è necessario eseguire dalla directory principale del repository il seguente comando:
 ```bash
 $ ./scripts/setup.sh
 ```
