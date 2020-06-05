@@ -1,5 +1,5 @@
 /*
- * database.go
+ * db_test.go
  *
  * Pacchetto per interfacciarsi con il database SQL
  *
@@ -71,6 +71,22 @@ func TestAll(t *testing.T) {
 		return
 	}
 
+	prestito, err := AddPrestito(libro, "test_user", 10000)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if err := SetRestituzione(libro); err != nil {
+		t.Error(err)
+		return
+	}
+
+	if err := RemovePrestito(prestito); err != nil {
+		t.Error(err)
+		return
+	}
+
 	if err := RemoveLibro(libro); err != nil {
 		t.Error(err)
 		return
@@ -85,6 +101,11 @@ func TestAll(t *testing.T) {
 		t.Error(err)
 		return
 	}
+
+	//suqi, err := GetCurrentPrestito(2)
+	//fmt.Println(GetCurrentPrestito(2))
+	//err = SetRestituzione(2)
+	//fmt.Println(GetCurrentPrestito(2))
 
 	// id, err := db.AddPrestito(8, "marcoilbeffardo", time.Now(), 100)
 	// auths, err := db.RicercaAutori("")

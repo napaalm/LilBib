@@ -1,15 +1,21 @@
 [Generale]
-admin="admin"
+#fqdn_sito="lilbib.example.org"
+fqdn_sito="localhost"
+porta_http=":8080"
+lunghezza_pagina=24
+utente_admin="admin"
 chiave_firma="secret"
-fqdn_sito="example.org"
-dummy_auth=false
+#cookie_sicuri=true
+cookie_sicuri=false
+#dummy_auth=false
+dummy_auth=true
 
 [LDAP]
 host="ldap.example.org"
 porta="389"
 
 [SQL]
-username="asdf"
-password="asdf"
-indirizzo="asdf"
-database="asdf"
+username="lilbib"
+password="secret"
+indirizzo="localhost"
+database="lilbib"

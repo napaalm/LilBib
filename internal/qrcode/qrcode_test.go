@@ -1,9 +1,9 @@
 /*
- * config.go
+ * qrcode_test.go
  *
- * File di test per il package config.
+ * File di test per il package qrcode.
  *
- * Copyright (c) 2020 Filippo Casarin <casarin.filippo17@gmail.com>
+ * Copyright (c) 2020 Antonio Napolitano <nap@antonionapolitano.eu>
  *
  * This file is part of LilBib.
  *
@@ -22,14 +22,32 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package config
+package qrcode
 
 import (
 	"fmt"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
 	"testing"
 )
 
 func TestAll(t *testing.T) {
-	LoadConfig("test.toml")
-	fmt.Println(Config)
+	// Carica e visualizza la configurazione di test
+	config.LoadConfig("../../config/config.toml")
+	fmt.Println(config.Config)
+
+	// Carica il database
+	db.InizializzaDB()
+
+	// Libri di esempio
+	var ids []uint32 = []uint32{1, 2, 4}
+
+	// Genera la pagina dei QR code e stampala
+	page, err := GeneratePage(ids)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(page)
+	}
 }

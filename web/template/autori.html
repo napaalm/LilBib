@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<head>
+
+<title>LilBib</title>
+<meta name="description" content="Lightweight Integrated Logistics for Book Indexing and Borrowing"/>
+<meta name="keywords" content="libri, prenotazione, liceo, vinci, dav"> <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
+<meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa --> 
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
+<link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
+<!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
+
+</head>
+
+
+<body> 
+
+<div style="min-height: 100vh;
+ overflow: hidden;
+ display: block;
+ position: relative;
+ padding-bottom: 100px; ">
+ 
+<header>
+	<nav>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li><a href="/libri">Libri</a></li>   <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
+			<li><a href="/autori">Autori</a></li>
+			<li><a href="/generi">Generi</a></li>
+			<li><a href="/prestito">Prestito</a></li>
+			<li><a href="/restituzione">Restituzione</a></li>
+			<li><span class="footerRight"><a href="/login"> <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui" class="login">Login</span></a></span></li>
+		</ul>
+	</nav>
+</header>
+
+<div>
+	<h1 class="TitoloLib">Autori</h1>
+</div>
+
+<div class="menuLib">
+	<a class="menuLib0" href="/autori/a">A</a> 
+	<a class="menuLib" href="/autori/b">B</a> 
+	<a class="menuLib" href="/autori/c">C</a> 
+	<a class="menuLib" href="/autori/d">D</a> 
+	<a class="menuLib" href="/autori/e">E</a> 
+	<a class="menuLib" href="/autori/f">F</a>
+	<a class="menuLib" href="/autori/g">G</a> 
+	<a class="menuLib" href="/autori/h">H</a> 
+	<a class="menuLib" href="/autori/i">I</a> 
+	<a class="menuLib" href="/autori/j">J</a> 
+	<a class="menuLib" href="/autori/k">K</a>
+	<a class="menuLib" href="/autori/l">L</a> 
+	<a class="menuLib" href="/autori/m">M</a> 
+	<a class="menuLib" href="/autori/n">N</a> 
+	<a class="menuLib" href="/autori/o">O</a> 
+	<a class="menuLib" href="/autori/p">P</a> 
+	<a class="menuLib" href="/autori/q">Q</a> 
+	<a class="menuLib" href="/autori/r">R</a> 
+	<a class="menuLib" href="/autori/s">S</a> 
+	<a class="menuLib" href="/autori/t">T</a> 
+	<a class="menuLib" href="/autori/u">U</a> 
+	<a class="menuLib" href="/autori/v">V</a> 
+	<a class="menuLib" href="/autori/w">W</a> 
+	<a class="menuLib" href="/autori/x">X</a> 
+	<a class="menuLib" href="/autori/y">Y</a> 
+	<a class="menuLib1" href="/autori/z">Z</a>
+</div>
+
+<div class="elencoLib" id="DimElencoLib">
+<div class="spazio"> 
+	</div>
+	{{ range $index, $value := .Autori}}
+	<a class="Box1G" href="/libri/0?autori={{ $value.Nome }} {{ $value.Cognome }}">
+			<h1 class="autori">{{ $value.Nome }} {{ $value.Cognome }}</h1>
+	</a>
+	{{ end }}
+	<div class="spazio"> 
+	</div>
+	<div class="spazio"> 
+	</div>
+</div>
+
+
+
+<footer class="Other" id="footerId" >
+	<p id="text2Id" class=" FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
+	<p id="text1Id" class=" FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
+	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
+</footer>
+
+</div>
+	
+<script src="/static/js/login.js" type="text/javascript"></script>
+
+</body>
+</html>

@@ -4,8 +4,7 @@
  * Pacchetto per interfacciarsi con il database SQL
  *
  * Copyright (c) 2020 Filippo Casarin <casarin.filippo17@gmail.com>
- *
- * Copyright (c) 2020 Davide Vendramin <davidevendramin5@gmail.com>
+ * Copyright (c) 2020 Davide Vendramin <natalianatiche02@gmail.com>
  *
  * This file is part of LilBib.
  *
@@ -38,12 +37,13 @@ import (
 
 //Tabelle del database
 type Libro struct {
-	Codice    uint32
-	Titolo    string
-	Autore    uint32
-	Genere    uint32
-	Prenotato bool
-	Hashz     string
+	Codice        uint32
+	Titolo        string
+	NomeAutore    string
+	CognomeAutore string
+	Genere        string
+	Prenotato     bool
+	Hashz         string
 }
 
 type Genere struct {
@@ -63,7 +63,15 @@ type Prestito struct {
 	Utente            string
 	Data_prenotazione time.Time
 	Durata            uint32
-	Data_restituzione time.Time
+	Data_restituzione sql.NullTime
+}
+
+type NoCurrentPrestitoError struct {
+	codice uint32
+}
+
+func (e *NoCurrentPrestitoError) Error() string {
+	return fmt.Sprintf("No current Prestito for libro with codice %d.", e.codice)
 }
 
 var db_Connection *sql.DB
@@ -88,7 +96,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	}
 
 	//Salvo la query che eseguirà l'sql in una variabile stringa
-	q := `SELECT * FROM Libro WHERE codice = ?`
+	q := `SELECT Libro.Codice,Libro.Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz FROM Libro,Autore,Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice AND Libro.Codice = ?`
 	//Applico la query al database. Salvo i risultati in rows
 	rows, err := db_Connection.Query(q, cod)
 	//Se c'è un errore, ritorna un libro vuoto e l'errore
@@ -103,7 +111,7 @@ func GetLibro(cod uint32) (Libro, error) {
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		//Tramite rows.Scan() salvo i vari risultati nel libro creato in precedenza. In caso di errore ritorno un libro vuoto e l'errore
-		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.Autore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil {
+		if err := rows.Scan(&lib.Codice, &lib.Titolo, &lib.NomeAutore, &lib.CognomeAutore, &lib.Genere, &lib.Prenotato, &lib.Hashz); err != nil {
 			return Libro{}, err
 		}
 	}
@@ -114,6 +122,39 @@ func GetLibro(cod uint32) (Libro, error) {
 
 	//Returno il libro trovato e null (null sarebbe l'errore che non è avvenuto)
 	return lib, nil
+}
+
+//Funzione per contare tutti i libri
+func CountLibri() (uint32, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return 0, err
+	}
+
+	q := `SELECT COUNT(*) FROM Libro`
+	rows, err := db_Connection.Query(q)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var tot uint32
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&tot); err != nil {
+			return 0, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	return tot, nil
 }
 
 //Funzione per trovare Autori in base all'iniziale del cognome
@@ -130,6 +171,45 @@ func GetAutori(iniziale uint8) ([]Autore, error) {
 	q := `SELECT * FROM Autore WHERE cognome LIKE ?`
 	//Applico la query al database. Salvo i risultati in rows
 	rows, err := db_Connection.Query(q, s)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var auths []Autore
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var fabrizio Autore
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Nome, &fabrizio.Cognome); err != nil {
+			return nil, err
+		}
+		//Copio la variabile temporanea nell'ultima posizione dell'array
+		auths = append(auths, fabrizio)
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	//Returno gli autori trovati e null (null sarebbe l'errore che non è avvenuto)
+	return auths, nil
+}
+
+//Funzione per trovare Autori in base all'iniziale del cognome
+func GetTuttiAutori() ([]Autore, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return nil, err
+	}
+
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	q := `SELECT * FROM Autore`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(q)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
 		return nil, err
@@ -219,7 +299,7 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		var data_pre int64
-		var data_rest int64
+		var data_rest sql.NullInt64
 		var fabrizio Prestito
 		//Tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Libro, &fabrizio.Utente, &data_pre, &fabrizio.Durata, &data_rest); err != nil {
@@ -228,7 +308,8 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 		//Salvo data_pre in fabrizio convertendola in timestamp unix
 		fabrizio.Data_prenotazione = time.Unix(data_pre, 0)
 		//Salvo data_rest in fabrizio convertendola in timestamp unix
-		fabrizio.Data_restituzione = time.Unix(data_rest, 0)
+		fabrizio.Data_restituzione.Valid = data_rest.Valid
+		fabrizio.Data_restituzione.Time = time.Unix(data_rest.Int64, 0)
 		//Copio la variabile temporanea nell'ultima posizione dell'array
 		prests = append(prests, fabrizio)
 	}
@@ -241,8 +322,54 @@ func GetPrestiti(utente string) ([]Prestito, error) {
 	return prests, nil
 }
 
+//Funzione per trovare tutti i prestiti di un utente
+func GetCurrentPrestito(codice uint32) (Prestito, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return Prestito{}, err
+	}
+
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	q := `SELECT Codice,Libro,Utente,Data_prenotazione,Durata FROM Prestito WHERE Libro = ? AND Data_restituzione IS NULL`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(q, codice)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return Prestito{}, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var pres Prestito
+	var count uint32
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var data_pre int64
+		//Tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&pres.Codice, &pres.Libro, &pres.Utente, &data_pre, &pres.Durata); err != nil {
+			return Prestito{}, err
+		}
+		//Salvo data_pre in pres convertendola in timestamp unix
+		pres.Data_prenotazione = time.Unix(data_pre, 0)
+
+		count += 1
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return Prestito{}, err
+	}
+
+	if count != 1 {
+		return Prestito{}, &NoCurrentPrestitoError{codice}
+	}
+
+	//Returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
+	return pres, nil
+}
+
 //Funzione per la ricerca dei libri
-func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, error) {
+func RicercaLibriNoPage(nome string, autore, genere []uint32) ([]Libro, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
@@ -253,9 +380,7 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	tags := strings.Split(nome, " ")
 	var args []interface{}
 	for _, tag := range tags {
-		if len(tag) > 0 {
-			args = append(args, "%"+tag+"%")
-		}
+		args = append(args, "%"+tag+"%")
 	}
 	for _, a := range autore {
 		args = append(args, a)
@@ -263,17 +388,14 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	for _, g := range genere {
 		args = append(args, g)
 	}
-	args = append(args, page*config.Config.Generale.LunghezzaPagina, (page+1)*config.Config.Generale.LunghezzaPagina)
 
 	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
-	q := `SELECT * FROM Libro WHERE 1 = 1` + strings.Repeat(` AND titolo LIKE ?`, len(tags))
-	if len(autore) > 0 {
-		q += ` AND autore IN (?` + strings.Repeat(`,?`, len(autore)-1) + `)`
-	}
-	if len(genere) > 0 {
-		q += ` AND genere IN (?` + strings.Repeat(`,?`, len(genere)-1) + `)`
-	}
-	q += ` LIMIT ?,?`
+	q := `SELECT Libro.Codice,Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz
+	      FROM Libro,Autore,Genere
+		  WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` +
+		strings.Repeat(` AND titolo LIKE ?`, len(tags)) + `
+		  AND autore IN (""` + strings.Repeat(`,?`, len(autore)) + `)
+		  AND genere IN (""` + strings.Repeat(`,?`, len(genere)) + `)`
 
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
@@ -288,7 +410,105 @@ func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, e
 	for rows.Next() {
 		var fabrizio Libro
 		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
-		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.Autore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.NomeAutore, &fabrizio.CognomeAutore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
+			return nil, err
+		}
+		//Copio la variabile temporanea nell'ultima posizione dell'array
+		libs = append(libs, fabrizio)
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	//Returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	return libs, nil
+}
+
+//Funzione per la ricerca dei libri
+func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return nil, err
+	}
+
+	//Divido la stringa nome in vari tag e poi aggiungo i vari argomenti alla slice "args"
+	tags := strings.Split(nome, " ")
+	var args []interface{}
+	for _, tag := range tags {
+		args = append(args, "%"+tag+"%")
+	}
+	for _, a := range autore {
+		args = append(args, a)
+	}
+	for _, g := range genere {
+		args = append(args, g)
+	}
+	args = append(args, uint16(page)*config.Config.Generale.LunghezzaPagina, uint16(page+1)*config.Config.Generale.LunghezzaPagina)
+
+	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
+	q := `SELECT Libro.Codice,Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz
+	      FROM Libro,Autore,Genere
+		  WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` +
+		strings.Repeat(` AND titolo LIKE ?`, len(tags)) + `
+		  AND autore IN (""` + strings.Repeat(`,?`, len(autore)) + `)
+		  AND genere IN (""` + strings.Repeat(`,?`, len(genere)) + `)
+		  LIMIT ?,?`
+
+	rows, err := db_Connection.Query(q, args...)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var libs []Libro
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var fabrizio Libro
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.NomeAutore, &fabrizio.CognomeAutore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
+			return nil, err
+		}
+		//Copio la variabile temporanea nell'ultima posizione dell'array
+		libs = append(libs, fabrizio)
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	//Returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	return libs, nil
+}
+
+//Funzione per ottenere tutti i libri
+func GetLibri() ([]Libro, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return nil, err
+	}
+
+	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
+	q := `SELECT Libro.Codice, Libro.Titolo, Autore.Nome, Autore.Cognome, Genere.Nome, Libro.Prenotato, Libro.Hashz FROM Libro, Autore, Genere WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice`
+
+	rows, err := db_Connection.Query(q)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var libs []Libro
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var fabrizio Libro
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.NomeAutore, &fabrizio.CognomeAutore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
 			return nil, err
 		}
 		//Copio la variabile temporanea nell'ultima posizione dell'array
@@ -313,17 +533,17 @@ func RicercaAutori(nome string) ([]Autore, error) {
 
 	//Divido la stringa nome in vari tag e poi li aggiungo alla slice "args"
 	tags := strings.Split(nome, " ")
+
 	var args []interface{}
-	for j := uint8(0); j < 2; j++ {
-		for _, tag := range tags {
-			if len(tag) > 0 {
-				//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
-				args = append(args, "%"+tag+"%")
-			}
+	for _, tag := range tags {
+		if len(tag) > 0 {
+			//I % servono per dire all'SQL di cercare la stringa in qualsiasi posizione
+			args = append(args, "%"+tag+"%")
+			args = append(args, "%"+tag+"%")
 		}
 	}
 
-	q := `SELECT * FROM Autore WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1) + strings.Repeat(` OR cognome LIKE ?`, len(tags))
+	q := `SELECT * FROM Autore WHERE 0 = 0` + strings.Repeat(` AND (nome LIKE ? OR cognome LIKE ?)`, len(args)/2)
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
@@ -369,8 +589,12 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 			args = append(args, "%"+tag+"%")
 		}
 	}
-
-	q := `SELECT * FROM Genere WHERE nome LIKE ?` + strings.Repeat(` OR nome LIKE ?`, len(tags)-1)
+	q := ``
+	if len(args) > 0 {
+		q = `SELECT * FROM Genere WHERE 0 = 0` + strings.Repeat(` AND nome LIKE ?`, len(args))
+	} else {
+		q = `SELECT * FROM Genere`
+	}
 	rows, err := db_Connection.Query(q, args...)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
@@ -389,7 +613,6 @@ func RicercaGeneri(nome string) ([]Genere, error) {
 		//Copio la variabile temporanea nell'ultima posizione dell'array
 		gens = append(gens, fabrizio)
 	}
-
 	//Se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -499,7 +722,8 @@ func AddAutore(nome, cognome string) (uint32, error) {
 	return uint32(id), nil
 }
 
-func AddPrestito(libro uint32, utente string, data_prenotazione time.Time, durata uint32) (uint32, error) {
+func AddPrestito(libro uint32, utente string, durata uint32) (uint32, error) {
+	data_prenotazione := time.Now()
 	//Verifico se il server è ancora disponibile
 	err := db_Connection.Ping()
 	//Se c'è un errore, ritorna null e l'errore
@@ -528,6 +752,13 @@ func AddPrestito(libro uint32, utente string, data_prenotazione time.Time, durat
 		return 0, err
 	}
 
+	q := `UPDATE Libro SET prenotato = 1 WHERE codice = ?`
+	rows, err := db_Connection.Query(q, libro)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
 	//Returno l'id del libro inserito e null (null sarebbe l'errore che non è avvenuto)
 	return uint32(id), nil
 }
@@ -555,15 +786,21 @@ func SetHash(codice uint32, hash string) error {
 }
 
 //Funzione per impostare la restituzione
-func SetRestituzione(prestito uint32, data_restituzione time.Time) error {
+func SetRestituzione(libro uint32) error {
+	prestito_struct, err := GetCurrentPrestito(libro)
+	if err != nil {
+		return err
+	}
+	prestito := prestito_struct.Codice
+
+	data_restituzione := time.Now()
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
 		return err
 	}
-
 	q := `UPDATE Prestito
-		  SET data_restituzione = ?
+		  SET Data_restituzione = ?
 		  WHERE codice = ?`
 	rows, err := db_Connection.Query(q, data_restituzione.Unix(), prestito)
 	//Se c'è un errore, ritorna null e l'errore
@@ -572,6 +809,13 @@ func SetRestituzione(prestito uint32, data_restituzione time.Time) error {
 	}
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
+
+	q2 := `UPDATE Libro SET prenotato = 0 WHERE codice = ?`
+	rows2, err := db_Connection.Query(q2, libro)
+	if err != nil {
+		return err
+	}
+	defer rows2.Close()
 
 	return nil
 }
@@ -658,4 +902,106 @@ func RemovePrestito(codice uint32) error {
 	defer rows.Close()
 
 	return nil
+}
+
+//Funzione che ritorna il numero di libri prenotati
+func LibriPrenotati() (uint32, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return 0, err
+	}
+
+	q := `SELECT COUNT(*) FROM Libro
+		WHERE prenotato = 1`
+	rows, err := db_Connection.Query(q)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var pren uint32
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&pren); err != nil {
+			return 0, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	return pren, nil
+}
+
+//Funzione che ritorna il numero di libri disponibili
+func LibriDisponibili() (uint32, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return 0, err
+	}
+
+	q := `SELECT COUNT(*) FROM Libro
+		WHERE prenotato = 0`
+	rows, err := db_Connection.Query(q)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var disp uint32
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&disp); err != nil {
+			return 0, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	return disp, nil
+}
+
+//Funzione che conta gli autori totali
+func CountAutori() (uint32, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return 0, err
+	}
+
+	q := `SELECT COUNT(*) FROM Autore`
+	rows, err := db_Connection.Query(q)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return 0, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var tot uint32
+	for rows.Next() {
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&tot); err != nil {
+			return 0, err
+		}
+	}
+
+	//se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	return tot, nil
+
 }
