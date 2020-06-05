@@ -304,11 +304,18 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Ottiene il dominio del sito web
+		// Ottiene la configurazione per i cookie
 		fqdn := config.Config.Generale.FQDN
+		secure := config.Config.Generale.SecureCookies
 
 		// Crea e imposta il cookie
-		cookie := http.Cookie{Name: "access_token", Value: string(token), Domain: fqdn, MaxAge: 86400}
+		cookie := http.Cookie{
+			Name:   "access_token",
+			Value:  string(token),
+			Domain: fqdn,
+			MaxAge: 86400, // 24 ore
+			Secure: secure,
+		}
 		http.SetCookie(w, &cookie)
 
 		// Reindirizza a /utente

@@ -114,6 +114,12 @@ In caso non sia stato effettuato l'accesso reindirizza a `/login`.
 Permette di restituire i libri in proprio possesso.
 Funzionamento identico a `/prestito`.
 
+### `/admin/generaCodici`
+Permette all'utente amministratore di generare i codici QR per i libri.
+
+### `/admin/aggiungiLibro`
+Permette all'utente amministratore di aggiungere generi, autori e libri al database.
+
 ### `/static`
 Endpoint per servire contenuti statici da `web/static`.
 

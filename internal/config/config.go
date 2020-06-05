@@ -43,6 +43,7 @@ type generale struct {
 	AdminUser       string `toml:"utente_admin"`
 	LunghezzaPagina uint16 `toml:"lunghezza_pagina"`
 	JWTSecret       string `toml:"chiave_firma"`
+	SecureCookies   bool   `toml:"cookie_sicuri"`
 	DummyAuth       bool   `toml:"dummy_auth"`
 }
 
