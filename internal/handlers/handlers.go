@@ -356,7 +356,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
 	// Se l'autenticazione fallisce reindirizza a /login
 	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		http.Redirect(w, r, "/logout", http.StatusSeeOther)
 		return
 	}
 
