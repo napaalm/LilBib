@@ -174,14 +174,19 @@ func HandleLibri(w http.ResponseWriter, r *http.Request) {
 		idsGeneri = append(idsGeneri, g.Codice)
 	}
 
+	libriTot, err := db.RicercaLibriNoPage(titolo, idsAutori, idsGeneri)
+	if float32(page) > float32(len(libriTot))/float32(config.Config.Generale.LunghezzaPagina) {
+		page -= 1
+	}
 	libri, err := db.RicercaLibri(titolo, idsAutori, idsGeneri, page)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if page == 0 {
-		if float32(page+1) >= (float32(len(libri)) + 1/float32(config.Config.Generale.LunghezzaPagina)) {
+		if float32(page+1) >= (float32(len(libriTot)) / float32(config.Config.Generale.LunghezzaPagina)) {
 			templates.ExecuteTemplate(w, "libri.html", struct {
 				PaginaPrec uint16
 				Pagina     uint16
@@ -586,95 +591,21 @@ func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Method == "POST" {
-		r.ParseForm()
-		tipo_list, ok := r.Form["tipo"]
-		if !ok {
-			http.Error(w, "tipo non definito", http.StatusBadRequest)
-			return
-		}
-
-		tipo := tipo_list[0]
-
-		if tipo == "genere" {
-			genere, ok := r.Form["genere"]
-			if !ok {
-				http.Error(w, "genere non definito", http.StatusBadRequest)
-				return
-			}
-
-			if _, err := db.AddGenere(genere[0]); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			http.Redirect(w, r, "/admin/aggiungiLibro", http.StatusSeeOther)
-
-		} else if tipo == "autore" {
-			nome, ok0 := r.Form["nome"]
-			cognome, ok1 := r.Form["cognome"]
-			if !ok0 || !ok1 {
-				http.Error(w, "autore non definito", http.StatusBadRequest)
-				return
-			}
-
-			if _, err := db.AddAutore(nome[0], cognome[0]); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			http.Redirect(w, r, "/admin/aggiungiLibro", http.StatusSeeOther)
-
-		} else if tipo == "libro" {
-			genere_str, ok0 := r.Form["genere"]
-			autore_str, ok1 := r.Form["autore"]
-			libro, ok2 := r.Form["nome"]
-
-			if !ok0 || !ok1 || !ok2 {
-				http.Error(w, "valori non definiti", http.StatusBadRequest)
-				return
-			}
-
-			genere, err := strconv.ParseUint(genere_str[0], 10, 32)
-			if err != nil {
-				http.Error(w, "genere non è un intero", http.StatusBadRequest)
-				return
-			}
-
-			autore, err := strconv.ParseUint(autore_str[0], 10, 32)
-			if err != nil {
-				http.Error(w, "autore non è un intero", http.StatusBadRequest)
-				return
-			}
-
-			if _, err := db.AddLibro(libro[0], uint32(autore), uint32(genere)); err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			http.Redirect(w, r, "/admin/aggiungiLibro", http.StatusSeeOther)
-
-		} else {
-			http.Error(w, "velore invalido per tipo", http.StatusBadRequest)
-		}
-
-	} else {
-		generi, err := db.GetGeneri()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-
-		autori, err := db.GetTuttiAutori()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-
-		templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
-			Generi []db.Genere
-			Autori []db.Autore
-			Values CommonValues
-		}{generi, autori, CommonValues{Version}})
+	generi, err := db.GetGeneri()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
+	autori, err := db.GetTuttiAutori()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	templates.ExecuteTemplate(w, "aggiungiLibro.html", struct {
+		Generi []db.Genere
+		Autori []db.Autore
+		Values CommonValues
+	}{generi, autori, CommonValues{Version}})
 }
 
 func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {

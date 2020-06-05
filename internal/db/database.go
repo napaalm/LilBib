@@ -435,6 +435,63 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 }
 
 //Funzione per la ricerca dei libri
+func RicercaLibriNoPage(nome string, autore, genere []uint32) ([]Libro, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return nil, err
+	}
+
+	//Divido la stringa nome in vari tag e poi aggiungo i vari argomenti alla slice "args"
+	tags := strings.Split(nome, " ")
+	var args []interface{}
+	for _, tag := range tags {
+		args = append(args, "%"+tag+"%")
+	}
+	for _, a := range autore {
+		args = append(args, a)
+	}
+	for _, g := range genere {
+		args = append(args, g)
+	}
+
+	//Esamino tutti i casi possibili di richiesta, scegliendo la query giusta per ogni situazione possibile
+	q := `SELECT Libro.Codice,Titolo,Autore.Nome,Autore.Cognome,Genere.Nome,Prenotato,Hashz
+	      FROM Libro,Autore,Genere
+		  WHERE Libro.Autore = Autore.Codice AND Libro.Genere = Genere.Codice` +
+		strings.Repeat(` AND titolo LIKE ?`, len(tags)) + `
+		  AND autore IN (""` + strings.Repeat(`,?`, len(autore)) + `)
+		  AND genere IN (""` + strings.Repeat(`,?`, len(genere)) + `)`
+
+	rows, err := db_Connection.Query(q, args...)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var libs []Libro
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var fabrizio Libro
+		//Tramite rows.Scan() salvo i vari risultati nella variabile creata in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Titolo, &fabrizio.NomeAutore, &fabrizio.CognomeAutore, &fabrizio.Genere, &fabrizio.Prenotato, &fabrizio.Hashz); err != nil {
+			return nil, err
+		}
+		//Copio la variabile temporanea nell'ultima posizione dell'array
+		libs = append(libs, fabrizio)
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	//Returno i libri trovati e null (null sarebbe l'errore che non è avvenuto)
+	return libs, nil
+}
+
+//Funzione per la ricerca dei libri
 func RicercaLibri(nome string, autore, genere []uint32, page uint16) ([]Libro, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
