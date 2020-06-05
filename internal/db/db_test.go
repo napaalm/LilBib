@@ -71,6 +71,22 @@ func TestAll(t *testing.T) {
 		return
 	}
 
+	prestito, err := AddPrestito(libro, "test_user", 10000)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if err := SetRestituzione(libro); err != nil {
+		t.Error(err)
+		return
+	}
+
+	if err := RemovePrestito(prestito); err != nil {
+		t.Error(err)
+		return
+	}
+
 	if err := RemoveLibro(libro); err != nil {
 		t.Error(err)
 		return
@@ -82,16 +98,6 @@ func TestAll(t *testing.T) {
 	}
 
 	if err := RemoveAutore(autore); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if _, err := AddPrestito(1, "test_user", 10000); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := SetRestituzione(1); err != nil {
 		t.Error(err)
 		return
 	}
