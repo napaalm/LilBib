@@ -12,15 +12,16 @@
 		<script>
 			function filter(search) {
 				search = search.toLowerCase();
-				for (let libro of document.getElementsByName('libro-label'))
+				for (let libro of document.getElementsByName('codici'))
 					libro.hidden = !libro.innerText.toLowerCase().includes(search);
 			}
 
 			function setAll(value) {
-				for (let libro of document.getElementsByName('libro-label'))
+				for (let libro of document.getElementsByName('codici'))
 					libro.children[0].children[0].checked = value;
 			}
 		</script>
+		
 	</head>
 
 	<body>
