@@ -48,7 +48,7 @@
 				<h1 class="TitoloLib">Genera codici QR</h1>
 			</div>
 
-			<div class="elencoLib"><div style="width: 100%; text-align: center;">
+			<div class="elencoLib"><div style="width: 80%; margin-left: 10%; margin-right: 10%; text-align: center;">
 			<h2 style=" padding-top: 35px; text-align: center; color: #F0803C;">ATTENZIONE: GENERARE UN NUOVO CODICE PER UN LIBRO RENDERA' INVALIDO QUELLO VECCHIO!!</h2>
 				</div><!-- <div class="spazio"></div> -->
 				<input class="LinkGenCod" placeholder="ricerca" type="text" onchange="filter(this.value)">
@@ -71,11 +71,16 @@
 				
 					
 					{{ range $idx, $libro := .Libri }}
-						<label>
-							<input style="text-align: left;" name="codici" value="{{ $libro.Codice }}" type="checkbox">{{ $libro.Titolo }}
+					<table>	
+					<label>	
+						<tr>
+							<td><input style="text-align: left;" name="codici" value="{{ $libro.Codice }}" type="checkbox"></td><td>{{ $libro.Titolo }}</td>
+						</tr>				
 						</label>
 						<br/>
 					{{ end }}
+					</table>
+					
 					</fieldset>
 				</form>
 				<!-- <div class="spazio"></div> -->
