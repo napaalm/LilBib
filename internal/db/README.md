@@ -18,11 +18,15 @@ func ChiudiDB()
 func GetLibro(codice uint32) (Libro, error)
 func GetLibri(page uint32) ([]Libri, error)
 func GetAutori(iniziale uint8) ([]Autore, error)
+func GetTuttiAutori() ([]Autore, error)
 func GetGeneri() ([]Genere, error)
 func GetPrestiti(utente string) ([]Prestito, error)
 func GetAssegnatario(cod uint32) (string, error)
+func GetCurrentPrestito(codice uint32) (Prestito, error)
+func GetLibri() ([]Libro, error)
 
 func RicercaLibri(nome string, autore, genere []uint32, page int16) ([]Libro, error)
+func RicercaLibriNoPage(nome string, autore, genere []uint32) ([]Libro, error)
 func RicercaAutori(nome string) ([]Autore, error)
 func RicercaGeneri(nome string) ([]Genere, error)
 
@@ -32,7 +36,7 @@ func AddAutore(nome, cognome string) (uint32, error)
 func AddPrestito(libro uint32, utente string, data_prenotazione time.Time, durata uint32) (uint32, error)
 
 func SetHash(codice uint32, hash string) error
-func SetRestituito(prestito uint32, data_restituzione time.Time) error
+func SetRestituzione(prestito uint32, data_restituzione time.Time) error
 
 func RemoveLibro(codice uint32) error
 func RemoveGenere(codice uint32) error
@@ -42,6 +46,7 @@ func RemovePrestito(codice uint32) error
 func LibriPrenotati() (uint32, error)
 func LibriDisponibili() (uint32, error)
 
-func CountaAutori() (uint32, error)
+func CountAutori() (uint32, error)
+func CountLibri() (uint32, error)
 ```
 
