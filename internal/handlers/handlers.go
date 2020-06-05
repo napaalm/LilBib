@@ -557,17 +557,15 @@ func HandleSetRestituzione(w http.ResponseWriter, r *http.Request) {
 	id := libro.Codice
 
 	// Ottiene il prestito corrente
-	prestito, err := db.GetCurrentPrestito(id)
+	_, err := db.GetCurrentPrestito(id)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
-	idPrestito := prestito.Codice
-
 	// Imposta la restituzione
-	err = db.SetRestituzione(idPrestito)
+	err = db.SetRestituzione(id)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
