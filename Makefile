@@ -51,7 +51,7 @@ linux:
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
 	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
-	tar -czf release/$(BINARY)-$(VERSION)-$@-amd64.tar.gz release/$(BINARY)-$(VERSION)-$@-amd64
+	cd release; tar -czf $(BINARY)-$(VERSION)-$@-amd64.tar.gz $(BINARY)-$(VERSION)-$@-amd64
 
 .PHONY: windows
 windows:
@@ -60,7 +60,7 @@ windows:
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
 	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
-	zip -qr release/$(BINARY)-$(VERSION)-$@-amd64.zip release/$(BINARY)-$(VERSION)-$@-amd64
+	cd release; zip -qr $(BINARY)-$(VERSION)-$@-amd64.zip $(BINARY)-$(VERSION)-$@-amd64
 
 %/:
 	mkdir -p $*
