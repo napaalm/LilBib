@@ -1,5 +1,5 @@
 [Generale]
-fqdn_sito="lilbib.example.org"
+fqdn_sito="localhost"
 porta_http=":8080"
 lunghezza_pagina=24
 utente_admin="admin"
@@ -8,8 +8,8 @@ utente_admin="admin"
 chiave_firma="secret"
 usa_sso=false
 sso_url="https://sso.example.org"
-cookie_sicuri=true
-dummy_auth=false
+cookie_sicuri=false
+dummy_auth=true
 
 [LDAP]
 host="ldap.example.org"
@@ -21,5 +21,5 @@ base_dn="dc=example,dc=org"
 [SQL]
 username="lilbib"
 password="secret"
-indirizzo="db.example.org"
+indirizzo="localhost"
 database="lilbib"

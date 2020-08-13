@@ -13,7 +13,8 @@ test:
 	go test -ldflags "-X main.Version=$(VERSION)" ./...
 
 sandbox/config: config | sandbox/
-	cp -r $^ $@
+	mkdir $@
+	cp $^/config_test.toml $@/config.toml
 
 .PHONY: sandbox/web
 sandbox/web: | sandbox/
@@ -47,7 +48,8 @@ clean:
 .PHONY: linux
 linux:
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
-	cp -r config release/$(BINARY)-$(VERSION)-$@-amd64
+	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64/config
+	cp config/config.toml release/$(BINARY)-$(VERSION)-$@-amd64/config
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
 	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
@@ -56,7 +58,8 @@ linux:
 .PHONY: windows
 windows:
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
-	cp -r config release/$(BINARY)-$(VERSION)-$@-amd64
+	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64/config
+	cp config/config.toml release/$(BINARY)-$(VERSION)-$@-amd64/config
 	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
 	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
