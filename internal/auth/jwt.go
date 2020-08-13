@@ -55,16 +55,17 @@ func (e *InvalidTokenError) Error() string {
 	return fmt.Sprintf("Failed to verify the following token: %s", string(e.token))
 }
 
-// Valore di ritorno di ParseToken
-type UserInfo struct {
-	Username string `json:"username"`
-	IsAdmin  bool   `json:"isAdmin"`
-}
-
 // Formato del payload JWT
 type customPayload struct {
-	Payload jwt.Payload
-	IsAdmin bool `json:"isAdmin"`
+	Payload  jwt.Payload
+	FullName string `json:"full_name"`
+	Group    string `json:"group"`
+}
+
+var dummyUserInfo = UserInfo{
+	"h4x0r",
+	"1337 h4x0r",
+	"1337",
 }
 
 // Inizializza l'algoritmo per la firma HS256
@@ -78,7 +79,7 @@ func InitializeSigning() {
 }
 
 // Genera un token
-func getToken(username string, isAdmin bool) ([]byte, error) {
+func getToken(userInfo UserInfo) ([]byte, error) {
 
 	// Ottiene il tempo corrente
 	now := time.Now()
@@ -90,19 +91,20 @@ func getToken(username string, isAdmin bool) ([]byte, error) {
 	pl := customPayload{
 		Payload: jwt.Payload{
 			Issuer:         "LilBib",
-			Subject:        username,
+			Subject:        userInfo.Username,
 			Audience:       jwt.Audience{"http://" + fqdn, "https://" + fqdn},
 			ExpirationTime: jwt.NumericDate(now.Add(24 * time.Hour)),
 			IssuedAt:       jwt.NumericDate(now),
 		},
-		IsAdmin: isAdmin,
+		FullName: userInfo.FullName,
+		Group:    userInfo.Group,
 	}
 
 	// Firma il token
 	token, err := jwt.Sign(pl, jwtSigner)
 
 	if err != nil {
-		return nil, &JWTCreationError{username}
+		return nil, &JWTCreationError{userInfo.Username}
 	}
 
 	return token, nil
@@ -134,12 +136,13 @@ func ParseToken(token []byte) (UserInfo, error) {
 
 	if err != nil {
 		// Valori di errore
-		return UserInfo{"reep", false}, &InvalidTokenError{token}
+		return dummyUserInfo, &InvalidTokenError{token}
 	}
 
 	// Ottengo le informazioni sull'utente
 	username := pl.Payload.Subject
-	isAdmin := pl.IsAdmin
+	fullName := pl.FullName
+	group := pl.Group
 
-	return UserInfo{username, isAdmin}, nil
+	return UserInfo{username, fullName, group}, nil
 }

@@ -383,11 +383,13 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 		prestitiTitoli[index].Titolo = libro.Titolo
 	}
 
+	isAdmin := utente.Username == config.Config.Generale.AdminUser
 	templates.ExecuteTemplate(w, "utente.html", struct {
 		Utente         auth.UserInfo
+		IsAdmin        bool
 		PrestitiTitoli []PrestitoTitolo
 		Values         CommonValues
-	}{utente, prestitiTitoli, CommonValues{Version}})
+	}{utente, isAdmin, prestitiTitoli, CommonValues{Version}})
 }
 
 // Formato: /api/getLibro?qrcode=<base64-encoded code+password>
@@ -602,7 +604,7 @@ func HandleAggiungiLibro(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
-	} else if !user.IsAdmin {
+	} else if user.Username != config.Config.Generale.AdminUser {
 		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
 		return
 	}
@@ -723,7 +725,7 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
-	} else if !user.IsAdmin {
+	} else if user.Username != config.Config.Generale.AdminUser {
 		http.Error(w, "You are not an admin!", http.StatusUnauthorized)
 		return
 	}

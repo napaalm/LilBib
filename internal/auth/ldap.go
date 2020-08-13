@@ -26,10 +26,12 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
+	"log"
 
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
-	. "github.com/go-ldap/ldap/v3"
+	ldap "github.com/go-ldap/ldap/v3"
 )
 
 // Errore di autenticazione
@@ -42,55 +44,59 @@ func (e *AuthenticationError) Error() string {
 }
 
 // Controlla le credenziali sul server LDAP
-func checkCredentials(username string, password string) error {
+func checkCredentials(username string, password string) (UserInfo, error) {
 
-	// Utente readonly per la ricerca dell'utente effettivo
-	bindusername := "readonly"
-	bindpassword := "password"
-
-	// Ottiene l'indirizzo del server dalla configurazione
+	// Ottiene la configurazione
 	host := config.Config.LDAP.URI
 	port := config.Config.LDAP.Porta
+	baseDN := config.Config.LDAP.BaseDN
+	bindUserDN := "cn=" + config.Config.LDAP.Username + "," + baseDN
+	bindPassword := config.Config.LDAP.Password
 
 	// Connessione al server LDAP
-	l, err := DialURL("ldap://" + host + ":" + port)
+	l, err := ldap.DialURL("ldap://" + host + ":" + port)
 	if err != nil {
-		return &AuthenticationError{username}
+		log.Println("auth: ", err.Error())
+		return dummyUserInfo, &AuthenticationError{username}
 	}
 	defer l.Close()
 
-	// Per prima cosa effettuo l'accesso con un utente readonly
-	err = l.Bind(bindusername, bindpassword)
+	// Per prima cosa effettuo l'accesso con un utente admin
+	err = l.Bind(bindUserDN, bindPassword)
 	if err != nil {
-		return &AuthenticationError{username}
+		log.Println("auth: ", err.Error())
+		return dummyUserInfo, &AuthenticationError{username}
 	}
 
 	// Cerco l'username richiesto
-	searchRequest := NewSearchRequest(
-		"dc=example,dc=com",
-		ScopeWholeSubtree, NeverDerefAliases, 0, 0, false,
-		fmt.Sprintf("(&(objectClass=organizationalPerson)(uid=%s))", username),
-		[]string{"dn"},
+	searchRequest := ldap.NewSearchRequest(
+		baseDN,
+		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
+		fmt.Sprintf("(uid=%s)", username),
+		[]string{"dn", "cn", "ou"},
 		nil,
 	)
 
 	sr, err := l.Search(searchRequest)
 	if err != nil {
-		return &AuthenticationError{username}
+		log.Println("auth: ", err.Error())
+		return dummyUserInfo, &AuthenticationError{username}
 	}
 
 	// Verifico il numero di utenti corrispondenti e ottendo il DN dell'utente
 	if len(sr.Entries) != 1 {
-		return &AuthenticationError{username}
+		return dummyUserInfo, &AuthenticationError{username}
 	}
 
-	userdn := sr.Entries[0].DN
+	userDN := sr.Entries[0].DN
+	fullName := sr.Entries[0].GetAttributeValue("cn")
+	group := sr.Entries[0].GetAttributeValue("ou")
 
 	// Verifica la password
-	err = l.Bind(userdn, password)
+	err = l.Bind(userDN, password)
 	if err != nil {
-		return &AuthenticationError{username}
+		return dummyUserInfo, errors.New("Password errata!")
 	}
 
-	return nil
+	return UserInfo{username, fullName, group}, nil
 }

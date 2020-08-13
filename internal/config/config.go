@@ -54,8 +54,11 @@ type autenticazione struct {
 }
 
 type ldap struct {
-	URI   string `toml:"uri"`
-	Porta string `toml:"porta"`
+	URI      string `toml:"uri"`
+	Porta    string `toml:"porta"`
+	Username string `toml:"username"`
+	Password string `toml:"password"`
+	BaseDN   string `toml:"base_dn"`
 }
 
 type sql struct {

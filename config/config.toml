@@ -17,6 +17,9 @@ dummy_auth=true
 [LDAP]
 host="ldap.example.org"
 porta="389"
+utente="admin"
+password="admin"
+base_dn="dc=example,dc=org"
 
 [SQL]
 username="lilbib"

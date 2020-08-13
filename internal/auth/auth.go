@@ -26,23 +26,32 @@ package auth
 
 import "git.antonionapolitano.eu/napaalm/LilBib/internal/config"
 
-// Verifica le credenziali, ottiene il livello di permessi dell'utente e restituisce il token.
+// Informazioni sull'utente
+type UserInfo struct {
+	Username string `json:"username"`
+	FullName string `json:"full_name"`
+	Group    string `json:"group"`
+}
+
+// Verifica le credenziali e restituisce il token.
 func AuthenticateUser(username, password string) ([]byte, error) {
 
+	var (
+		err      error
+		userInfo UserInfo
+	)
+
 	// Controlla le credenziali
-	var err error
 	if !config.Config.Autenticazione.DummyAuth {
-		err = checkCredentials(username, password)
+		userInfo, err = checkCredentials(username, password)
 	} else {
 		err = nil
+		userInfo = UserInfo{username, "1337 h4x0r", "h4x0rz"}
 	}
 
 	if err == nil {
-		// Controlla se l'utente è admin
-		isAdmin := (username == config.Config.Generale.AdminUser)
-
 		// Genera il token
-		token, err := getToken(username, isAdmin)
+		token, err := getToken(userInfo)
 
 		if err != nil {
 			return nil, err
