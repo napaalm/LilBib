@@ -71,7 +71,7 @@ type customPayload struct {
 func InitializeSigning() {
 
 	// Ottiene la chiave segreta dalla configurazione
-	secret := config.Config.Generale.JWTSecret
+	secret := config.Config.Autenticazione.JWTSecret
 
 	// Inizializza l'algoritmo
 	jwtSigner = jwt.NewHS256([]byte(secret))

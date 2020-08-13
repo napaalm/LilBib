@@ -32,9 +32,10 @@ import (
 )
 
 type config struct {
-	Generale generale `toml:"Generale"`
-	LDAP     ldap     `toml:"LDAP"`
-	SQL      sql      `toml:"SQL"`
+	Generale       generale       `toml:"Generale"`
+	Autenticazione autenticazione `toml:"Autenticazione"`
+	LDAP           ldap           `toml:"LDAP"`
+	SQL            sql            `toml:"SQL"`
 }
 
 type generale struct {
@@ -42,9 +43,14 @@ type generale struct {
 	Porta           string `toml:"porta_http"`
 	AdminUser       string `toml:"utente_admin"`
 	LunghezzaPagina uint16 `toml:"lunghezza_pagina"`
-	JWTSecret       string `toml:"chiave_firma"`
-	SecureCookies   bool   `toml:"cookie_sicuri"`
-	DummyAuth       bool   `toml:"dummy_auth"`
+}
+
+type autenticazione struct {
+	JWTSecret     string `toml:"chiave_firma"`
+	SSO           bool   `toml:"usa_sso"`
+	SSOURL        string `toml:"sso_url"`
+	SecureCookies bool   `toml:"cookie_sicuri"`
+	DummyAuth     bool   `toml:"dummy_auth"`
 }
 
 type ldap struct {

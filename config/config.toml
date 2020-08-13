@@ -4,11 +4,15 @@ fqdn_sito="localhost"
 porta_http=":8080"
 lunghezza_pagina=24
 utente_admin="admin"
+
+[Autenticazione]
 chiave_firma="secret"
-#cookie_sicuri=true
+usa_sso=false
+sso_url="https://sso.example.org"
 cookie_sicuri=false
-#dummy_auth=false
+#cookie_sicuri=true
 dummy_auth=true
+#dummy_auth=false
 
 [LDAP]
 host="ldap.example.org"

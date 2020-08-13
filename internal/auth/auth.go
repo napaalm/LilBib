@@ -31,7 +31,7 @@ func AuthenticateUser(username, password string) ([]byte, error) {
 
 	// Controlla le credenziali
 	var err error
-	if !config.Config.Generale.DummyAuth {
+	if !config.Config.Autenticazione.DummyAuth {
 		err = checkCredentials(username, password)
 	} else {
 		err = nil

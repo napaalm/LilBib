@@ -283,7 +283,10 @@ func HandleGeneri(w http.ResponseWriter, r *http.Request) {
 // Percorso: /login
 // Mostra pagina di accesso.
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	// Usa o meno un provider SSO
+	sso := config.Config.Autenticazione.SSO
+
+	if r.Method == "POST" && !sso {
 		r.ParseForm()
 		username_list, ok0 := r.Form["username"]
 		password_list, ok1 := r.Form["password"]
@@ -306,7 +309,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 		// Ottiene la configurazione per i cookie
 		fqdn := config.Config.Generale.FQDN
-		secure := config.Config.Generale.SecureCookies
+		secure := config.Config.Autenticazione.SecureCookies
 
 		// Crea e imposta il cookie
 		cookie := http.Cookie{
@@ -332,9 +335,13 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.ExecuteTemplate(w, "login.html", struct {
-		Values CommonValues
-	}{CommonValues{Version}})
+	if sso {
+		http.Redirect(w, r, config.Config.Autenticazione.SSOURL, http.StatusSeeOther)
+	} else {
+		templates.ExecuteTemplate(w, "login.html", struct {
+			Values CommonValues
+		}{CommonValues{Version}})
+	}
 }
 
 // Percorso: /utente
@@ -768,7 +775,7 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	// Ottiene la configurazione per i cookie
 	fqdn := config.Config.Generale.FQDN
-	secure := config.Config.Generale.SecureCookies
+	secure := config.Config.Autenticazione.SecureCookies
 
 	// Crea e imposta il cookie
 	cookie := http.Cookie{
