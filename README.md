@@ -99,10 +99,10 @@ Reindirizza alla ricerca di `/libri` quando si clicca su un genere.
 
 ### `/login`
 Pagina di accesso all'area utente.
-Utilizza il server LDAP per l'autenticazione, ritorna un token e reindirizza a `/utente`.
+Utilizza il server LDAP per l'autenticazione (oppure reindirizza alla pagina di accesso del SSO), ritorna un token e reindirizza a `/utente`.
 
 ### `/logout`
-Endpoint che rimuove il token di accesso e reindirizza a `/login`.
+Endpoint che rimuove il token di accesso e reindirizza a `/`.
 
 ### `/utente`
 Contiene informazioni sull'utente, come il nome utente e la storia dei prestiti.

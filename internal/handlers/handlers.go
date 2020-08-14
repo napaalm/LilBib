@@ -36,6 +36,7 @@ import (
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/hash"
 	"git.antonionapolitano.eu/napaalm/LilBib/internal/qrcode"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"text/template"
@@ -336,7 +337,27 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if sso {
-		http.Redirect(w, r, config.Config.Autenticazione.SSOURL, http.StatusSeeOther)
+		// Imposta dominio ed eventualmente porta
+		nextURL := config.Config.Generale.FQDN
+		if nextURL == "localhost" {
+			nextURL = nextURL + config.Config.Generale.Porta
+		}
+
+		// Imposta il percorso
+		nextURL = nextURL + "/utente"
+
+		// Imposta lo schema
+		if config.Config.Autenticazione.SecureCookies {
+			nextURL = "https://" + nextURL
+		} else {
+			nextURL = "http://" + nextURL
+		}
+
+		// Crea la query
+		query := "?next=" + url.QueryEscape(nextURL)
+
+		// Genera la risposta
+		http.Redirect(w, r, config.Config.Autenticazione.SSOURL + query, http.StatusSeeOther)
 	} else {
 		templates.ExecuteTemplate(w, "login.html", struct {
 			Values CommonValues
@@ -363,7 +384,8 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 
 	// Se l'autenticazione fallisce reindirizza a /login
 	if err != nil {
-		http.Redirect(w, r, "/logout", http.StatusSeeOther)
+		deleteCookie(w, r)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -775,6 +797,12 @@ func HandleGeneraCodici(w http.ResponseWriter, r *http.Request) {
 
 // Percorso: /logout
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
+	deleteCookie(w, r)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// Elimina il cookie con il token di accesso
+func deleteCookie(w http.ResponseWriter, r *http.Request) {
 	// Ottiene la configurazione per i cookie
 	fqdn := config.Config.Generale.FQDN
 	secure := config.Config.Autenticazione.SecureCookies
@@ -788,6 +816,4 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 		Secure: secure,
 	}
 	http.SetCookie(w, &cookie)
-
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
