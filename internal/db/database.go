@@ -276,8 +276,55 @@ func GetGeneri() ([]Genere, error) {
 	return gens, nil
 }
 
+//Funzione per trovare tutti i prestiti di un libro
+func GetPrestitiLibro(libro uint32) ([]Prestito, error) {
+	//Verifico se il server è ancora disponibile
+	//Se c'è un errore, ritorna null e l'errore
+	if err := db_Connection.Ping(); err != nil {
+		return nil, err
+	}
+
+	//Salvo la query che eseguirà l'sql in una variabile stringa
+	q := `SELECT * FROM Prestito WHERE libro = ? ORDER BY data_prenotazione DESC`
+	//Applico la query al database. Salvo i risultati in rows
+	rows, err := db_Connection.Query(q, libro)
+	//Se c'è un errore, ritorna null e l'errore
+	if err != nil {
+		return nil, err
+	}
+	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
+	defer rows.Close()
+
+	var prests []Prestito
+	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
+	for rows.Next() {
+		var data_pre int64
+		var data_rest sql.NullInt64
+		var fabrizio Prestito
+		//Tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
+		if err := rows.Scan(&fabrizio.Codice, &fabrizio.Libro, &fabrizio.Utente, &data_pre, &fabrizio.Durata, &data_rest); err != nil {
+			return nil, err
+		}
+		//Salvo data_pre in fabrizio convertendola in timestamp unix
+		fabrizio.Data_prenotazione = time.Unix(data_pre, 0)
+		//Salvo data_rest in fabrizio convertendola in timestamp unix
+		fabrizio.Data_restituzione.Valid = data_rest.Valid
+		fabrizio.Data_restituzione.Time = time.Unix(data_rest.Int64, 0)
+		//Copio la variabile temporanea nell'ultima posizione dell'array
+		prests = append(prests, fabrizio)
+	}
+	//Se c'è un errore, ritorna null e l'errore
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	//Returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
+	return prests, nil
+
+}
+
 //Funzione per trovare tutti i prestiti di un utente
-func GetPrestiti(utente string) ([]Prestito, error) {
+func GetPrestitiUtente(utente string) ([]Prestito, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {

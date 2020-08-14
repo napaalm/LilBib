@@ -133,11 +133,13 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	prestito, err := db.GetCurrentPrestito(idLibro)
+	prestiti, err := db.GetPrestitiLibro(idLibro)
 	templates.ExecuteTemplate(w, "libro.html", struct {
-		Libro  db.Libro
-		Utente string
-		Values CommonValues
-	}{libro, prestito.Utente, CommonValues{Version}})
+		Libro    db.Libro
+		Utente   string
+		Prestiti []db.Prestito
+		Values   CommonValues
+	}{libro, prestito.Utente, prestiti, CommonValues{Version}})
 }
 
 // Formato: /libri/<page uint32>
@@ -389,7 +391,7 @@ func HandleUtente(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	prestiti, err := db.GetPrestiti(utente.Username)
+	prestiti, err := db.GetPrestitiUtente(utente.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

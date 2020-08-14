@@ -151,7 +151,9 @@ INSERT INTO `Prestito` (`Codice`, `Libro`, `Utente`, `Data_prenotazione`, `Durat
 (3,	5,	'badr.bousselham',	1013126400,	1209600,	1014536000),
 (4,	8,	'carlo.conti',		1015126400,	1209600,	NULL),
 (5,	12,	'dalila.diurni',	1019126400,	1209600,	NULL),
-(6,	20,	'fabio.fermi',		1016126400,	1209600,	NULL);
+(6,	20,	'fabio.fermi',		1016126400,	1209600,	NULL),
+(7,	1,	'dalila.diurni',	1019126400,	1209600,	NULL),
+(8,	1,	'fabio.fermi',	1019126400,	1209600,	NULL);
 
 CREATE USER 'lilbib'@'%' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON lilbib.* TO 'lilbib'@'%';

@@ -612,8 +612,8 @@ padding-top: 10px;
 .libro{
 
 background-color: #E8E8E8;
-width: 600px;
-height: 400px;
+width: 700px;
+height: auto;
 border-radius: 10px;
 position: absolute;
 top: 50%;
@@ -712,6 +712,13 @@ text-align: center;
 table.ggTable{
 
 color: white;
+padding-bottom: 25px;
+
+}
+
+table.ggTable1{
+
+color: black;
 padding-bottom: 25px;
 
 }
