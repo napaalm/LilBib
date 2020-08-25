@@ -139,11 +139,10 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		templates.ExecuteTemplate(w, "libro.html", struct {
 			Libro    db.Libro
 			Utente   string
-			Giorni   time.Time
 			Scaduto  bool
 			Prestiti []db.Prestito
 			Values   CommonValues
-		}{libro, prestito.Utente, time.Time{}, true, prestiti, CommonValues{Version}})
+		}{libro, prestito.Utente, true, prestiti, CommonValues{Version}})
 	} else {
 		if (time.Now().Unix() + 86400) > (int64(prestito.Durata) + prestito.Data_prenotazione.Unix()) {
 			templates.ExecuteTemplate(w, "libro.html", struct {
