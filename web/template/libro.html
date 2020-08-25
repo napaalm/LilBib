@@ -76,8 +76,8 @@
 		{{ range $index, $value := .Prestiti }}
 		<tr>
 			<td style="text-align: center">{{ $value.Utente }}</td>
-			<td style="text-align: center">{{ $value.Data_prenotazione }}</td>
-			<td style="text-align: center">{{ if $value.Data_restituzione.Valid }} {{ $value.Data_restituzione.Time }} {{ else }} Non restituito {{ end }}</td>
+			<td style="text-align: center">{{ $value.FormatDataPrenotazione }}</td>
+			<td style="text-align: center">{{ $value.FormatDataRestituzione }}</td>
 		</tr>
 		{{ end }}
 

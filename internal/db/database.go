@@ -66,6 +66,18 @@ type Prestito struct {
 	Data_restituzione sql.NullTime
 }
 
+func (p *Prestito) FormatDataPrenotazione() string {
+	return p.Data_prenotazione.Format("02/01/2006 15:04")
+}
+
+func (p *Prestito) FormatDataRestituzione() string {
+	if p.Data_restituzione.Valid {
+		return p.Data_restituzione.Time.Format("02/01/2006 15:04")
+	} else {
+		return "Non restituito"
+	}
+}
+
 type NoCurrentPrestitoError struct {
 	codice uint32
 }
