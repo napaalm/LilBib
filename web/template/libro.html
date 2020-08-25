@@ -39,6 +39,11 @@
 {{ if .Libro.Prenotato }}
 <h2 class="libL">Disponibile: No</h2>
 <h2 class="libL">Assegnatario: {{ .Utente }}</h2>
+{{ if .Scaduto }}
+<h2 class="libL">Giorni alla riconsegna: Tempo scaduto!</h2>
+{{ else }}
+<h2 class="libL">Giorni alla riconsegna: {{ .Giorni }}</h2>
+{{ end }}
 {{ else }}
 <h2 class="libL">Disponibile: Si</h2>
 {{ end }}

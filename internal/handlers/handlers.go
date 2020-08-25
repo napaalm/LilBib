@@ -40,6 +40,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 )
 
 const templatesDir = "web/template"
@@ -134,12 +135,37 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 	}
 	prestito, err := db.GetCurrentPrestito(idLibro)
 	prestiti, err := db.GetPrestitiLibro(idLibro)
-	templates.ExecuteTemplate(w, "libro.html", struct {
-		Libro    db.Libro
-		Utente   string
-		Prestiti []db.Prestito
-		Values   CommonValues
-	}{libro, prestito.Utente, prestiti, CommonValues{Version}})
+	if (time.Now().Unix()) > (int64(prestito.Durata) + prestito.Data_prenotazione.Unix()) {
+		templates.ExecuteTemplate(w, "libro.html", struct {
+			Libro    db.Libro
+			Utente   string
+			Giorni   time.Time
+			Scaduto  bool
+			Prestiti []db.Prestito
+			Values   CommonValues
+		}{libro, prestito.Utente, time.Time{}, true, prestiti, CommonValues{Version}})
+	} else {
+		if (time.Now().Unix() + 86400) > (int64(prestito.Durata) + prestito.Data_prenotazione.Unix()) {
+			templates.ExecuteTemplate(w, "libro.html", struct {
+				Libro    db.Libro
+				Utente   string
+				Giorni   string
+				Scaduto  bool
+				Prestiti []db.Prestito
+				Values   CommonValues
+			}{libro, prestito.Utente, "0 giorni e " + strconv.Itoa(int((int64(prestito.Durata)-(time.Now().Unix()-prestito.Data_prenotazione.Unix()))/3600)) + " ore", false, prestiti, CommonValues{Version}})
+
+		} else {
+			templates.ExecuteTemplate(w, "libro.html", struct {
+				Libro    db.Libro
+				Utente   string
+				Giorni   int64
+				Scaduto  bool
+				Prestiti []db.Prestito
+				Values   CommonValues
+			}{libro, prestito.Utente, (int64(prestito.Durata) - (time.Now().Unix() - prestito.Data_prenotazione.Unix())) / 86400, false, prestiti, CommonValues{Version}})
+		}
+	}
 }
 
 // Formato: /libri/<page uint32>
@@ -359,7 +385,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		query := "?next=" + url.QueryEscape(nextURL)
 
 		// Genera la risposta
-		http.Redirect(w, r, config.Config.Autenticazione.SSOURL + query, http.StatusSeeOther)
+		http.Redirect(w, r, config.Config.Autenticazione.SSOURL+query, http.StatusSeeOther)
 	} else {
 		templates.ExecuteTemplate(w, "login.html", struct {
 			Values CommonValues

@@ -146,14 +146,14 @@ CREATE TABLE `Prestito` (
 
 TRUNCATE `Prestito`;
 INSERT INTO `Prestito` (`Codice`, `Libro`, `Utente`, `Data_prenotazione`, `Durata`, `Data_restituzione`) VALUES
-(1,	1,	'alfio.ammannati',	1013126400,	1209600,	NULL),
+(1,	1,	'alfio.ammannati',	1598388408,	87600,	NULL),
 (2,	4,	'bartolomeo.bianchi',	1013126400,	1209600,	1014336000),
 (3,	5,	'badr.bousselham',	1013126400,	1209600,	1014536000),
 (4,	8,	'carlo.conti',		1015126400,	1209600,	NULL),
 (5,	12,	'dalila.diurni',	1019126400,	1209600,	NULL),
 (6,	20,	'fabio.fermi',		1016126400,	1209600,	NULL),
-(7,	1,	'dalila.diurni',	1019126400,	1209600,	NULL),
-(8,	1,	'fabio.fermi',	1019126400,	1209600,	NULL);
+(7,	1,	'dalila.diurni',	1019126400,	1209600,	1014336000),
+(8,	1,	'fabio.fermi',	1019126400,	1209600,	1014335000);
 
 CREATE USER 'lilbib'@'%' IDENTIFIED BY 'secret';
 GRANT ALL PRIVILEGES ON lilbib.* TO 'lilbib'@'%';
