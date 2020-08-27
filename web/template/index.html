@@ -1,145 +1,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LilBib</title>
-  <meta name="description"
-        content="Lightweight Integrated Logistics for Book Indexing and Borrowing">
-  <meta name="keywords"
-        content="libri, prenotazione, liceo, vinci, dav">
-        <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
-  <meta name="robot"
-        content="nofollow">
-        <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa -->
+  <title>LilBib</title><!--Bootsrap 4 CDN-->
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity=
+        "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous"><!--Fontawesome CDN-->
+  <link rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity=
+        "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous"><!--Custom styles-->
   <link rel="stylesheet"
         type="text/css"
-        href="/static/css/960_12_col.css">
-        <!-- questo e' un tentativo che per ora e fallito-->
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
-  <link rel="stylesheet"
-        type="text/css"
-        href="/static/css/style.css"><!--Zix: per favore usiamo un unico file css -->
-  <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
-
+        href="../static/css/custom.css">
   <style type="text/css">
-  div.c14 {min-height: 100vh; overflow: hidden; display: block; position: relative; padding-bottom: 100px;}
+  div.c2 {background-color: transparent}
+  nav.c1 {background-color: #bc7b1c}
   </style>
 </head>
 <body>
-  <div class="c14">
-    <header>
-      <nav>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
+  <nav class="navbar navbar-expand navbar-dark justify-content-between fixed-top c1">
+    <a class="navbar-brand"
+         href="#">LilBib</a>
+    <div class="collapse navbar-collapse"
+         id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link"
+              href="#">Home</a>
+        </li>
 
-          <li>
-            <a href="/libri">Libri</a>
-          </li>
-          <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
+        <li class="nav-item">
+          <a class="nav-link"
+              href="#">Libri</a>
+        </li>
 
-          <li>
-            <a href="/autori">Autori</a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link"
+              href="#">Prestito</a>
+        </li>
 
-          <li>
-            <a href="/generi">Generi</a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link"
+              href="#">Restituzione</a>
+        </li>
 
-          <li>
-            <a href="/prestito">Prestito</a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link"
+              href="#">Generi</a>
+        </li>
 
-          <li>
-            <a href="/restituzione">Restituzione</a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link"
+              href="#">Autori</a>
+        </li>
+      </ul>
 
-          <li><span class="footerRight"><a href="/login">
-          <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui"
-                class="login">Login</span></a></span>
-          </li>
-        </ul>
-      </nav>
-    </header>
+      <form class="form-inline my-2 my-lg-0">
+        <a class="btn btn-outline-primary my-2 my-sm-0"
+              id="fbtn"
+              href="/login"><!--<i class="material-icons">person</i>--><span id=
+              "suqi_sypeeoui"
+              class="login">Login</span></a>
+      </form>
+    </div>
+  </nav>
 
-    <div class="homeImg">
-      <img class="home"
-           src="/static/img/libriHome.jpeg"> 
-           <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
-
-      <h1 class="titleHome">Lightweight Integrated Logistics for<br>
-      Book Indexing and Borrowing</h1>
-      <!-- bisogna cambiare font -->
+  <div class="container title row"
+       id="bg">
+    <div class="col-6 mx-auto col-md-4 order-md-2 c2"><img src="../static/img/image.png"
+         class="img-fluid mb-3 mb-md-0">
     </div>
 
-    <div class="middleHome">
-      <div class="coll1Home">
-        <h2 class="home">Libri Totali</h2>
+    <div class="col-md-8 order-md-1 text-center text-md-left pr-md-5">
+      <h1 class="mb-3">LilBib</h1>
 
-        <p class="Home"><span class="numHome">{{ .Totali }}</span>
-        </p>
+      <h1 class="mb-3">Lightweight Integrated Logistics for Book Indexing and
+      Borrowing</h1>
+
+      <p class="lead md-4">You have so many different things placeholder text has to be
+      able to do, and I don't believe Lorem Ipsum has the stamina. You're telling the
+      enemy exactly what you're going to do. No wonder you've been fighting Lorem Ipsum
+      your entire adult life.</p>
+
+      <div class="d-flex flex-column flex-md-row">
+        <a href="login.html"
+             class="btn btn-lg btn-primary mb-3 mr-md-3">Accedi</a> <a href="#"
+             class="btn btn-lg btn-outline-secondary mb-3">Elenco libri</a>
       </div>
-
-      <div class="coll2Home">
-        <h2 class="home">Libri Disponibili</h2>
-
-        <p class="Home"><span class="numHome">{{ .Disponibili }}</span>
-        </p>
-      </div>
-
-      <div class="coll3Home">
-        <h2 class="home">Autori</h2>
-
-        <p class="Home"><span class="numHome">{{ .AutoriTot}}</span>
-        </p>
-      </div>
-    </div>
-
-    <div class="spazioD">
-    </div>
-
-    <div>
-      <footer class="Other">
-        <p class="FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-
-        <p class="FooterRight"><a href=
-        "https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> |
-        <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
-      </footer>
     </div>
   </div>
+
+  <div id="bg-2">
+    <div class="container home-cards row"
+         id="r-h">
+      <div class="col-sm-4 ca card card-body">
+        <h5 class="card-title">Libri Totali</h5>
+
+        <p class="card-text card-num">{{ .Totali }}</p>
+        <a href="#"
+             class="btn btn-primary">Elenco libri</a>
+      </div>
+
+      <div class="col-sm-4 ca card card-body">
+        <h5 class="card-title">Libri Disponibili</h5>
+
+        <p class="card-text card-num">15</p>
+        <a href="#"
+             class="btn btn-primary">Elenco libri</a>
+      </div>
+
+      <div class="col-sm-4 ca card card-body">
+        <h5 class="card-title">Autori</h5>
+
+        <p class="card-text card-num">15</p>
+        <a href="#"
+             class="btn btn-primary">Autori</a>
+      </div>
+    </div>
+  </div>
+  <!--<div id="bg-3"></div>-->
+
+  <footer class="footer-1">
+    <div class="footer-copyright py-3">
+      <a class="text-left">© 2020 LilBib | Versione: {{ .Values.Version }}</a>
+      <p class="text-right"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git"
+         class="foot-link">Codice sorgente</a> | <a href=
+         "https://www.gnu.org/licenses/agpl-3.0.en.html"
+         class="foot-link">Licenza AGPLv3</a></p>
+    </div>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity=
+        "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity=
+        "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script> 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity=
+        "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script> 
   <script>
-        function getCookie(name) {
-                    var dc = document.cookie;
-                    var prefix = name + "=";
-                    var begin = dc.indexOf("; " + prefix);
-                    if (begin == -1) {
-                            begin = dc.indexOf(prefix);
-                            if (begin != 0) return null;
-                    }
-                    else                         
-                    {
-                        begin += 2;
-                        var end = document.cookie.indexOf(";", begin);
-                        if (end == -1) {
-                                end = dc.length;
-                        }
-                    }
-                    // because unescape has been deprecated, replaced with decodeURI
-                    //return unescape(dc.substring(begin + prefix.length, end));
-                    return decodeURI(dc.substring(begin + prefix.length, end));
+
+      function getCookie(name) {
+        var dc = document.cookie;
+        var prefix = name + "=";
+        var begin = dc.indexOf("; " + prefix);
+        if (begin == -1) {
+          begin = dc.indexOf(prefix);
+          if (begin != 0) return null;
+        } else {
+          begin += 2;
+          var end = document.cookie.indexOf(";", begin);
+          if (end == -1) {
+            end = dc.length;
+          }
         }
-        var myCookie = getCookie("access_token");
-        if (myCookie == null) {
-                document.getElementById("suqi_sypeeoui").textContent = "Login";
-        }
-        else{
-                document.getElementById("suqi_sypeeoui").textContent = "Area Utente";
-        }
-  </script> 
-  <script src="/static/js/login.js"
-        type="text/javascript"></script>
+        // because unescape has been deprecated, replaced with decodeURI
+        //return unescape(dc.substring(begin + prefix.length, end));
+        return decodeURI(dc.substring(begin + prefix.length, end));
+      }
+      var myCookie = getCookie("access_token");
+      if (myCookie == null) {
+        document.getElementById("suqi_sypeeoui").textContent = "Login";
+      } else {
+        document.getElementById("suqi_sypeeoui").textContent = "Area Utente";
+      }
+  </script>
 </body>
 </html>

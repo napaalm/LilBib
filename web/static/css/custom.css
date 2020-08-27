@@ -1,0 +1,140 @@
+@import url("https://fonts.googleapis.com/css?family=Numans");
+
+html,
+body {
+  color: #ffeffe;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+
+#bg {
+  background-image: url("../img/book.jpg");
+
+  min-height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+
+#bg-2 {
+  background-image: url("../img/book2.jpg");
+  position: static;
+  min-height: 65%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#bg-3 {
+  background-image: url("../img/halfbook.jpg");
+  position: static;
+  min-height: 65%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.title {
+  position: relative;
+  margin-top: 125px;
+  margin-bottom: 30px;
+}
+
+.navbar-dark .navbar-nav .active {
+  font-weight: bold;
+  color: #fefffe;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #b4b8c5;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #e9ebf8;
+}
+
+.btn-outline-primary {
+  color: #585481;
+  border-color: #585481;
+  font-weight: bold;
+}
+
+.btn-outline-primary:hover {
+  color: #bc7b1c;
+  border-color: #585481;
+  background-color: #585481;
+}
+
+#fbtn {
+  color: #585481;
+}
+
+#fbtn:hover {
+  color: #bc7b1c;
+}
+
+.foot-link {
+  color: #b4b8c5;
+  text-decoration: none;
+}
+
+.foot-link:hover {
+  color: #e9ebf8;
+  text-decoration: none;
+}
+
+.footer-1 {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #bc7b1c;
+  height: 55px;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.home-cards {
+  color: #fefffe;
+  position: relative;
+  padding: 5%;
+
+  width: 100%;
+  min-height: 60%;
+}
+
+.card-num {
+  font-size: 50px;
+}
+
+.home-base {
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  text-align: center;
+}
+
+#r-h {
+  position: relative;
+}
+
+.ca {
+  position: relative;
+  margin-top: 10px;
+}
+
+.text-left {
+  position: absolute;
+  left: 0.5%;
+}
+
+.text-right {
+  position: absolute;
+  right: 2%;
+}
