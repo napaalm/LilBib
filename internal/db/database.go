@@ -78,6 +78,26 @@ func (p *Prestito) FormatDataRestituzione() string {
 	}
 }
 
+func (p *Prestito) FormatScadenza() string {
+	time_remaining := (int64(p.Durata) - (time.Now().Unix() - p.Data_prenotazione.Unix()))
+	if time_remaining <= 0 {
+		return "Tempo scaduto"
+	}
+	if time_remaining < 3600 {
+		return "Meno di un'ora"
+	}
+	if time_remaining < 7200 {
+		return "1 ora"
+	}
+	if time_remaining < 86400 {
+		return fmt.Sprintf("%d ore", time_remaining/3600)
+	}
+	if time_remaining < 172800 {
+		return fmt.Sprintf("%d giorni", time_remaining/86400)
+	}
+	return fmt.Sprintf("%d giorni", time_remaining/86400)
+}
+
 type NoCurrentPrestitoError struct {
 	codice uint32
 }

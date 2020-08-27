@@ -60,7 +60,8 @@
         <tr>
             <th>Libro</th>
             <th>Data Prenotazione</th>
-            <th>Data Restituzione</th>
+	    <th>Data Restituzione</th>
+	    <th>Scadenza
         </tr>
     </thead>
     <tbody>
@@ -69,6 +70,7 @@
 			<td style="text-align: center">{{ $value.Titolo }}</td>
 			<td style="text-align: center">{{ $value.Prestito.FormatDataPrenotazione }}</td>
 			<td style="text-align: center">{{ $value.Prestito.FormatDataRestituzione }}</td>
+			<td style="text-align: center">{{ $value.Prestito.FormatScadenza }}</td>
 		</tr>
 		{{ end }}
 
