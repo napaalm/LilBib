@@ -40,7 +40,6 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
-	"time"
 )
 
 const templatesDir = "web/template"
@@ -134,37 +133,19 @@ func HandleLibro(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	prestito, err := db.GetCurrentPrestito(idLibro)
-	prestiti, err := db.GetPrestitiLibro(idLibro)
-	if (time.Now().Unix()) > (int64(prestito.Durata) + prestito.Data_prenotazione.Unix()) {
-		templates.ExecuteTemplate(w, "libro.html", struct {
-			Libro    db.Libro
-			Utente   string
-			Scaduto  bool
-			Prestiti []db.Prestito
-			Values   CommonValues
-		}{libro, prestito.Utente, true, prestiti, CommonValues{Version}})
-	} else {
-		if (time.Now().Unix() + 86400) > (int64(prestito.Durata) + prestito.Data_prenotazione.Unix()) {
-			templates.ExecuteTemplate(w, "libro.html", struct {
-				Libro    db.Libro
-				Utente   string
-				Giorni   string
-				Scaduto  bool
-				Prestiti []db.Prestito
-				Values   CommonValues
-			}{libro, prestito.Utente, "0 giorni e " + strconv.Itoa(int((int64(prestito.Durata)-(time.Now().Unix()-prestito.Data_prenotazione.Unix()))/3600)) + " ore", false, prestiti, CommonValues{Version}})
-
-		} else {
-			templates.ExecuteTemplate(w, "libro.html", struct {
-				Libro    db.Libro
-				Utente   string
-				Giorni   int64
-				Scaduto  bool
-				Prestiti []db.Prestito
-				Values   CommonValues
-			}{libro, prestito.Utente, (int64(prestito.Durata) - (time.Now().Unix() - prestito.Data_prenotazione.Unix())) / 86400, false, prestiti, CommonValues{Version}})
-		}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	prestiti, err := db.GetPrestitiLibro(idLibro)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	templates.ExecuteTemplate(w, "libro.html", struct {
+		Libro           db.Libro
+		Prestiti        []db.Prestito
+		CurrentPrestito db.NullPrestito
+		Values          CommonValues
+	}{libro, prestiti, prestito, CommonValues{Version}})
 }
 
 // Formato: /libri/<page uint32>

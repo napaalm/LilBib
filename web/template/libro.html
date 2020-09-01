@@ -38,25 +38,13 @@
 <h2 class="libL">Genere: {{ .Libro.Genere}}</h2>
 {{ if .Libro.Prenotato }}
 <h2 class="libL">Disponibile: No</h2>
-<h2 class="libL">Assegnatario: {{ .Utente }}</h2>
-{{ if .Scaduto }}
-<h2 class="libL">Giorni alla riconsegna: Tempo scaduto!</h2>
-{{ else }}
-<h2 class="libL">Giorni alla riconsegna: {{ .Giorni }}</h2>
-{{ end }}
 {{ else }}
 <h2 class="libL">Disponibile: Si</h2>
 {{ end }}
-<!--<h1 class="center">Storico Libro</h1>
-<h1 class="center">Utente   Data Prenotazione   Data Restituzione</h1>
-{{ range $index, $value := .Prestiti }}
-{{ if $value.Data_restituzione.Valid }}
-<h1 class="center">{{$value.Utente}} {{$value.Data_prenotazione}} {{$value.Data_restituzione.Time}}</h1>
-{{ else }}
-<h1 class="center">{{$value.Utente}} {{$value.Data_prenotazione}}</h1>
+{{ if .CurrentPrestito.Valid }}
+<h2 class="libL">Assegnatario: {{ .CurrentPrestito.Prestito.Utente }}</h2>
+<h2 class="libL">Giorni alla riconsegna: {{ .CurrentPrestito.Prestito.FormatScadenza }}</h2>
 {{ end }}
-{{ end }}
--->
 
 <h2 class="Utente" style="color:black">Storico Prenotazioni</h2>
 <div style="padding-left: 50px; padding-right: 50px;">

@@ -98,12 +98,17 @@ func (p Prestito) FormatScadenza() string {
 	return fmt.Sprintf("%d giorni", time_remaining/86400)
 }
 
+type NullPrestito struct {
+	Prestito Prestito
+	Valid    bool
+}
+
 type NoCurrentPrestitoError struct {
 	codice uint32
 }
 
 func (e *NoCurrentPrestitoError) Error() string {
-	return fmt.Sprintf("No current Prestito for libro with codice %d.", e.codice)
+	return fmt.Sprintf("No current Prestito for libro with codice %i.", e.codice)
 }
 
 var db_Connection *sql.DB
@@ -402,11 +407,11 @@ func GetPrestitiUtente(utente string) ([]Prestito, error) {
 }
 
 //Funzione per trovare tutti i prestiti di un utente
-func GetCurrentPrestito(codice uint32) (Prestito, error) {
+func GetCurrentPrestito(codice uint32) (NullPrestito, error) {
 	//Verifico se il server è ancora disponibile
 	//Se c'è un errore, ritorna null e l'errore
 	if err := db_Connection.Ping(); err != nil {
-		return Prestito{}, err
+		return NullPrestito{Prestito{}, false}, err
 	}
 
 	//Salvo la query che eseguirà l'sql in una variabile stringa
@@ -415,19 +420,19 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 	rows, err := db_Connection.Query(q, codice)
 	//Se c'è un errore, ritorna null e l'errore
 	if err != nil {
-		return Prestito{}, err
+		return NullPrestito{Prestito{}, false}, err
 	}
 	//Rows verrà chiuso una volta che tutte le funzioni normali saranno terminate oppure al prossimo return
 	defer rows.Close()
 
 	var pres Prestito
-	var count uint32
+	var count uint32 = 0
 	//Rows.Next() scorre tutte le righe trovate dalla query returnando true. Quando le finisce returna false
 	for rows.Next() {
 		var data_pre int64
 		//Tramite rows.Scan() salvo i vari risultati nelle variabili create in precedenza. In caso di errore ritorno null e l'errore
 		if err := rows.Scan(&pres.Codice, &pres.Libro, &pres.Utente, &data_pre, &pres.Durata); err != nil {
-			return Prestito{}, err
+			return NullPrestito{Prestito{}, false}, err
 		}
 		//Salvo data_pre in pres convertendola in timestamp unix
 		pres.Data_prenotazione = time.Unix(data_pre, 0)
@@ -436,15 +441,15 @@ func GetCurrentPrestito(codice uint32) (Prestito, error) {
 	}
 	//Se c'è un errore, ritorna null e l'errore
 	if err := rows.Err(); err != nil {
-		return Prestito{}, err
+		return NullPrestito{Prestito{}, false}, err
 	}
 
 	if count != 1 {
-		return Prestito{}, &NoCurrentPrestitoError{codice}
+		return NullPrestito{Prestito{}, false}, nil
 	}
 
 	//Returno i prestiti trovati e null (null sarebbe l'errore che non è avvenuto)
-	return pres, nil
+	return NullPrestito{pres, true}, nil
 }
 
 //Funzione per la ricerca dei libri
@@ -866,11 +871,14 @@ func SetHash(codice uint32, hash string) error {
 
 //Funzione per impostare la restituzione
 func SetRestituzione(libro uint32) error {
-	prestito_struct, err := GetCurrentPrestito(libro)
+	nullprestito_struct, err := GetCurrentPrestito(libro)
 	if err != nil {
 		return err
 	}
-	prestito := prestito_struct.Codice
+	if !nullprestito_struct.Valid {
+		return &NoCurrentPrestitoError{libro}
+	}
+	prestito := nullprestito_struct.Prestito.Codice
 
 	data_restituzione := time.Now()
 	//Verifico se il server è ancora disponibile
