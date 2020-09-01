@@ -81,7 +81,7 @@ func (p Prestito) FormatDataRestituzione() string {
 func (p Prestito) FormatScadenza() string {
 	time_remaining := (int64(p.Durata) - (time.Now().Unix() - p.Data_prenotazione.Unix()))
 	if time_remaining <= 0 {
-		return "Tempo scaduto"
+		return "Data di restituzione sforata!"
 	}
 	if time_remaining < 3600 {
 		return "Meno di un'ora"

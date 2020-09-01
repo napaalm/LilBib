@@ -70,7 +70,11 @@
 			<td style="text-align: center">{{ $value.Titolo }}</td>
 			<td style="text-align: center">{{ $value.Prestito.FormatDataPrenotazione }}</td>
 			<td style="text-align: center">{{ $value.Prestito.FormatDataRestituzione }}</td>
-			<td style="text-align: center">{{ $value.Prestito.FormatScadenza }}</td>
+			{{ if $value.Prestito.Data_restituzione.Valid }}
+				<td style="text-align: center">Riconsegnato :)</td>
+			{{ else }}
+				<td style="text-align: center">{{ $value.Prestito.FormatScadenza }}</td>
+			{{ end }}
 		</tr>
 		{{ end }}
 
