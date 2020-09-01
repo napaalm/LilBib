@@ -66,11 +66,11 @@ type Prestito struct {
 	Data_restituzione sql.NullTime
 }
 
-func (p *Prestito) FormatDataPrenotazione() string {
+func (p Prestito) FormatDataPrenotazione() string {
 	return p.Data_prenotazione.Format("02/01/2006 15:04")
 }
 
-func (p *Prestito) FormatDataRestituzione() string {
+func (p Prestito) FormatDataRestituzione() string {
 	if p.Data_restituzione.Valid {
 		return p.Data_restituzione.Time.Format("02/01/2006 15:04")
 	} else {
@@ -78,7 +78,7 @@ func (p *Prestito) FormatDataRestituzione() string {
 	}
 }
 
-func (p *Prestito) FormatScadenza() string {
+func (p Prestito) FormatScadenza() string {
 	time_remaining := (int64(p.Durata) - (time.Now().Unix() - p.Data_prenotazione.Unix()))
 	if time_remaining <= 0 {
 		return "Tempo scaduto"
