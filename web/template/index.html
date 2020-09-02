@@ -16,61 +16,17 @@
         type="text/css"
         href="../static/css/custom.css">
   <style type="text/css">
-  div.c2 {background-color: transparent}
-  nav.c1 {background-color: #bc7b1c}
+  div.c1 {background-color: transparent}
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand navbar-dark justify-content-between fixed-top c1">
-    <a class="navbar-brand"
-         href="#">LilBib</a>
-    <div class="collapse navbar-collapse"
-         id="navbarNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link"
-              href="#">Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"
-              href="#">Libri</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"
-              href="#">Prestito</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"
-              href="#">Restituzione</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"
-              href="#">Generi</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link"
-              href="#">Autori</a>
-        </li>
-      </ul>
-
-      <form class="form-inline my-2 my-lg-0">
-        <a class="btn btn-outline-primary my-2 my-sm-0"
-              id="fbtn"
-              href="/login"><!--<i class="material-icons">person</i>--><span id=
-              "suqi_sypeeoui"
-              class="login">Login</span></a>
-      </form>
-    </div>
-  </nav>
+  <header>
+    {{ template "navbar.xml" }}
+  </header>
 
   <div class="container title row"
        id="bg">
-    <div class="col-6 mx-auto col-md-4 order-md-2 c2"><img src="../static/img/image.png"
+    <div class="col-6 mx-auto col-md-4 order-md-2 c1"><img src="../static/img/image.png"
          class="img-fluid mb-3 mb-md-0">
     </div>
 
@@ -122,16 +78,7 @@
     </div>
   </div>
   <!--<div id="bg-3"></div>-->
-
-  <footer class="footer-1">
-    <div class="footer-copyright py-3">
-      <a class="text-left">© 2020 LilBib | Versione: {{ .Values.Version }}</a>
-      <p class="text-right"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git"
-         class="foot-link">Codice sorgente</a> | <a href=
-         "https://www.gnu.org/licenses/agpl-3.0.en.html"
-         class="foot-link">Licenza AGPLv3</a></p>
-    </div>
-  </footer>
+  {{ template "footer.xml" .Values }} 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity=
         "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

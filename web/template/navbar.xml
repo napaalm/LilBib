@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand navbar-dark justify-content-between fixed-top"
+     style="background-color: #bc7b1c">
+  <a class="navbar-brand"
+     href="#">LilBib</a>
+  <div class="collapse navbar-collapse"
+       id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link"
+           href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           href="/libri">Libri</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           href="/prestito">Prestito</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           href="/restituzione">Restituzione</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           href="/generi">Generi</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"
+           href="/autori">Autori</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <a class="btn btn-outline-primary my-2 my-sm-0"
+         id="fbtn"
+         href="/login">
+        <!--<i class="material-icons">person</i>-->
+        <span id="suqi_sypeeoui"
+              class="login">Login</span>
+      </a>
+    </form>
+  </div>
+</nav>

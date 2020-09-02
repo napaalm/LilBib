@@ -26,39 +26,7 @@
 <body>
   <div class="c16">
     <header>
-      <nav>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-
-          <li>
-            <a href="/libri">Libri</a>
-          </li>
-          <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
-
-          <li>
-            <a href="/autori">Autori</a>
-          </li>
-
-          <li>
-            <a href="/generi">Generi</a>
-          </li>
-
-          <li>
-            <a href="/prestito">Prestito</a>
-          </li>
-
-          <li>
-            <a href="/restituzione">Restituzione</a>
-          </li>
-
-          <li><span class="footerRight"><a href="/login">
-          <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui"
-                class="login">Login</span></a></span>
-          </li>
-        </ul>
-      </nav>
+      {{ template "navbar.xml" }}
     </header>
 
     <section>
@@ -118,18 +86,9 @@
                href="/libri/{{.PaginaSucc}}">&gt;</a>
         </div>
       </div>
-
-      <footer id="footerId"
-              class="Other">
-        <p id="text2Id"
-           class="FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-
-        <p id="text1Id"
-           class="FooterRight"><a href=
-           "https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> |
-           <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
-      </footer>
+      {{ template "footer.xml" .Values }} 
       <script>
+
       var a = document.getElementById('tfnewsearch');
       a.addEventListener('submit',function(e) {
       e.preventDefault();
@@ -138,8 +97,6 @@
       });
       </script> 
       <script>
-
-
 
         document.getElementById("sypeeoui1").href += window.location.href.substring(window.location.href.lastIndexOf("/")+2, window.location.href.length)
         document.getElementById("sypeeoui2").href += window.location.href.substring(window.location.href.lastIndexOf("/")+2, window.location.href.length)

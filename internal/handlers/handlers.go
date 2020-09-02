@@ -59,12 +59,14 @@ type PrestitoTitolo struct {
 // viene inizializzato nel momento in cui viene importato il package
 var templates = template.Must(template.ParseFiles(
 	templatesDir+"/autori.html",
+	templatesDir+"/footer.xml",
 	templatesDir+"/generi.html",
 	templatesDir+"/index.html",
 	templatesDir+"/libri.html",
 	templatesDir+"/libro.html",
 	templatesDir+"/libro_tabella.xml",
 	templatesDir+"/login.html",
+	templatesDir+"/navbar.xml",
 	templatesDir+"/prestito.html",
 	templatesDir+"/restituzione.html",
 	templatesDir+"/utente.html",

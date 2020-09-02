@@ -26,39 +26,7 @@
 <body>
   <div class="c22">
     <header>
-      <nav>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-
-          <li>
-            <a href="/libri">Libri</a>
-          </li>
-          <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
-
-          <li>
-            <a href="/autori">Autori</a>
-          </li>
-
-          <li>
-            <a href="/generi">Generi</a>
-          </li>
-
-          <li>
-            <a href="/prestito">Prestito</a>
-          </li>
-
-          <li>
-            <a href="/restituzione">Restituzione</a>
-          </li>
-
-          <li><span class="footerRight"><a href="/login">
-          <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui"
-                class="login">Login</span></a></span>
-          </li>
-        </ul>
-      </nav>
+      {{ template "navbar.xml" }}
     </header>
 
     <div>
@@ -87,16 +55,7 @@
             hidden=""
             class="c21">Prendi in prestito</button>
     </p>
-
-    <div>
-      <footer class="Other">
-        <p class="FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-
-        <p class="FooterRight"><a href=
-        "https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> |
-        <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
-      </footer>
-    </div>
+    {{ template "footer.xml" .Values }}
   </div>
   <script type="module">
         import QrScanner from '/static/js/qr-scanner.min.js';
