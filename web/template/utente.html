@@ -1,118 +1,140 @@
 <!DOCTYPE html>
-
+<html>
 <head>
+  <title>LilBib</title>
+  <meta name="description"
+        content="Lightweight Integrated Logistics for Book Indexing and Borrowing">
+  <meta name="keywords"
+        content="libri, prenotazione, liceo, vinci, dav">
+        <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
+  <meta name="robot"
+        content="nofollow">
+        <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa -->
+  <link rel="stylesheet"
+        type="text/css"
+        href="/static/css/960_12_col.css">
+        <!-- questo e' un tentativo che per ora e fallito-->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
+  <link rel="stylesheet"
+        type="text/css"
+        href="/static/css/style.css"><!--Zix: per favore usiamo un unico file css -->
 
-<title>LilBib</title>
-<meta name="description" content="Lightweight Integrated Logistics for Book Indexing and Borrowing"/>
-<meta name="keywords" content="libri, prenotazione, liceo, vinci, dav"> <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
-<meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa --> 
-<link rel="stylesheet" type="text/css" href="/static/css/960_12_col.css"> <!-- questo e' un tentativo che per ora e fallito--> 
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
-<link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
-<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/css/dataTables.css">
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+  <script type="text/javascript"
+        charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet"
+        type="text/css"
+        href="/static/css/dataTables.css">
+  <script type="text/javascript"
+        charset="utf8"
+        src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+        <!-- Zix: se ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 
-<!-- Zix: se ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
-
+  <style type="text/css">
+  div.c31 {min-height: 100vh; overflow: hidden; display: block; position: relative; padding-bottom: 100px;}
+  div.c30 {padding-left: 40px; padding-right: 40px; margin-bottom: 150px;}
+  div.c29 {width: 100%; text-align: center;}
+  button.c28 {color: white; background: linear-gradient(to bottom, #232C33 0%, #536878 100%); border: 0px; cursor: pointer; width: 70px; height: 25px;}
+  div.c27 {widht: 100%; color: white;}
+  a.c26 {margin-left: 3%;}
+  a.c25 {margin-rigth: 3%;}
+  </style>
 </head>
-
- 
 <body>
+  <div class="c31">
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
 
-<div style="min-height: 100vh;
- overflow: hidden;
- display: block;
- position: relative;
- padding-bottom: 100px; ">
- 
-<header>
-	<nav>
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/libri">Libri</a></li>   <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
-			<li><a href="/autori">Autori</a></li>
-			<li><a href="/generi">Generi</a></li>
-			<li><a href="/prestito">Prestito</a></li>
-			<li><a href="/restituzione">Restituzione</a></li>
-			<li><span class="footerRight"><a href="/login"> <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui" class="login">Login</span></a></span></li>
-		</ul>	
-	</nav>
-</header>
+          <li>
+            <a href="/libri">Libri</a>
+          </li>
+          <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
 
+          <li>
+            <a href="/autori">Autori</a>
+          </li>
 
-<div>
-	<h1 class="TitoloLib">Utente</h1>
-</div>
+          <li>
+            <a href="/generi">Generi</a>
+          </li>
 
+          <li>
+            <a href="/prestito">Prestito</a>
+          </li>
 
-<div class="containerUtente">
+          <li>
+            <a href="/restituzione">Restituzione</a>
+          </li>
 
-<h2 class="Utente">{{ .Utente.FullName }}</h2>
-<h2 class="Utente">Storico Prenotazioni</h2>
-<div style="padding-left: 40px; padding-right: 40px; margin-bottom: 150px;">
-<table id="fancytable" class="ggTable">
+          <li><span class="footerRight"><a href="/login">
+          <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui"
+                class="login">Login</span></a></span>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-<col width="35%">
-    <col width="32%">
-    <col width="32%">
-    <thead>
-        <tr>
-            <th>Libro</th>
-            <th>Data Prenotazione</th>
-            <th>Data Restituzione</th>
-        </tr>
-    </thead>
-    <tbody>
-		{{ range $index, $value := .PrestitiTitoli }}
-		<tr>
-			<td style="text-align: center">{{ $value.Titolo }}</td>
-			<td style="text-align: center">{{ $value.Prestito.FormatDataPrenotazione }}</td>
-			<td style="text-align: center">{{ $value.Prestito.FormatDataRestituzione }}</td>
-		</tr>
-		{{ end }}
+    <div>
+      <h1 class="TitoloLib">Utente</h1>
+    </div>
 
-      
-    </tbody>
+    <div class="containerUtente">
+      <h2 class="Utente">{{ .Utente.FullName }}</h2>
 
-</table>
-{{ if .IsAdmin }}
-<div style="widht: 100%; color: white;">
-<h2 class="Utente">Admin</h2>
-<div class="centerLink">
-<a style="margin-rigth: 3%;" class="LinkUtente" href="/admin/generaCodici">Genera Codici QR</a>
-<a style="margin-left: 3%;" class="LinkUtente" href="/admin/aggiungiLibro">Aggiungi Libro</a>
-</div> 
-</div>
-{{ end }}
-<div class="spazio"></div>
-<div style="width: 100%; text-align: center;">
-<button onclick="window.location = '/logout'" type="button" style="color: white; background: 
-linear-gradient(to bottom, #232C33 0%, #536878 100%); border: 0px; cursor: pointer; width: 70px; height: 25px;">Esci</button>
-</div>
-<div class="spazio"></div>
-</div>
-</div>
-  
+      <h2 class="Utente">Storico Prenotazioni</h2>
 
+      <div class="c30">
+        {{ template "utente_tabella.xml" . }} {{ if .IsAdmin }}
+        <div class="c27">
+          <h2 class="Utente">Admin</h2>
 
+          <div class="centerLink">
+            <a class="LinkUtente c25"
+                 href="/admin/generaCodici">Genera Codici QR</a> <a class=
+                 "LinkUtente c26"
+                 href="/admin/aggiungiLibro">Aggiungi Libro</a>
+          </div>
+        </div>
+        {{ end }}
+        <div class="spazio">
+        </div>
 
-<div>
-<footer id="footerId" class="Other" >
-	<p id="text2Id" class=" FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-	<p id="text1Id" class=" FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
-	| <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
-</footer>
-</div>
-</div>
+        <div class="c29">
+          <button onclick="window.location = '/logout'"
+               type="button"
+               class="c28">Esci</button>
+        </div>
 
-<script>$(document).ready(function() {
+        <div class="spazio">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <footer id="footerId"
+              class="Other">
+        <p id="text2Id"
+           class="FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
+
+        <p id="text1Id"
+           class="FooterRight"><a href=
+           "https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> |
+           <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
+      </footer>
+    </div>
+  </div>
+  <script>
+  $(document).ready(function() {
     $('#fancytable').DataTable();
-} );
-</script>  
-
-<script src="/static/js/login.js" type="text/javascript"></script>
-	
+  } );
+  </script> 
+  <script src="/static/js/login.js"
+        type="text/javascript"></script>
 </body>
-
 </html>

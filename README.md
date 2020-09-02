@@ -6,7 +6,7 @@ Sistema di gestione bibliotecaria.
 
 ## Setup
 ### Prerequisiti
-È necessario installare [golang](https://golang.org/) e `make` per compilare il codice, `docker` e `docker-compose` per eseguire il database di sviluppo, e `zip` per comprimere i file di rilascio.
+È necessario installare [golang](https://golang.org/), `make` per compilare il progetto, `tidy` per formattare il codice html, `docker` e `docker-compose` per eseguire il database di sviluppo, e `zip` per comprimere i file di rilascio.
 
 **Nota per gli utenti Windows**: si consiglia di installare [git for windows](https://gitforwindows.org/) poiché fornisce un set di tool simile ai sistemi Unix, il che è fondamentale al fine di eseguire il Makefile ed i git hooks. Inoltre, per installare `make` e `zip` si consiglia un package manager come [Chocolatey](https://chocolatey.org/).
 
@@ -31,6 +31,12 @@ Per eliminare i risultati della compilazione:
 ```bash
 $ make clean
 ```
+## Note per gli sviluppatori web
+Nel progetto è contenuto uno script (`scripts/tidy.sh`) che formatta i template html/xml. È possibile eseguirlo con:
+```bash
+$ make tidy
+```
+Prestare attenzione ad eventuali errori e warning! Se ci sono errori, e questi non vengono corretti, l'hook pre-commit non permetterà di creare il commit.
 
 # Organizzazione delle cartelle
 Basata su [questo](https://github.com/golang-standards/project-layout).

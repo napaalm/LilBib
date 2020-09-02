@@ -1,0 +1,22 @@
+<table id="fancytable"
+       class="ggTable1">
+  <col width="35%">
+    <col width="32%">
+      <col width="32%">
+        <thead>
+          <tr>
+            <th>Utente</th>
+            <th>Data Prenotazione</th>
+            <th>Data Restituzione</th>
+          </tr>
+        </thead>
+        <tbody>{{ range $index, $value := .Prestiti }} 
+        <tr>
+          <td style="text-align: center">{{ $value.Utente }}</td>
+          <td style="text-align: center">{{ $value.FormatDataPrenotazione }}</td>
+          <td style="text-align: center">{{ $value.FormatDataRestituzione }}</td>
+        </tr>{{ end }}</tbody>
+      </col>
+    </col>
+  </col>
+</table>

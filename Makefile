@@ -5,24 +5,34 @@ VERSION ?= $(shell git describe --always --dirty --tags 2> /dev/null)
 all: clean release run
 
 .PHONY: build
-build:
-	go build -ldflags "-X main.Version=$(VERSION)" -o $(BINARY) cmd/lilbib/main.go
+build: | build/
+	go build -ldflags "-X main.Version=$(VERSION)" -o build/$(BINARY) cmd/lilbib/main.go
 
 .PHONY: test
 test:
 	go test -ldflags "-X main.Version=$(VERSION)" ./...
+
+.PHONY: tidy
+tidy:
+	./scripts/tidy.sh web/template
+
+.PHONY: web
+web: | build/
+	cp -r $@ build
+	tidy -qim -w 0 -omit --output-bom no --hide-comments yes --vertical-space auto --indent no build/web/template/*.html; [ $$? -eq 2 ] && { echo "Template HTML code is not valid!"; exit 1; } || { exit 0; }
+	tidy -qim -w 0 -xml -omit --output-bom no --hide-comments yes --vertical-space auto --indent no build/web/template/*.xml; [ $$? -eq 2 ] && { echo "Template XML code is not valid!"; exit 1; } || { exit 0; }
 
 sandbox/config: config | sandbox/
 	mkdir $@
 	cp $^/config_test.toml $@/config.toml
 
 .PHONY: sandbox/web
-sandbox/web: | sandbox/
+sandbox/web: web | sandbox/
 	rm -rf $@
-	cp -r web $@
+	ln -s ../build/web $@
 
 sandbox/$(BINARY): build | sandbox/
-	cp $(BINARY) $@
+	cp build/$(BINARY) $@
 
 .PHONY: sandbox
 sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
@@ -35,7 +45,7 @@ sandbox: sandbox/web sandbox/config sandbox/$(BINARY)
 database: /tmp/lilbib-database.lock
 
 .PHONY: run
-run: build sandbox database
+run: database sandbox
 	cd sandbox; ./$(BINARY)
 
 .PHONY: release
@@ -43,24 +53,25 @@ release: linux windows
 
 .PHONY: clean
 clean:
-	rm -rf sandbox $(BINARY) release
+	rm -rf build sandbox release
+
 
 .PHONY: linux
-linux:
+linux: web
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64/config
 	cp config/config.toml release/$(BINARY)-$(VERSION)-$@-amd64/config
-	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
+	cp -r build/web release/$(BINARY)-$(VERSION)-$@-amd64
 	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
 	cd release; tar -czf $(BINARY)-$(VERSION)-$@-amd64.tar.gz $(BINARY)-$(VERSION)-$@-amd64
 
 .PHONY: windows
-windows:
+windows: web
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64
 	mkdir -p release/$(BINARY)-$(VERSION)-$@-amd64/config
 	cp config/config.toml release/$(BINARY)-$(VERSION)-$@-amd64/config
-	cp -r web release/$(BINARY)-$(VERSION)-$@-amd64
+	cp -r build/web release/$(BINARY)-$(VERSION)-$@-amd64
 	cp database/lilbib.sql release/$(BINARY)-$(VERSION)-$@-amd64
 	GOOS=$@ GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o release/$(BINARY)-$(VERSION)-$@-amd64/ ./...
 	cd release; zip -qr $(BINARY)-$(VERSION)-$@-amd64.zip $(BINARY)-$(VERSION)-$@-amd64

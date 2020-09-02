@@ -63,12 +63,15 @@ var templates = template.Must(template.ParseFiles(
 	templatesDir+"/index.html",
 	templatesDir+"/libri.html",
 	templatesDir+"/libro.html",
+	templatesDir+"/libro_tabella.xml",
 	templatesDir+"/login.html",
 	templatesDir+"/prestito.html",
 	templatesDir+"/restituzione.html",
 	templatesDir+"/utente.html",
+	templatesDir+"/utente_tabella.xml",
 	templatesDir+"/aggiungiLibro.html",
 	templatesDir+"/generaCodici.html",
+	templatesDir+"/generaCodici_tabella.xml",
 ))
 
 // Handler per qualunque percorso diverso da tutti gli altri percorsi riconosciuti.

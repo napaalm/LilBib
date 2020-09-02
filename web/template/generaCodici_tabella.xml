@@ -1,0 +1,10 @@
+<table>{{ range $idx, $libro := .Libri }} 
+<tr name='libro-row'>
+  <td style="text-align: left">
+    <input style="text-align: left;"
+           name="codici"
+           value="{{ $libro.Codice }}"
+           type="checkbox" />
+  </td>
+  <td style="text-align: left">{{ $libro.Titolo }}</td>
+</tr>{{ end }}</table>

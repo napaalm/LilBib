@@ -1,123 +1,171 @@
 <!DOCTYPE html>
-
+<html>
 <head>
+  <title>LilBib</title>
+  <meta name="description"
+        content="Lightweight Integrated Logistics for Book Indexing and Borrowing">
+  <meta name="keywords"
+        content="libri, prenotazione, liceo, vinci, dav">
+        <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
+  <meta name="robot"
+        content="nofollow">
+        <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa -->
+  <link rel="stylesheet"
+        type="text/css"
+        href="/static/css/960_12_col.css">
+        <!-- questo e' un tentativo che per ora e fallito-->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
+  <link rel="stylesheet"
+        type="text/css"
+        href="/static/css/style.css"><!--Zix: per favore usiamo un unico file css -->
 
-<title>LilBib</title>
-<meta name="description" content="Lightweight Integrated Logistics for Book Indexing and Borrowing"/>
-<meta name="keywords" content="libri, prenotazione, liceo, vinci, dav"> <!-- Zix: pare sia inutile nei nuovi browser ma a noi questo poco importa-->
-<meta name="robot" content="nofollow"/> <!-- Zix: essendo un sito interno alla scuola anche in che modo il browser individua la pagina puo' sembrare superflueo ma a noi questo poco importa --> 
-<link rel="stylesheet" type="text/css" href="/static/css/960_12_col.css"> <!-- questo e' un tentativo che per ora e fallito--> 
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> <!--Zix: se vi servono i nomi delle icone https://material.io/resources/icons/?style=baseline ecco a voi -->
-<link rel="stylesheet" type="text/css" href="/static/css/style.css"> <!--Zix: per favore usiamo un unico file css -->
+  <script>
+                        function logout() {
+                                                document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                                                window.location = '/login';
+                                        }
+  </script>
+  <!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
 
-	<script>
-		        function logout() {
-				                document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-				                window.location = '/login';
-				        }
-	</script>
-
-	<!-- Zix: se ironiamente ho lasciato due volte la directory LilBib toglietene una prima di fare il commit -->
-
+  <style type="text/css">
+  input.c3 {width: 75px; color: black;}
+  div.c2 {min-height: 100vh; overflow: hidden; display: block; position: relative; padding-bottom: 100px;}
+  input.c1 {width: 75px;}
+  </style>
 </head>
-
- 
 <body>
+  <div class="c2">
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
 
-<div style="min-height: 100vh;
-		     overflow: hidden;
-		      display: block;
-		       position: relative;
-		        padding-bottom: 100px; ">
-		 
-<header>
- <nav>
- <ul>
-<li><a href="/">Home</a></li>
-<li><a href="/libri">Libri</a></li>   <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
-<li><a href="/autori">Autori</a></li>
-<li><a href="/generi">Generi</a></li>
-<li><a href="/prestito">Prestito</a></li>
-<li><a href="/restituzione">Restituzione</a></li>
-<li><span class="footerRight"><a href="/login"> <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui" class="login">Login</span></a></span></li>
-</ul>   
-</nav>
-</header>
+          <li>
+            <a href="/libri">Libri</a>
+          </li>
+          <!-- Zix: vanno create ed inserite le pagine che reindirizzano al punto specificato -->
 
-<div>
-	<h1 class="TitoloLib">Aggiungi Libro</h1>
-</div>
+          <li>
+            <a href="/autori">Autori</a>
+          </li>
 
-<div class="elencoLib">
-<form class="AgLib0" method="post">
-	<input type="hidden" name="tipo" value="genere">
-	<fieldset> 
-	<legend>
-Aggiungi Genere
-	</legend>
-	<br/><br/>
-	<span class="AgLib">Genere:<br/><br/><input type="text" name="genere" placeholder="Genere"/></span>
-	<br/>
-	<input style="width: 75px;" type="submit" value="Crea"/>
-	</fieldset> 
-	
-</form>
+          <li>
+            <a href="/generi">Generi</a>
+          </li>
 
-<form class="AgLib1" method="post">
-<input type="hidden" name="tipo" value="autore">
-<fieldset> 
-<legend>
-Aggiungi Autore
-</legend>
-<span>Nome:<br/><br/><input type="text" name="nome" placeholder="Nome"/></span>
-<br/>
-<span class="AgLib">Cognome:<br/><br/><input type="text" name="cognome" placeholder="Cognome"/></span><br/>
-<input style="width: 75px;" type="submit" value="Crea"/>
+          <li>
+            <a href="/prestito">Prestito</a>
+          </li>
 
-</fieldset> 
-</form class="th3">
+          <li>
+            <a href="/restituzione">Restituzione</a>
+          </li>
 
-<form class="AgLib2" method="post">
-<input type="hidden" name="tipo" value="libro">
+          <li><span class="footerRight"><a href="/login">
+          <!--<i class="material-icons">person</i>--><span id="suqi_sypeeoui"
+                class="login">Login</span></a></span>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
-<fieldset class="th3"> 
-<legend>
-Aggiungi Libro
-</legend>
-<span>Nome:<br/><br/><input type="text" name="nome" placeholder="Nome"/></span>
-<br/>
-<span class="AgLib">Genere:<br/><br/></span><select name="genere"/>
-	{{ range $idx, $genere := .Generi }}
-	<option value="{{ $genere.Codice }}">{{ $genere.Nome }}</option>
-	{{ end }}
-</select>
-<br/><br/>
-<span class="AgLib">Autore:<br/><br/></span><select name="autore"/>
-	{{ range $idx, $autore := .Autori }}
-	<option value="{{ $autore.Codice }}">{{ $autore.Nome }} {{ $autore.Cognome }}</option>
-	{{ end }}
-</select>
-<br/><br/><br/>
+    <div>
+      <h1 class="TitoloLib">Aggiungi Libro</h1>
+    </div>
 
-<input style="width: 75px; color: black;" type="submit" value="Crea"/>
+    <div class="elencoLib">
+      <form class="AgLib0"
+            method="post">
+        <input type="hidden"
+              name="tipo"
+              value="genere">
+        <fieldset>
+          <legend>Aggiungi Genere</legend><br>
+          <br>
+          <span class="AgLib">Genere:<br>
+          <br>
+          <input type="text"
+                 name="genere"
+                 placeholder="Genere"></span><br>
+          <input class="c1"
+                    type="submit"
+                    value="Crea">
+        </fieldset>
+      </form>
 
-</fieldset> 
+      <form class="AgLib1"
+            method="post">
+        <input type="hidden"
+              name="tipo"
+              value="autore">
+        <fieldset>
+          <legend>Aggiungi Autore</legend> <span>Nome:<br>
+          <br>
+          <input type="text"
+                 name="nome"
+                 placeholder="Nome"></span><br>
+          <span class="AgLib">Cognome:<br>
+          <br>
+          <input type="text"
+                 name="cognome"
+                 placeholder="Cognome"></span><br>
+          <input class="c1"
+                    type="submit"
+                    value="Crea">
+        </fieldset>
+      </form>
 
-</form>
-</div>
+      <form class="AgLib2"
+            method="post">
+        <input type="hidden"
+              name="tipo"
+              value="libro">
+        <fieldset class="th3">
+          <legend>Aggiungi Libro</legend> <span>Nome:<br>
+          <br>
+          <input type="text"
+                 name="nome"
+                 placeholder="Nome"></span><br>
+          <span class="AgLib">Genere:<br>
+          <br></span> <select name="genere">
+          </select> {{ range $idx, $genere := .Generi }}
+        </fieldset>
+      </form>
+    </div>
+  </div>
 
+  <option value="{{ $genere.Codice }}">
+    {{ $genere.Nome }}
+  </option>{{ end }}<br>
+  <br>
+  <span class="AgLib">Autore:<br>
+  <br></span> <select name="autore">
+  </select> {{ range $idx, $autore := .Autori }}
+  <option value="{{ $autore.Codice }}">
+    {{ $autore.Nome }} {{ $autore.Cognome }}
+  </option>{{ end }}<br>
+  <br>
+  <br>
+  <input class="c3"
+        type="submit"
+        value="Crea">
+  <div>
+    <footer id="footerId"
+            class="Other">
+      <p id="text2Id"
+         class="FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
 
-
-<div>
-	<footer id="footerId" class="Other" >
-		        <p id="text2Id" class=" FooterLeft">© 2020 LilBib | Versione: {{ .Values.Version }}</p>
-			        <p id="text1Id" class=" FooterRight"><a href="https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> 
-				        | <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
-	</footer>
-</div>
-
-<script src="/static/js/login.js" type="text/javascript"></script>
-
+      <p id="text1Id"
+         class="FooterRight"><a href=
+         "https://git.antonionapolitano.eu/napaalm/LilBib.git">Codice sorgente</a> |
+         <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">Licenza AGPLv3</a></p>
+    </footer>
+  </div>
+  <script src="/static/js/login.js"
+        type="text/javascript"></script>
 </body>
-
 </html>

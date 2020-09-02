@@ -90,5 +90,6 @@ _testmain.go
 
 # output files
 /lilbib
+/build
 /release
 /sandbox
