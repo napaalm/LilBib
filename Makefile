@@ -16,11 +16,17 @@ test:
 tidy:
 	./scripts/tidy.sh web/template
 
+build/web/template/%.html: web/template/%.html | build/web/template/
+	tidy -qi -w 0 -omit --output-bom no --hide-comments yes --vertical-space auto --indent no -o $@ $^; [ $$? -eq 2 ] && { echo "Template HTML code is not valid!"; exit 1; } || { exit 0; }
+
+build/web/template/%.xml: web/template/%.xml | build/web/template/
+	tidy -qi -w 0 -xml -omit --output-bom no --hide-comments yes --vertical-space auto --indent no -o $@ $^; [ $$? -eq 2 ] && { echo "Template XML code is not valid!"; exit 1; } || { exit 0; }
+
+build/web/static: web/static | build/web/static/
+	cp -r $^ $@
+
 .PHONY: web
-web: | build/
-	cp -r $@ build
-	tidy -qim -w 0 -omit --output-bom no --hide-comments yes --vertical-space auto --indent no build/web/template/*.html; [ $$? -eq 2 ] && { echo "Template HTML code is not valid!"; exit 1; } || { exit 0; }
-	tidy -qim -w 0 -xml -omit --output-bom no --hide-comments yes --vertical-space auto --indent no build/web/template/*.xml; [ $$? -eq 2 ] && { echo "Template XML code is not valid!"; exit 1; } || { exit 0; }
+web: $(addprefix build/,$(wildcard web/template/*.html) $(wildcard web/template/*.xml) web/static)
 
 sandbox/config: config | sandbox/
 	mkdir $@
