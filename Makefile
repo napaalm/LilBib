@@ -25,16 +25,16 @@ build/web/template/%.xml: web/template/%.xml | build/web/template/
 build/web/static: web/static | build/web/static/
 	cp -r $^ $@
 
+build/web: $(addprefix build/,$(wildcard web/template/*.html) $(wildcard web/template/*.xml) web/static)
+
 .PHONY: web
-web: $(addprefix build/,$(wildcard web/template/*.html) $(wildcard web/template/*.xml) web/static)
+web: build/web
 
 sandbox/config: config | sandbox/
 	mkdir $@
 	cp $^/config_test.toml $@/config.toml
 
-.PHONY: sandbox/web
-sandbox/web: web | sandbox/
-	rm -rf $@
+sandbox/web: | build/web sandbox/
 	ln -s ../build/web $@
 
 sandbox/$(BINARY): build | sandbox/
