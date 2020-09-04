@@ -10,13 +10,14 @@ body {
 
 #bg {
   background-image: url("../img/book.jpg");
+  position: static;
 
   min-height: 100%;
+  width: 100%;
 
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  overflow: hidden;
 }
 
 #bg-2 {
