@@ -1,98 +1,117 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>LilBib</title><!--Bootsrap 4 CDN-->
-  <link rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity=
-        "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous"><!--Fontawesome CDN-->
-  <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-        integrity=
-        "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous"><!--Custom styles-->
-  <link rel="stylesheet"
-        type="text/css"
-        href="../static/css/custom.css">
-  <style type="text/css">
-  div.c1 {background-color: transparent}
-  </style>
-</head>
-<body>
-  <header>
-    {{ template "navbar.xml" }}
-  </header>
+  <head>
+    <title>LilBib</title>
+    <!--Bootsrap 4 CDN-->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <!--Fontawesome CDN-->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+      crossorigin="anonymous"
+    />
+    <!--Custom styles-->
+    <link rel="stylesheet" type="text/css" href="../static/css/custom.css" />
+    <style type="text/css">
+      div.c1 {
+        background-color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <header>{{ template "navbar.xml" }}</header>
 
-  <div class="container title row"
-       id="bg">
-    <div class="col-6 mx-auto col-md-4 order-md-2 c1"><img src="../static/img/image.png"
-         class="img-fluid mb-3 mb-md-0">
-    </div>
+    <div id="bg">
+      <div class="container title">
+        <div class="row">
+          <div class="col-6 mx-auto col-md-4 order-md-2 c1">
+            <img src="../static/img/image.png" class="img-fluid mb-3 mb-md-0" />
+          </div>
 
-    <div class="col-md-8 order-md-1 text-center text-md-left pr-md-5">
-      <h1 class="mb-3">LilBib</h1>
+          <div class="col-md-8 order-md-1 text-center text-md-left pr-md-5">
+            <h1 class="mb-3">LilBib</h1>
 
-      <h1 class="mb-3">Lightweight Integrated Logistics for Book Indexing and
-      Borrowing</h1>
+            <h1 class="mb-3">
+              Lightweight Integrated Logistics for Book Indexing and Borrowing
+            </h1>
 
-      <p class="lead md-4">You have so many different things placeholder text has to be
-      able to do, and I don't believe Lorem Ipsum has the stamina. You're telling the
-      enemy exactly what you're going to do. No wonder you've been fighting Lorem Ipsum
-      your entire adult life.</p>
+            <p class="lead md-4">
+              You have so many different things placeholder text has to be able
+              to do, and I don't believe Lorem Ipsum has the stamina. You're
+              telling the enemy exactly what you're going to do. No wonder
+              you've been fighting Lorem Ipsum your entire adult life.
+            </p>
 
-      <div class="d-flex flex-column flex-md-row">
-        <a href="login.html"
-             class="btn btn-lg btn-primary mb-3 mr-md-3">Accedi</a> <a href="#"
-             class="btn btn-lg btn-outline-secondary mb-3">Elenco libri</a>
+            <div class="d-flex flex-column flex-md-row">
+              <a href="login.html" class="btn btn-lg btn-primary mb-3 mr-md-3"
+                >Accedi</a
+              >
+              <a href="#" class="btn btn-lg btn-outline-secondary mb-3"
+                >Elenco libri</a
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div id="bg-2">
-    <div class="container home-cards row"
-         id="r-h">
-      <div class="col-sm-4 ca card card-body">
-        <h5 class="card-title">Libri Totali</h5>
+    <div id="bg-2">
+      <div class="container home-cards">
+        <div class="row" id="r-h">
+          <div class="col-sm-4 ca">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Libri Totali</h5>
+                <p class="card-text card-num">15</p>
+                <p href="#" class="btn btn-primary">Elenco libri</p>
+              </div>
+            </div>
+          </div>
 
-        <p class="card-text card-num">{{ .Totali }}</p>
-        <a href="#"
-             class="btn btn-primary">Elenco libri</a>
-      </div>
+          <div class="col-sm-4 ca">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Libri Disponibili</h5>
+                <p class="card-text card-num">15</p>
+              </div>
+            </div>
+          </div>
 
-      <div class="col-sm-4 ca card card-body">
-        <h5 class="card-title">Libri Disponibili</h5>
-
-        <p class="card-text card-num">15</p>
-        <a href="#"
-             class="btn btn-primary">Elenco libri</a>
-      </div>
-
-      <div class="col-sm-4 ca card card-body">
-        <h5 class="card-title">Autori</h5>
-
-        <p class="card-text card-num">15</p>
-        <a href="#"
-             class="btn btn-primary">Autori</a>
+          <div class="col-sm-4 ca">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Autori</h5>
+                <p class="card-text card-num">15</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <!--<div id="bg-3"></div>-->
-  {{ template "footer.xml" .Values }} 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity=
-        "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script> 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity=
-        "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script> 
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity=
-        "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script> 
-  <script>
-
+    <!--<div id="bg-3"></div>-->
+    {{ template "footer.xml" .Values }}
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script>
       function getCookie(name) {
         var dc = document.cookie;
         var prefix = name + "=";
@@ -117,6 +136,6 @@
       } else {
         document.getElementById("suqi_sypeeoui").textContent = "Area Utente";
       }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
