@@ -29,10 +29,10 @@ import (
 	"log"
 	"net/http"
 
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/auth"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/handlers"
+	"git.napaalm.xyz/napaalm/LilBib/internal/auth"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/db"
+	"git.napaalm.xyz/napaalm/LilBib/internal/handlers"
 )
 
 var Version string

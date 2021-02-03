@@ -29,7 +29,7 @@ import (
 	"fmt"
 	"time"
 
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
 	"github.com/gbrlsnchs/jwt/v3"
 )
 

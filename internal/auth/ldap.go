@@ -30,7 +30,7 @@ import (
 	"fmt"
 	"log"
 
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
 	ldap "github.com/go-ldap/ldap/v3"
 )
 

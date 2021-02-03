@@ -26,8 +26,8 @@ package qrcode
 
 import (
 	"fmt"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/db"
 	"testing"
 )
 

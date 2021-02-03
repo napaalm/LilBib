@@ -1,6 +1,6 @@
 # db
 Pacchetto per la comunicazione con il database SQL.
-Utilizzare le seguenti librerie: [database/sql](https://git.antonionapolitano.eu/napaalm/LilBib/src/master) e [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql).
+Utilizzare le seguenti librerie: [database/sql](https://git.napaalm.xyz/napaalm/LilBib/src/master) e [github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql).
 
 ## Tipi
 ```go

@@ -28,7 +28,7 @@
 package db
 
 import (
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
 	"testing"
 )
 

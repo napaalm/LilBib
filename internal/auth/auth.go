@@ -24,7 +24,7 @@
 
 package auth
 
-import "git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+import "git.napaalm.xyz/napaalm/LilBib/internal/config"
 
 // Informazioni sull'utente
 type UserInfo struct {

@@ -29,7 +29,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
 	"time"

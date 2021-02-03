@@ -27,8 +27,8 @@ package qrcode
 
 import (
 	"encoding/base64"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/hash"
+	"git.napaalm.xyz/napaalm/LilBib/internal/db"
+	"git.napaalm.xyz/napaalm/LilBib/internal/hash"
 	qrcode "github.com/skip2/go-qrcode"
 	"strings"
 )

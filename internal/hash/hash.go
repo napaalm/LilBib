@@ -29,7 +29,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/db"
+	"git.napaalm.xyz/napaalm/LilBib/internal/db"
 )
 
 type ErrHash struct{}

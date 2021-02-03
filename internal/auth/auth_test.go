@@ -25,9 +25,9 @@
 package auth
 
 import (
-	"testing"
 	"fmt"
-	"git.antonionapolitano.eu/napaalm/LilBib/internal/config"
+	"git.napaalm.xyz/napaalm/LilBib/internal/config"
+	"testing"
 )
 
 func TestAll(t *testing.T) {
