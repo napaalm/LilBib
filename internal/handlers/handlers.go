@@ -811,17 +811,42 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 
 // Elimina il cookie con il token di accesso
 func deleteCookie(w http.ResponseWriter, r *http.Request) {
-	// Ottiene la configurazione per i cookie
-	fqdn := config.Config.Generale.FQDN
-	secure := config.Config.Autenticazione.SecureCookies
+	// Usa o meno un provider SSO
+	sso := config.Config.Autenticazione.SSO
 
-	// Crea e imposta il cookie
-	cookie := http.Cookie{
-		Name:   "access_token",
-		Value:  "",
-		Domain: fqdn,
-		MaxAge: -1,
-		Secure: secure,
+	// Delega il logout al provider SSO oppure elimina direttamente il cookie
+	if sso {
+		// Imposta dominio ed eventualmente porta
+		nextURL := config.Config.Generale.FQDN
+		if nextURL == "localhost" {
+			nextURL = nextURL + config.Config.Generale.Porta
+		}
+
+		// Imposta lo schema
+		if config.Config.Autenticazione.SecureCookies {
+			nextURL = "https://" + nextURL
+		} else {
+			nextURL = "http://" + nextURL
+		}
+
+		// Crea la query
+		query := "?next=" + url.QueryEscape(nextURL)
+
+		// Genera la risposta
+		http.Redirect(w, r, config.Config.Autenticazione.SSOURL+"/logout"+query, http.StatusSeeOther)
+	} else {
+		// Ottiene la configurazione per i cookie
+		fqdn := config.Config.Generale.FQDN
+		secure := config.Config.Autenticazione.SecureCookies
+
+		// Crea e imposta il cookie
+		cookie := http.Cookie{
+			Name:   "access_token",
+			Value:  "",
+			Domain: fqdn,
+			MaxAge: -1,
+			Secure: secure,
+		}
+		http.SetCookie(w, &cookie)
 	}
-	http.SetCookie(w, &cookie)
 }
